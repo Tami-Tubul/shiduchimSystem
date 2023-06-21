@@ -1,4 +1,3 @@
-const Matchmaker = require("../models/MatchmakerModel");
 const Candidate = require("../models/CandidateModel");
 
 
@@ -34,8 +33,6 @@ const registerCandidate = async (req, res, next) => {  //מילוי שאלון �
 
 const getAllDoneShiduchim = async (req, res, next) => { //הצגת כל השידוכים של האתר
     try {
-        let books = await Book.find({});
-        res.send(books)
     }
     catch (err) {
         next(err)
