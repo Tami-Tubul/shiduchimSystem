@@ -35,7 +35,7 @@ const approveMatchmaker = async (req, res, next) => {   //אישור שדכן ו
             });
             await user.save();
 
-            const mailTo = 'tamit0430@gmail.com'; //matchmakerExist.email;
+            const mailTo = matchmakerExist.email;
             const textMail = `שלום ${matchmakerExist.firstName}. התקבלת להיות שדכנית במערכת השידוכים שלנו! זוהי סיסמתך למערכת: ${user.password}`;
             
             mail.sendMail(mailTo, textMail);
@@ -59,7 +59,7 @@ const deleteMatchmaker = async (req, res, next) => {
         }
         else {
 
-            const mailTo = 'tamit0430@gmail.com'; // matchmakerExist.email ;
+            const mailTo = matchmakerExist.email;
             const textMail = `שלום ${matchmakerExist.firstName}. תודה על התעניינותך במערכת השידוכים שלנו. לצערנו, לא הצלחנו לקבל את בקשתך. מאחלים לך הצלחה בהמשך הדרך. `;
             
             mail.sendMail(mailTo, textMail);
