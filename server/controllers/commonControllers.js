@@ -1,6 +1,8 @@
+const Matchmaker = require("../models/MatchmakerModel");
 const Candidate = require("../models/CandidateModel");
 
-const registerCandidate = async (req, res, next) => {
+
+const registerCandidate = async (req, res, next) => {  //מילוי שאלון הרשמה למועמד
     try {
         const nonMandatoryFields = ["picture", "requireMoney", "CommitMoney", "drishotCharacters", "drishotNotMoza"] //שדות לא חובה
         const mandatoryFields = Object.keys(req.body).filter(field => !nonMandatoryFields.includes(field)); //שדות חובה
@@ -30,6 +32,42 @@ const registerCandidate = async (req, res, next) => {
 
 }
 
+const getAllDoneShiduchim = async (req, res, next) => { //הצגת כל השידוכים של האתר
+    try {
+        let books = await Book.find({});
+        res.send(books)
+    }
+    catch (err) {
+        next(err)
+    }
+
+}
+
+
+const filterCandidatesCards = async (req, res, next) => {  //סינון מועמדים (שדכן ומנהל)
+    try {
+
+    }
+    catch (err) {
+        next(err)
+    }
+
+}
+
+
+const getAllCandidatesCards = async (req, res, next) => {  //הצגת כרטיסי מועמדים (שדכן ומנהל)
+    try {
+
+    }
+    catch (err) {
+        next(err)
+    }
+
+}
+
 module.exports = {
-    registerCandidate
+    registerCandidate,
+    getAllDoneShiduchim,
+    filterCandidatesCards,
+    getAllCandidatesCards
 }

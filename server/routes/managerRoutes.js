@@ -6,9 +6,12 @@ const { authenticateToken } = require('../controllers/authControllers'); // בכ
 
 router.put("/approve-matchmaker/:id", authenticateToken, managerController.approveMatchmaker);
 router.delete("/delete-matchmaker/:id", authenticateToken, managerController.deleteMatchmaker);
-router.get("/", authenticateToken, managerController.getAllNewRegisters);
-router.delete("/:id", authenticateToken, managerController.deleteUsers);
-router.get("/", authenticateToken, managerController.getAllMassagesFromUsers);
+router.put("/approve-candidate/:id", authenticateToken, managerController.approveCandidate);
+router.delete("/delete-candidate/:id", authenticateToken, managerController.deleteCandidate);
+router.get("/", authenticateToken, managerController.getAllMatchmakers);
 router.get("/", authenticateToken, managerController.getAllMassagesFromMatchmakers);
+router.delete("/:id", authenticateToken, managerController.deleteMessagesFromMatchmakers);
+router.get("/", authenticateToken, managerController.statistikotShiduchim);
 
-module.exports = router; 
+module.exports = router;
+

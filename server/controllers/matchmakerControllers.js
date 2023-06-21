@@ -32,7 +32,7 @@ const registerMatchmaker = async (req, res, next) => {
 
 }
 
-const getAllUsersCards = async (req, res, next) => {
+const closingMatch = async (req, res, next) => { //סגירת שידוך
     try {
 
     }
@@ -42,7 +42,7 @@ const getAllUsersCards = async (req, res, next) => {
 
 }
 
-const deleteFromCart = async (req, res, next) => {
+const addCandidateToCart = async (req, res, next) => { //הוספת מועמד לאזור אישי
     try {
 
     }
@@ -51,7 +51,29 @@ const deleteFromCart = async (req, res, next) => {
     }
 
 }
-const AddToCart = async (req, res, next) => {
+
+const deleteCandidateFromCart = async (req, res, next) => { //הסרת מועמד מהאזור האישי
+    try {
+
+    }
+    catch (err) {
+        next(err)
+    }
+
+}
+
+
+const sendMessageToManager = async (req, res, next) => { //שליחת הודעה למנהל
+    try {
+
+    }
+    catch (err) {
+        next(err)
+    }
+
+}
+const sendLinkOfWebsite = async (req, res, next) => { //שיתוף קישור האתר
+
     try {
 
     }
@@ -69,40 +91,13 @@ const printQuestionPage = async (req, res, next) => {
     }
 
 }
-const sendMessageToManager = async (req, res, next) => {
-    try {
 
-    }
-    catch (err) {
-        next(err)
-    }
-
-}
-const sendLinkOfWebsite = async (req, res, next) => {
-    try {
-
-    }
-    catch (err) {
-        next(err)
-    }
-
-}
-const sendQuestionPageToManager = async (req, res, next) => {
-    try {
-
-    }
-    catch (err) {
-        next(err)
-    }
-
-}
 module.exports = {
     registerMatchmaker,
-    getAllUsersCards,
-    deleteFromCart,
-    AddToCart,
-    printQuestionPage,
+    closingMatch,
+    addCandidateToCart,
+    deleteCandidateFromCart,
     sendMessageToManager,
     sendLinkOfWebsite,
-    sendQuestionPageToManager,
+    printQuestionPage,
 }

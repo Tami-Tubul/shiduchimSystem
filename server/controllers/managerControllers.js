@@ -13,7 +13,7 @@ function generatePassword() {
         .slice(0, length);
 }
 
-const approveMatchmaker = async (req, res, next) => {   //אישור שדכן והכנסתו למאגר השדכנים במערכת
+const approveMatchmaker = async (req, res, next) => {   //אישור שדכן חדש
     try {
         const matchmakerID = req.params.id;
         const matchmakerExist = await Matchmaker.findOne({ _id: matchmakerID });
@@ -37,7 +37,7 @@ const approveMatchmaker = async (req, res, next) => {   //אישור שדכן ו
 
             const mailTo = matchmakerExist.email;
             const textMail = `שלום ${matchmakerExist.firstName}. התקבלת להיות שדכנית במערכת השידוכים שלנו! זוהי סיסמתך למערכת: ${user.password}`;
-            
+
             mail.sendMail(mailTo, textMail);
 
             res.status(201).json({ message: "השדכן אושר על ידי המנהל ונוסף בהצלחה", newUser: user })
@@ -50,7 +50,7 @@ const approveMatchmaker = async (req, res, next) => {   //אישור שדכן ו
     }
 
 }
-const deleteMatchmaker = async (req, res, next) => {
+const deleteMatchmaker = async (req, res, next) => { //מחיקת שדכן ושליחת הודעה במייל
     try {
         const matchmakerID = req.params.id;
         const matchmakerExist = await Matchmaker.findByIdAndDelete(matchmakerID);
@@ -61,7 +61,7 @@ const deleteMatchmaker = async (req, res, next) => {
 
             const mailTo = matchmakerExist.email;
             const textMail = `שלום ${matchmakerExist.firstName}. תודה על התעניינותך במערכת השידוכים שלנו. לצערנו, לא הצלחנו לקבל את בקשתך. מאחלים לך הצלחה בהמשך הדרך. `;
-            
+
             mail.sendMail(mailTo, textMail);
 
             res.status(200).json({ message: "השדכן לא אושר על ידי המנהל והוסר מהמערכת" });
@@ -73,10 +73,54 @@ const deleteMatchmaker = async (req, res, next) => {
 
 }
 
-//פה יהיו פונקציות אישור ומחיקת מועמד
+const approveCandidate = async (req, res, next) => {   // אישור מועמד חדש
+    try {
+        const candidateID = req.params.id;
+        const candidateExist = await Candidates.findOne({ _id: candidateID })
+        if (!candidateExist) {
+            return res.status(400).json({ message: "מועמד לא נמצא" });
+        }
+        else if (candidateExist.isApproved) {
+            return res.status(400).json({ message: "מועמד זה כבר רשום במערכת" });
+        }
+        else {
+            candidateExist.isApproved = true; //המנהל מעדכן את המועמד למאושר
+            await candidateExist.save();
+
+            res.status(201).json({ message: "המועמד נוסף בהצלחה למאגר" })
+        }
+    }
+    catch (err) {
+        next(err)
+    }
+
+}
+
+const deleteCandidate = async (req, res, next) => { //מחיקת מועמד  ושליחת הודעה במייל
+    try {
+        const candidateID = req.params.id;
+        const candidateExist = await Candidates.findByIdAndDelete(candidateID);
+        if (!candidateExist) {
+            return res.status(400).json({ message: "מועמד לא נמצא" });
+        }
+        else {
+
+            const mailTo = 'tamit0430@gmail.com'; // candidateExist.email ;
+            const textMail = `שלום ${candidateExist.firstName}. תודה על התעניינותך במערכת השידוכים שלנו. לצערנו, לא הצלחנו לקבל את בקשתך. מאחלים לך הצלחה בהמשך הדרך. `;
+
+            mail.sendMail(mailTo, textMail);
+
+            res.status(200).json({ message: "המועמד לא אושר על ידי המנהל והוסר מהמערכת" });
+        }
+    }
+    catch (err) {
+        next(err)
+    }
+
+}
 
 
-const getAllNewRegisters = async (req, res, next) => {
+const getAllMatchmakers = async (req, res, next) => { //הצגת כרטיסי שדכנים
     try {
 
     }
@@ -85,7 +129,8 @@ const getAllNewRegisters = async (req, res, next) => {
     }
 
 }
-const deleteUsers = async (req, res, next) => {
+
+const getAllMassagesFromMatchmakers = async (req, res, next) => { //הצגת הודעות משדכנים
     try {
 
     }
@@ -94,7 +139,8 @@ const deleteUsers = async (req, res, next) => {
     }
 
 }
-const getAllMassagesFromUsers = async (req, res, next) => {
+
+const deleteMessagesFromMatchmakers = async (req, res, next) => { //מחיקת הודעה ושליחת תשובה במייל
     try {
 
     }
@@ -103,7 +149,8 @@ const getAllMassagesFromUsers = async (req, res, next) => {
     }
 
 }
-const getAllMassagesFromMatchmakers = async (req, res, next) => {
+
+const statistikotShiduchim = async (req, res, next) => { //סטטיסטיקות שידוכים
     try {
 
     }
@@ -112,12 +159,15 @@ const getAllMassagesFromMatchmakers = async (req, res, next) => {
     }
 
 }
+
+
 module.exports = {
     approveMatchmaker,
     deleteMatchmaker,
-    getAllNewRegisters,
-    deleteUsers,
-    getAllMassagesFromUsers,
+    approveCandidate,
+    deleteCandidate,
+    getAllMatchmakers,
     getAllMassagesFromMatchmakers,
-
+    deleteMessagesFromMatchmakers,
+    statistikotShiduchim
 }
