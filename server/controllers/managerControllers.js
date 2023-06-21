@@ -74,7 +74,7 @@ const deleteMatchmaker = async (req, res, next) => {
 }
 
 //פה יהיו פונקציות אישור ומחיקת מועמד
-
+//להעתיק את הפונקציות ממיכל לכאן
 
 const getAllNewRegisters = async (req, res, next) => {
     try {
