@@ -1,17 +1,42 @@
 const mongoose = require('mongoose');
 
 const meorasimSchema = mongoose.Schema({
-    bachurName: { type: String, },
-    bachuraName: { type: String, },
-    bachurAge: { type: String, },
-    bachuraAge: { type: String, },
-    bachurYeshiva: { type: String, },
-    bachuraSeminar: { type: String, },
-    bachurCity: { type: String, },
-    bachuraCity: { type: String, },
-    bachuraCity: { type: String, },
-    date: { type: Date, },
-    picture: { type: String, },//איך מועלים תמונה?
+    bachurName: {
+        type: String,
+        required: true
+    },
+    bachuraName: {
+        type: String,
+        required: true
+    },
+    bachurFather: {
+        type: String,
+        required: true
+    },
+    bachuraFather: {
+        type: String,
+        required: true
+    },
+    bachurYeshiva: {
+        type: String,
+        required: true
+    },
+    bachuraSeminar: {
+        type: String,
+        required: true
+    },
+    bachurCity: {
+        type: String,
+        required: true
+    },
+    bachuraCity: {
+        type: String,
+        required: true
+    },
+    dateWort: {
+        type: String,
+        required: true
+    }
 })
 const Meorasim = new mongoose.model("meorasim", meorasimSchema);
 module.exports = Meorasim;

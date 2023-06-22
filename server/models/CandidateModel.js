@@ -11,18 +11,18 @@ const candidateSchema = mongoose.Schema({
     bornDate: { type: Date, required: true },//תאריך לידה
     countryBirth: { type: String, required: true },//ארץ לידה
     city: { type: String, required: true },//עיר
-    phone: { type: Number, required: true },//טלפון
+    phone: { type: String, required: true },//טלפון
     characters: { type: String, required: true },//תכונות אופי
     colorSkin: { type: String, required: true },//גוון עור
-    height: { type: String, required: true },//גובה
+    height: { type: mongoose.Schema.Types.Decimal128, required: true },//גובה
     bodyStracture: { type: String, required: true },//מבנה גוף
     healthCondition: { type: String, required: true },//מצב בריאותי
     economicCondition: { type: String },//מצב כלכלי
     look: { type: String, required: true },//מראה כללי
     sector: { type: String, required: true },//מגזר
     picture: { type: String },//תמונה
-    requireMoney: { type: String },//דרישות כספיות
-    CommitMoney: { type: String },//התחייבויות כספיות
+    requireMoney: { type: Number },//דרישות כספיות
+    CommitMoney: { type: Number },//התחייבויות כספיות
     yeshivaOrSeminar: { type: String, required: true },//שם מקום לימודים
     doingToday: { type: String, required: true },//עיסוק כיום
     origin: { type: String, required: true },//עידה
@@ -40,10 +40,10 @@ const candidateSchema = mongoose.Schema({
     drishotFavoriteMoza: { type: String, required: true },//דרישות-ארץ מוצא מועדף
     drishotNotMoza: { type: String },//דרישות לא ממוצא
     drishotHeaddress: { type: String, required: true },//דרישות-כיסוי ראש
-    fromAge: { type: String, required: true },//מגיל
-    mostAge: { type: String, required: true },//עד גיל
-    fromHigh: { type: String, required: true },//מגובה
-    mostHigh: { type: String, required: true },//עד גובה
+    fromAge: { type: Number, required: true },//מגיל
+    mostAge: { type: Number, required: true },//עד גיל
+    fromHigh: { type: mongoose.Schema.Types.Decimal128, required: true },//מגובה
+    mostHigh: { type: mongoose.Schema.Types.Decimal128, required: true },//עד גובה
     casherPhone: { type: Boolean, required: true },//טלפון כשר
     licence: { type: Boolean, required: true },//רישיון
     smoking: { type: Boolean, required: true },//מעשן

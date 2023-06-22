@@ -25,11 +25,14 @@ const matchmakerSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    candidates: [Number],//מערך מועמדים
+    candidates: [{  //מערך מועמדים
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Candidate'
+    }],
     isApproved: {  // האם השדכנית אושרה ע"י המנהל או בהמתנה
-        type: Boolean, 
+        type: Boolean,
         default: false
-    } 
+    }
 })
 const Matchmaker = new mongoose.model("matchmakers", matchmakerSchema);
 module.exports = Matchmaker;
