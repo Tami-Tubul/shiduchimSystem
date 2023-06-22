@@ -14,8 +14,8 @@ router.get("/matchmakers-cards", authenticateToken, checkUserRole('admin'), mana
 router.get("/messages", authenticateToken, checkUserRole('admin'), managerController.getAllMassagesFromMatchmakers);
 router.delete("/messages/:id", authenticateToken, checkUserRole('admin'), managerController.deleteMessageFromMatchmaker);
 
-router.post("/filter-candidates", authenticateToken, usersControllers.filterCandidatesCards);
-router.get("/candidates-cards", authenticateToken, usersControllers.getAllCandidatesCards);
+router.post("/filter-candidates", authenticateToken, checkUserRole('admin'), usersControllers.filterCandidatesCards);
+router.get("/candidates-cards", authenticateToken, checkUserRole('admin'), usersControllers.getAllCandidatesCards);
 
 module.exports = router;
 
