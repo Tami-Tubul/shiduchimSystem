@@ -31,7 +31,7 @@ const registerCandidate = async (req, res, next) => {  //מילוי שאלון �
 
 }
 
-const getAllDoneShiduchim = async (req, res, next) => { //הצגת כל השידוכים של האתר
+const getAllDoneShiduchim = async (req, res, next) => { //הצגת כל השידוכים של האתר (משמש גם להצגת הנתונים בגרף סטטיסטיקות) 
     try {
     }
     catch (err) {

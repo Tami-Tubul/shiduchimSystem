@@ -11,7 +11,6 @@ router.delete("/delete-candidate/:id", authenticateToken, managerController.dele
 router.get("/", authenticateToken, managerController.getAllMatchmakers);
 router.get("/", authenticateToken, managerController.getAllMassagesFromMatchmakers);
 router.delete("/:id", authenticateToken, managerController.deleteMessagesFromMatchmakers);
-router.get("/", authenticateToken, managerController.statistikotShiduchim);
 
 module.exports = router;
 

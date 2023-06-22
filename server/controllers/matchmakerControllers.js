@@ -75,16 +75,16 @@ const sendMessageToManager = async (req, res, next) => { //שליחת הודעה
 const sendLinkOfWebsite = async (req, res, next) => { //שיתוף קישור האתר
 
     try {
-
+         // אין לוגיקה לשרת. אמור להיות מיושם בצד לקוח
     }
     catch (err) {
         next(err)
     }
 
 }
-const printQuestionPage = async (req, res, next) => {
+const printQuestionPage = async (req, res, next) => { //הדפסת שאלון.
     try {
-
+        //אין לוגיקה לשרת. אמור להיות מיושם בצד לקוח
     }
     catch (err) {
         next(err)
@@ -97,7 +97,5 @@ module.exports = {
     closingMatch,
     addCandidateToCart,
     deleteCandidateFromCart,
-    sendMessageToManager,
-    sendLinkOfWebsite,
-    printQuestionPage,
+    sendMessageToManager
 }

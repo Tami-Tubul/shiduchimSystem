@@ -9,8 +9,6 @@ router.post("/", authenticateToken, matchmakerControllers.closingMatch);
 router.put("/:id", authenticateToken, matchmakerControllers.addCandidateToCart);
 router.delete("/:id", authenticateToken, matchmakerControllers.deleteCandidateFromCart);
 router.post("/", authenticateToken, matchmakerControllers.sendMessageToManager);
-router.post("/", authenticateToken, matchmakerControllers.sendLinkOfWebsite);
-router.post("/", authenticateToken, matchmakerControllers.printQuestionPage);
 
 module.exports = router;
 

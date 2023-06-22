@@ -150,16 +150,6 @@ const deleteMessagesFromMatchmakers = async (req, res, next) => { //מחיקת �
 
 }
 
-const statistikotShiduchim = async (req, res, next) => { //סטטיסטיקות שידוכים
-    try {
-
-    }
-    catch (err) {
-        next(err)
-    }
-
-}
-
 
 module.exports = {
     approveMatchmaker,
@@ -168,6 +158,5 @@ module.exports = {
     deleteCandidate,
     getAllMatchmakers,
     getAllMassagesFromMatchmakers,
-    deleteMessagesFromMatchmakers,
-    statistikotShiduchim
+    deleteMessagesFromMatchmakers
 }
