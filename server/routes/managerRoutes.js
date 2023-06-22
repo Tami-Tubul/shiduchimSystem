@@ -10,7 +10,7 @@ router.put("/approve-candidate/:id", authenticateToken, checkUserRole('admin'), 
 router.delete("/delete-candidate/:id", authenticateToken, checkUserRole('admin'), managerController.deleteCandidate);
 router.get("/matchmakers-cards", authenticateToken, checkUserRole('admin'), managerController.getAllMatchmakersCards);
 router.get("/messages", authenticateToken, checkUserRole('admin'), managerController.getAllMassagesFromMatchmakers);
-router.delete("/:id", authenticateToken, checkUserRole('admin'), managerController.deleteMessagesFromMatchmakers);
+router.delete("/messages/:id", authenticateToken, checkUserRole('admin'), managerController.deleteMessageFromMatchmaker);
 
 module.exports = router;
 

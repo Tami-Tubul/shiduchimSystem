@@ -14,7 +14,6 @@ const authLogin = async (req, res, next) => { //התחברות משתמש (מנ�
 
         const userID = userExist._id;
         const userRole = userExist.role;
-        RSA_PRIVATE_KEY
 
         const tokenData = jwt.sign(
             { id: userID, role: userRole },
@@ -52,7 +51,10 @@ const authenticateToken = async (req, res, next) => { //בדיקת טוקן  - �
             if (err)
                 return res.status(500).json({ message: "Failed to authenticate token." })
             else {
-                req.userRole = decoded.role; //מפענח מהדיקודד את הרול של היוזר שהתחבר ושומר אותו בבקשה
+                req.userConnect = {
+                    id: decoded.id,
+                    role: decoded.role
+                }
                 next();
             }
 
@@ -65,7 +67,7 @@ const authenticateToken = async (req, res, next) => { //בדיקת טוקן  - �
 };
 
 const checkUserRole = (role) => (req, res, next) => {  //בדיקת תפקיד היוזר כדי לדעת אילו דפים להציג לו ואיזה לא
-    const userRole = req.userRole;
+    const userRole = req.userConnect.role;
     if (userRole !== role) {
         return res.status(403).json({ message: `Access forbidden. Required role: ${role}` });
     }

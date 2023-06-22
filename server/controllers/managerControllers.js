@@ -141,7 +141,7 @@ const getAllMassagesFromMatchmakers = async (req, res, next) => { //הצגת ה�
 
 }
 
-const deleteMessagesFromMatchmakers = async (req, res, next) => { //מחיקת הודעה ושליחת תשובה במייל
+const deleteMessageFromMatchmaker = async (req, res, next) => { //מחיקת הודעה ושליחת תשובה במייל
     try {
 
     }
@@ -159,5 +159,5 @@ module.exports = {
     deleteCandidate,
     getAllMatchmakersCards,
     getAllMassagesFromMatchmakers,
-    deleteMessagesFromMatchmakers
+    deleteMessageFromMatchmaker
 }

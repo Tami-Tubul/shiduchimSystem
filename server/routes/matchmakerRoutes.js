@@ -5,10 +5,11 @@ const matchmakerControllers = require("../controllers/matchmakerControllers");
 const { authenticateToken } = require('../controllers/authControllers'); // בכל בקשה לשרת מופעלת פונקציה שמאמתת את הטוקן
 
 router.post("/register", matchmakerControllers.registerMatchmaker);
-router.post("/", authenticateToken, matchmakerControllers.closingMatch);
-router.put("/:id", authenticateToken, matchmakerControllers.addCandidateToCart);
-router.delete("/:id", authenticateToken, matchmakerControllers.deleteCandidateFromCart);
-router.post("/", authenticateToken, matchmakerControllers.sendMessageToManager);
+router.post("/closing-match", authenticateToken, matchmakerControllers.closingMatch);
+router.get("/cart", authenticateToken, matchmakerControllers.getAllCandidateOnCart);
+router.put("/cart/:id", authenticateToken, matchmakerControllers.addCandidateToCart);
+router.delete("/cart/:id", authenticateToken, matchmakerControllers.deleteCandidateFromCart);
+router.post("/message", authenticateToken, matchmakerControllers.sendMessageToManager);
 
 module.exports = router;
 
