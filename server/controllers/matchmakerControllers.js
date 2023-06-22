@@ -59,17 +59,6 @@ const getAllCandidateOnCart = async (req, res, next) => { //שליפת מועמ�
 
 }
 
-
-const addCandidateToCart = async (req, res, next) => { //הוספת מועמד לאזור אישי
-    try {
-
-    }
-    catch (err) {
-        next(err)
-    }
-
-}
-
 const deleteCandidateFromCart = async (req, res, next) => { //הסרת מועמד מהאזור האישי
     try {
         const matchmakerID = req.userConnect.id;
@@ -120,7 +109,6 @@ module.exports = {
     registerMatchmaker,
     closingMatch,
     getAllCandidateOnCart,
-    addCandidateToCart,
     deleteCandidateFromCart,
     sendMessageToManager
 }

@@ -1,4 +1,5 @@
 const Candidate = require("../models/CandidateModel");
+const Matchmaker = require("../models/MatchmakerModel");
 const Meorasim = require("../models/MeorasimModel");
 
 
@@ -157,9 +158,31 @@ const getAllCandidatesCards = async (req, res, next) => {  //הצגת כרטיס
     }
 }
 
+const addCandidateToCart = async (req, res, next) => { // הוספת מועמד לאזור אישי (שדכן)
+    try {
+        const matchmakerID = req.userConnect.id;
+        const candidateID = req.params.id;
+        const matchmaker = await Matchmaker.findOne({ _id: matchmakerID });
+        if(!matchmaker){
+            return res.status(400).json({ message: "שדכן לא נמצא" });
+         }
+         if (matchmaker.candidates.includes(candidateID)) {
+            return res.status(400).json({ message: "מועמד זה כבר קיים בסל שלך" });
+        }
+         matchmaker.candidates = [...matchmaker.candidates , candidateID];
+         matchmaker.save();
+         res.status(200).json({ message: "המועמד נוסף לסל בהצלחה", candidatesOnCart: matchmaker.candidates });
+
+    }
+    catch (err) {
+        next(err)
+    }
+}
+
 module.exports = {
     registerCandidate,
     getAllDoneShiduchim,
     filterCandidatesCards,
-    getAllCandidatesCards
+    getAllCandidatesCards,
+    addCandidateToCart
 }

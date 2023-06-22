@@ -7,7 +7,6 @@ const { authenticateToken } = require('../controllers/authControllers'); // בכ
 router.post("/register", matchmakerControllers.registerMatchmaker);
 router.post("/closing-match", authenticateToken, matchmakerControllers.closingMatch);
 router.get("/cart", authenticateToken, matchmakerControllers.getAllCandidateOnCart);
-router.put("/cart/:id", authenticateToken, matchmakerControllers.addCandidateToCart);
 router.delete("/cart/:id", authenticateToken, matchmakerControllers.deleteCandidateFromCart);
 router.post("/message", authenticateToken, matchmakerControllers.sendMessageToManager);
 

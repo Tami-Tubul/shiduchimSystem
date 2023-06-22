@@ -1,6 +1,8 @@
 const crypto = require('crypto');
 
 const Matchmaker = require("../models/MatchmakerModel");
+const Candidate = require("../models/CandidateModel");
+
 const User = require("../models/UserModel");
 
 const mail = require('../config/mailer')
@@ -76,7 +78,7 @@ const deleteMatchmaker = async (req, res, next) => { //מחיקת שדכן וש�
 const approveCandidate = async (req, res, next) => {   // אישור מועמד חדש
     try {
         const candidateID = req.params.id;
-        const candidateExist = await Candidates.findOne({ _id: candidateID })
+        const candidateExist = await Candidate.findOne({ _id: candidateID })
         if (!candidateExist) {
             return res.status(400).json({ message: "מועמד לא נמצא" });
         }
@@ -99,7 +101,7 @@ const approveCandidate = async (req, res, next) => {   // אישור מועמד
 const deleteCandidate = async (req, res, next) => { //מחיקת מועמד  ושליחת הודעה במייל
     try {
         const candidateID = req.params.id;
-        const candidateExist = await Candidates.findByIdAndDelete(candidateID);
+        const candidateExist = await Candidate.findByIdAndDelete(candidateID);
         if (!candidateExist) {
             return res.status(400).json({ message: "מועמד לא נמצא" });
         }
@@ -129,6 +131,7 @@ const getAllMatchmakersCards = async (req, res, next) => { //הצגת כרטיס
         next(err)
     }
 }
+
 
 const getAllMassagesFromMatchmakers = async (req, res, next) => { //הצגת הודעות משדכנים
     try {
