@@ -75,6 +75,18 @@ const sendMessageToManager = async (req, res, next) => { //שליחת הודעה
     }
 
 }
+
+const getDoneShiduchimOfMatchmaker = async (req, res, next) => { //שליפת כל השידוכים שהשדכן עשה
+
+    try {
+
+    }
+    catch (err) {
+        next(err)
+    }
+
+}
+
 const sendLinkOfWebsite = async (req, res, next) => { //שיתוף קישור האתר
 
     try {
@@ -100,5 +112,6 @@ module.exports = {
     getAllCandidateOnCart,
     addCandidateToCart,
     deleteCandidateFromCart,
-    sendMessageToManager
+    sendMessageToManager,
+    getDoneShiduchimOfMatchmaker
 }
