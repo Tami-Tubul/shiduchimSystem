@@ -106,7 +106,7 @@ const deleteCandidate = async (req, res, next) => { //מחיקת מועמד  ו�
         }
         else {
 
-            const mailTo = 'tamit0430@gmail.com'; // candidateExist.email ;
+            const mailTo = candidateExist.email;
             const textMail = `שלום ${candidateExist.firstName}. תודה על התעניינותך במערכת השידוכים שלנו. לצערנו, לא הצלחנו לקבל את בקשתך. מאחלים לך הצלחה בהמשך הדרך. `;
 
             mail.sendMail(mailTo, textMail);
