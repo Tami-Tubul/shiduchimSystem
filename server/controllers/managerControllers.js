@@ -2,7 +2,6 @@ const crypto = require('crypto');
 
 const Matchmaker = require("../models/MatchmakerModel");
 const Candidate = require("../models/CandidateModel");
-
 const User = require("../models/UserModel");
 
 const mail = require('../config/mailer')

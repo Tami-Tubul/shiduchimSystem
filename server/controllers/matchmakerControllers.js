@@ -1,8 +1,6 @@
 const Matchmaker = require("../models/MatchmakerModel");
 
 
-
-
 const closingMatch = async (req, res, next) => { //סגירת שידוך
     try {
 
