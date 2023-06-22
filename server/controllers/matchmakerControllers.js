@@ -1,36 +1,7 @@
 const Matchmaker = require("../models/MatchmakerModel");
 
 
-const registerMatchmaker = async (req, res, next) => {
-    try {
-        const { firstName, lastName, phone, livingPlace, age, email } = req.body;
-        if (!(firstName && lastName && phone && livingPlace && age && email)) {
-            return res.status(400).json({ message: "יש למלא את כל שדות החובה" });
-        }
-        const matchmakerExist = await Matchmaker.findOne({ email, phone });
 
-        if (matchmakerExist) {
-            return res.status(400).json({ message: "שדכן זה כבר קיים במערכת" });
-        }
-        else {
-            const newMatchmaker = new Matchmaker({
-                firstName: firstName,
-                lastName: lastName,
-                phone: phone,
-                livingPlace: livingPlace,
-                age: age,
-                email: email
-            })
-            await newMatchmaker.save();
-            res.status(201).json({ message: "נרשמת בהצלחה! פרטיך נבדקים במערכת, במידה והתקבלת תקבלי סיסמא למייל.", newMatchmaker: newMatchmaker })
-        }
-
-    }
-    catch (err) {
-        next(err)
-    }
-
-}
 
 const closingMatch = async (req, res, next) => { //סגירת שידוך
     try {
@@ -57,6 +28,27 @@ const getAllCandidateOnCart = async (req, res, next) => { //שליפת מועמ�
         next(err)
     }
 
+}
+
+const addCandidateToCart = async (req, res, next) => { // הוספת מועמד לאזור אישי (שדכן)
+    try {
+        const matchmakerID = req.userConnect.id;
+        const candidateID = req.params.id;
+        const matchmaker = await Matchmaker.findOne({ _id: matchmakerID });
+        if(!matchmaker){
+            return res.status(400).json({ message: "שדכן לא נמצא" });
+         }
+         if (matchmaker.candidates.includes(candidateID)) {
+            return res.status(400).json({ message: "מועמד זה כבר קיים בסל שלך" });
+        }
+         matchmaker.candidates = [...matchmaker.candidates , candidateID];
+         matchmaker.save();
+         res.status(200).json({ message: "המועמד נוסף לסל בהצלחה", candidatesOnCart: matchmaker.candidates });
+
+    }
+    catch (err) {
+        next(err)
+    }
 }
 
 const deleteCandidateFromCart = async (req, res, next) => { //הסרת מועמד מהאזור האישי
@@ -106,9 +98,9 @@ const printQuestionPage = async (req, res, next) => { //הדפסת שאלון.
 }
 
 module.exports = {
-    registerMatchmaker,
     closingMatch,
     getAllCandidateOnCart,
+    addCandidateToCart,
     deleteCandidateFromCart,
     sendMessageToManager
 }

@@ -3,6 +3,36 @@ const Matchmaker = require("../models/MatchmakerModel");
 const Meorasim = require("../models/MeorasimModel");
 
 
+const registerMatchmaker = async (req, res, next) => {  //הרשמת שדכן
+    try {
+        const { firstName, lastName, phone, livingPlace, age, email } = req.body;
+        if (!(firstName && lastName && phone && livingPlace && age && email)) {
+            return res.status(400).json({ message: "יש למלא את כל שדות החובה" });
+        }
+        const matchmakerExist = await Matchmaker.findOne({ email, phone });
+
+        if (matchmakerExist) {
+            return res.status(400).json({ message: "שדכן זה כבר קיים במערכת" });
+        }
+        else {
+            const newMatchmaker = new Matchmaker({
+                firstName: firstName,
+                lastName: lastName,
+                phone: phone,
+                livingPlace: livingPlace,
+                age: age,
+                email: email
+            })
+            await newMatchmaker.save();
+            res.status(201).json({ message: "נרשמת בהצלחה! פרטיך נבדקים במערכת, במידה והתקבלת תקבלי סיסמא למייל.", newMatchmaker: newMatchmaker })
+        }
+
+    }
+    catch (err) {
+        next(err)
+    }
+
+}
 
 const registerCandidate = async (req, res, next) => {  //מילוי שאלון הרשמה למועמד
     try {
@@ -158,31 +188,13 @@ const getAllCandidatesCards = async (req, res, next) => {  //הצגת כרטיס
     }
 }
 
-const addCandidateToCart = async (req, res, next) => { // הוספת מועמד לאזור אישי (שדכן)
-    try {
-        const matchmakerID = req.userConnect.id;
-        const candidateID = req.params.id;
-        const matchmaker = await Matchmaker.findOne({ _id: matchmakerID });
-        if(!matchmaker){
-            return res.status(400).json({ message: "שדכן לא נמצא" });
-         }
-         if (matchmaker.candidates.includes(candidateID)) {
-            return res.status(400).json({ message: "מועמד זה כבר קיים בסל שלך" });
-        }
-         matchmaker.candidates = [...matchmaker.candidates , candidateID];
-         matchmaker.save();
-         res.status(200).json({ message: "המועמד נוסף לסל בהצלחה", candidatesOnCart: matchmaker.candidates });
 
-    }
-    catch (err) {
-        next(err)
-    }
-}
 
 module.exports = {
+    registerMatchmaker,
     registerCandidate,
     getAllDoneShiduchim,
     filterCandidatesCards,
-    getAllCandidatesCards,
-    addCandidateToCart
+    getAllCandidatesCards
+    
 }
