@@ -2,20 +2,20 @@ const Candidate = require("../models/CandidateModel");
 
 //פונקציות משותפות לשדכן ומנהל
 
-const filterCandidatesCards = async (req, res, next) => {  //סינון מועמדים (שדכן ומנהל)
+const filterCandidatesCards = async (req, res, next) => {  //סינון מועמדים
     try {
         const {
             sector,
             fromAge,
             mostAge,
-            economicCondition, // מעמד הכוונה מצב כלכלי?
+            economicCondition, 
             fromHigh,
             mostHigh,
             look,
             colorSkin,
             countryBirth,
-            drishotFavoriteMoza, //מוצא בחור הכוונה לעידה? אין לו שדה מוצא..
-            drishotNotMoza, //מוצא בחור הכוונה לעידה? אין לו שדה מוצא..
+            drishotFavoriteMoza, 
+            drishotNotMoza, 
             city,
             characters,
             drishotHeaddress,
@@ -104,7 +104,7 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
 
 }
 
-const getAllCandidatesCards = async (req, res, next) => {  //הצגת כרטיסי מועמדים (שדכן ומנהל)
+const getAllCandidatesCards = async (req, res, next) => {  //הצגת כרטיסי מועמדים
     try {
         const allCandidates = await Candidate.find({})
         return res.status(200).json({ candidates: allCandidates });
