@@ -6,10 +6,10 @@ const usersControllers = require('../controllers/usersControllers');
 
 const { authenticateToken, checkUserRole } = require('../controllers/authControllers'); // בכל בקשה לשרת מופעלת פונקציה שמאמתת את הטוקן ופונקציה נוספת שבודקת אם זה המנהל
 
-router.put("/approve-matchmaker/:id", authenticateToken, checkUserRole('admin'), managerController.approveMatchmaker);
-router.delete("/delete-matchmaker/:id", authenticateToken, checkUserRole('admin'), managerController.deleteMatchmaker);
-router.put("/approve-candidate/:id", authenticateToken, checkUserRole('admin'), managerController.approveCandidate);
-router.delete("/delete-candidate/:id", authenticateToken, checkUserRole('admin'), managerController.deleteCandidate);
+router.put("/new-matchmakers/:id", authenticateToken, checkUserRole('admin'), managerController.approveMatchmaker);
+router.delete("/new-matchmakers/:id", authenticateToken, checkUserRole('admin'), managerController.deleteMatchmaker);
+router.put("/new-candidates/:id", authenticateToken, checkUserRole('admin'), managerController.approveCandidate);
+router.delete("/new-candidates/:id", authenticateToken, checkUserRole('admin'), managerController.deleteCandidate);
 router.get("/matchmakers-cards", authenticateToken, checkUserRole('admin'), managerController.getAllMatchmakersCards);
 router.get("/messages", authenticateToken, checkUserRole('admin'), managerController.getAllMassagesFromMatchmakers);
 router.delete("/messages/:id", authenticateToken, checkUserRole('admin'), managerController.deleteMessageFromMatchmaker);
