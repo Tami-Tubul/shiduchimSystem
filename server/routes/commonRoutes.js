@@ -4,8 +4,8 @@ const commonControllers = require('../controllers/commonControllers');
 
 router.post("/register-candidate", commonControllers.registerCandidate);
 router.post("/filter-candidates", commonControllers.filterCandidatesCards);
+router.get("/meorasim-cards", commonControllers.getAllDoneShiduchim);
 router.get("/candidates-cards", commonControllers.getAllCandidatesCards);
-router.get("/meorasim", commonControllers.getAllDoneShiduchim);
 
 
 module.exports = router; 

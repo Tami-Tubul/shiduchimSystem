@@ -1,4 +1,6 @@
 const Candidate = require("../models/CandidateModel");
+const Meorasim = require("../models/MeorasimModel");
+
 
 
 const registerCandidate = async (req, res, next) => {  //מילוי שאלון הרשמה למועמד
@@ -31,8 +33,10 @@ const registerCandidate = async (req, res, next) => {  //מילוי שאלון �
 
 }
 
-const getAllDoneShiduchim = async (req, res, next) => { //הצגת כל השידוכים של האתר (משמש גם להצגת הנתונים בגרף סטטיסטיקות) 
+const getAllDoneShiduchim = async (req, res, next) => { //שליפת כל השידוכים של האתר (משמש גם להצגת הנתונים בגרף סטטיסטיקות) 
     try {
+        const allMeorasim = await Meorasim.find({})
+        return res.status(200).json({ meorasim: allMeorasim });
     }
     catch (err) {
         next(err)
@@ -53,8 +57,8 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
             look,
             colorSkin,
             countryBirth,
-            drishotFavoriteMoza,
-            drishotNotMoza,
+            drishotFavoriteMoza, //מוצא בחור הכוונה לעידה? אין לו שדה מוצא..
+            drishotNotMoza, //מוצא בחור הכוונה לעידה? אין לו שדה מוצא..
             city,
             characters,
             drishotHeaddress,
@@ -134,13 +138,7 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
 
         const filteredCandidates = await Candidate.find(query);
 
-        if (filteredCandidates) {
-            return res.status(200).json({ filteredCandidates: filteredCandidates })
-        }
-
-        else {
-            return res.status(404).json({ message: "לא נמצאו מועמדים התואמים לסינון שלך" });
-        }
+        return res.status(200).json({ filteredCandidates: filteredCandidates })
 
     }
     catch (err) {
@@ -151,11 +149,13 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
 
 const getAllCandidatesCards = async (req, res, next) => {  //הצגת כרטיסי מועמדים (שדכן ומנהל)
     try {
-
+        const allCandidates = await Candidate.find({})
+        return res.status(200).json({ candidates: allCandidates });
     }
     catch (err) {
         next(err)
     }
+
 
 }
 
