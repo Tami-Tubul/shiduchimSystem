@@ -155,8 +155,6 @@ const getAllCandidatesCards = async (req, res, next) => {  //הצגת כרטיס
     catch (err) {
         next(err)
     }
-
-
 }
 
 module.exports = {

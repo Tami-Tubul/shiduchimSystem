@@ -120,19 +120,20 @@ const deleteCandidate = async (req, res, next) => { //מחיקת מועמד  ו�
 }
 
 
-const getAllMatchmakers = async (req, res, next) => { //הצגת כרטיסי שדכנים
+const getAllMatchmakersCards = async (req, res, next) => { //הצגת כרטיסי שדכנים
     try {
-
+        const allMatchmakers = await Matchmaker.find({})
+        return res.status(200).json({ matchmakers: allMatchmakers });
     }
     catch (err) {
         next(err)
     }
-
 }
 
 const getAllMassagesFromMatchmakers = async (req, res, next) => { //הצגת הודעות משדכנים
     try {
-
+        const allMatchmakers = await Matchmaker.find({})
+        return res.status(200).json({ matchmakers: allMatchmakers });
     }
     catch (err) {
         next(err)
@@ -156,7 +157,7 @@ module.exports = {
     deleteMatchmaker,
     approveCandidate,
     deleteCandidate,
-    getAllMatchmakers,
+    getAllMatchmakersCards,
     getAllMassagesFromMatchmakers,
     deleteMessagesFromMatchmakers
 }
