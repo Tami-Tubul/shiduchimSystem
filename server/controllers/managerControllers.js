@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const Matchmaker = require("../models/MatchmakerModel");
 const Candidate = require("../models/CandidateModel");
 const User = require("../models/UserModel");
+const Message = require("../models/MessageModel");
 
 const mail = require('../config/mailer')
 
@@ -134,8 +135,8 @@ const getAllMatchmakersCards = async (req, res, next) => { //הצגת כרטיס
 
 const getAllMassagesFromMatchmakers = async (req, res, next) => { //הצגת הודעות משדכנים
     try {
-        const allMatchmakers = await Matchmaker.find({})
-        return res.status(200).json({ matchmakers: allMatchmakers });
+        const allMessages = await Message.find({})
+        return res.status(200).json({ messages: allMessages });
     }
     catch (err) {
         next(err)
