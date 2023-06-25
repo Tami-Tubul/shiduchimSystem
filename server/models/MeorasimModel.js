@@ -42,5 +42,5 @@ const meorasimSchema = mongoose.Schema({
         ref: 'Matchmaker'
     }
 })
-const Meorasim = new mongoose.model("meorasim", meorasimSchema);
+const Meorasim = new mongoose.model("meorasims", meorasimSchema);
 module.exports = Meorasim;
