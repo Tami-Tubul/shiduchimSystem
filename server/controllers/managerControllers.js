@@ -90,6 +90,18 @@ const approveCandidate = async (req, res, next) => {   // אישור מועמד
             await candidateExist.save();
 
             res.status(201).json({ message: "המועמד נוסף בהצלחה למאגר" })
+
+            //תזמון שליחת מייל פעם בחודש מתאריך זה
+            const mailTo = candidateExist.email;
+            const textMail = `שלום ${candidateExist.firstName}. זוהי בדיקת רלוונטיות חודשית. האם אתה עדיין מחפש שידוך? השב בכן או לא כדי שהמערכת תדע האם להסיר אותך מהמאגר. תודה.`;
+
+            const task = mail.sendMail(mailTo, textMail, true);
+
+            //במידה והמועמד השיב שהוא כבר לא רלוונטי
+            //candidateExist.remove();   //הסרת המועמד מטבלת המועמדים
+            //res.status(200).json({ message: "המועמד הוסר בהצלחה מהמאגר" })
+            //task.destroy(); //הפסקת תזמון המייל החודשי
+
         }
     }
     catch (err) {
@@ -144,9 +156,17 @@ const getAllMassagesFromMatchmakers = async (req, res, next) => { //הצגת ה�
 
 }
 
-const deleteMessageFromMatchmaker = async (req, res, next) => { //מחיקת הודעה ושליחת תשובה במייל
+const deleteMessageFromMatchmaker = async (req, res, next) => { //מחיקת הודעה מהשדכן
     try {
+        const messageID = req.params.id;
+        const messageExist = await Message.findByIdAndDelete(messageID);
+        if (!messageExist) {
+            return res.status(400).json({ message: "הודעה לא נמצאה" });
+        }
+        else {
 
+            res.status(200).json({ message: "ההודעה הוסרה בהצלחה" });
+        }
     }
     catch (err) {
         next(err)

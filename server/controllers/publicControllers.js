@@ -39,10 +39,16 @@ const registerCandidate = async (req, res, next) => {  //מילוי שאלון �
         const nonMandatoryFields = ["picture", "requireMoney", "CommitMoney", "drishotCharacters", "drishotNotMoza"] //שדות לא חובה
         const mandatoryFields = Object.keys(req.body).filter(field => !nonMandatoryFields.includes(field)); //שדות חובה
         const candidate = req.body;  //כל השדות 
-        const hasAllMandatoryFields = mandatoryFields.every(field => candidate[field]); //בדיקה האם כל שדות החובה מולאו
+        const missingFields = [];
 
-        if (!hasAllMandatoryFields) {
-            return res.status(400).json({ message: "יש למלא את כל שדות החובה" });
+        mandatoryFields.forEach(field => {  //בדיקה האם כל שדות החובה מולאו
+            if (candidate[field] === undefined || candidate[field] === null) {
+                missingFields.push(field);
+            }
+        });
+
+        if (missingFields.length > 0) {
+            return res.status(400).json({ message: `יש למלא את כל שדות החובה. השדות החסרים הם: ${missingFields.join(', ')}` });
         }
 
         const candidateExist = await Candidate.findOne({ email: candidate.email, phone: candidate.phone });
@@ -196,5 +202,5 @@ module.exports = {
     getAllDoneShiduchim,
     filterCandidatesCards,
     getAllCandidatesCards
-    
+
 }

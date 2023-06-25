@@ -11,7 +11,7 @@ router.get("/cart", authenticateToken, matchmakerControllers.getAllCandidateOnCa
 router.delete("/cart/:id", authenticateToken, matchmakerControllers.deleteCandidateFromCart);
 router.put("/candidates-cards/:id", authenticateToken, matchmakerControllers.addCandidateToCart); 
 router.post("/message", authenticateToken, matchmakerControllers.sendMessageToManager);
-router.post("/your-meorasim-cards", authenticateToken, matchmakerControllers.getDoneShiduchimOfMatchmaker);
+router.get("/your-meorasim-cards", authenticateToken, matchmakerControllers.getDoneShiduchimOfMatchmaker);
 
 router.post("/filter-candidates", authenticateToken, usersControllers.filterCandidatesCards);
 router.get("/candidates-cards", authenticateToken, usersControllers.getAllCandidatesCards);

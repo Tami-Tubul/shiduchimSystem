@@ -7,7 +7,7 @@ exports.sendMail = (mailTo, textMail, schedule = false) => {
         service: 'gmail',
         auth: {
             user: 'tamihamalka@gmail.com',
-            pass: 'xxxxxxxxxxxxx' //סיסמת אפליקציה
+            pass: 'uwiiyrypngtrvyhh' //סיסמת אפליקציה
         }
     });
 
@@ -17,9 +17,9 @@ exports.sendMail = (mailTo, textMail, schedule = false) => {
         subject: 'נשלחה לך הודעה מאתר שידוכים',
         text: textMail
     };
-    
+
     if (schedule) { //קוד זה מתזמן את השליחה פעם בחודש
-        cron.schedule('0 0 1 * *', () => {
+        const task = cron.schedule('0 0 1 * *', () => {
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                     console.log(error);
@@ -28,6 +28,8 @@ exports.sendMail = (mailTo, textMail, schedule = false) => {
                 }
             })
         });
+
+        return task;
     }
     else { //שליחת מייל ללא תזמון
         transporter.sendMail(mailOptions, function (error, info) {

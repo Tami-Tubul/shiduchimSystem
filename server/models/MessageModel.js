@@ -14,7 +14,8 @@ const messageSchema = mongoose.Schema({
         required: true
     },
     dateOfSending: {
-        type: Date
+        type: Date,
+        default: Date.now //תאריך של אותו יום בו נשלחה ההודעה
     },
 })
 const Message = new mongoose.model("messages", messageSchema);

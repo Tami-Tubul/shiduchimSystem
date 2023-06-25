@@ -36,6 +36,10 @@ const meorasimSchema = mongoose.Schema({
     dateWort: {
         type: String,
         required: true
+    },
+    matchmakerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Matchmaker'
     }
 })
 const Meorasim = new mongoose.model("meorasim", meorasimSchema);
