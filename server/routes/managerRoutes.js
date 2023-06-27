@@ -13,6 +13,7 @@ router.delete("/new-candidates/:id", authenticateToken, checkUserRole('admin'), 
 router.get("/matchmakers-cards", authenticateToken, checkUserRole('admin'), managerController.getAllMatchmakersCards);
 router.get("/messages", authenticateToken, checkUserRole('admin'), managerController.getAllMassagesFromMatchmakers);
 router.delete("/messages/:id", authenticateToken, checkUserRole('admin'), managerController.deleteMessageFromMatchmaker);
+router.delete("/remoal-candidates/:id", authenticateToken, checkUserRole('admin'), managerController.removingIrrelevantCandidate);
 
 router.post("/filter-candidates", authenticateToken, checkUserRole('admin'), usersControllers.filterCandidatesCards);
 router.get("/candidates-cards", authenticateToken, checkUserRole('admin'), usersControllers.getAllCandidatesCards);

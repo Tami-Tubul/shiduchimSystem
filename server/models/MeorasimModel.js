@@ -1,6 +1,16 @@
 const mongoose = require('mongoose');
 
 const meorasimSchema = mongoose.Schema({
+    bachurId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Candidate',
+        required: true
+    },
+    bachuraId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Candidate',
+        required: true
+    },
     bachurName: {
         type: String,
         required: true

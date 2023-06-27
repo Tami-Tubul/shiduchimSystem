@@ -4,15 +4,46 @@ const Meorasim = require("../models/MeorasimModel");
 const Candidate = require("../models/CandidateModel");
 
 
-const closingMatch = async (req, res, next) => { //סגירת שידוך
-   //חייבים מזהה של הבחור והבחורה כדי לוודא שלא נוסף שידוך פעמיים לטבלת המאורסים!!!!
+
+const markingCandidateForRemoval = async (req, res, next) => { //סימון מועמד להסרה ע"י השדכן. בפועל המנהל מוחק אותו בפונקציית מחיקה שלו
+
     try {
 
-        const { bachurName, bachuraName, bachurFather, bachuraFather, bachurYeshiva, bachuraSeminar, bachurCity, bachuraCity, dateWort } = req.body;
+        const candidateID = req.params.id;
+        const candidateExist = await Candidate.findByIdAndUpdate(candidateID, {
+            pendingDeletion: true
+        })
+
+        if (!candidateExist) {
+            return res.status(404).json({ message: "מועמד לא נמצא" })
+        }
+
+        res.status(200).json({ message: "המועמד סומן למחיקה" })
+
+
+    } catch (err) {
+        next(err)
+    }
+
+}
+
+const closingMatch = async (req, res, next) => { //סגירת שידוך
+
+    try {
+
+        const { bachurId, bachurName, bachuraId, bachuraName, bachurFather, bachuraFather, bachurYeshiva, bachuraSeminar, bachurCity, bachuraCity, dateWort } = req.body;
         if (!(bachurName && bachuraName && bachurFather && bachuraFather && bachurYeshiva && bachuraSeminar && bachurCity && bachuraCity && dateWort)) {
             return res.status(400).json({ message: "יש למלא את כל שדות החובה" });
         }
+
+        const shiduchExist = await Meorasim.findOne({ bachurId: bachurId, bachuraId: bachuraId })
+        if (shiduchExist) {
+            return res.status(400).json({ message: "שידוך זה כבר קיים בטבלת המאורסים" });
+        }
+
         const newShiduch = new Meorasim({
+            bachurId: bachurId,
+            bachuraId: bachuraId,
             bachurName: bachurName,
             bachuraName: bachuraName,
             bachurFather: bachurFather,
@@ -24,35 +55,31 @@ const closingMatch = async (req, res, next) => { //סגירת שידוך
             dateWort: dateWort,
             matchmakerId: req.userConnect.id //השדכן המחובר שעשה את השידוך
         })
-        await newShiduch.save();
-        res.status(201).json({ message: "השידוך נוסף בהצלחה למאגר המאורסים" });
 
+        const saveShiduch = await newShiduch.save();  //הוספת שידוך לטבלת מאורסים
+       
+        if (saveShiduch) {
+          
+            const bachur = await Candidate.findOne({ _id: bachurId });
+            const bachura = await Candidate.findOne({ _id: bachuraId });
 
-        //הסרת המאורסים מטבלת המועמדים
-        //חייבים מזהה של הבחור והבחורה כדי להסיר אותם מטבלת מועמדים
-        // const fullNameBachur = bachurName.split(' ');
-        // const firstNameBachur = fullNameBachur[0];
-        // const lastNameBachur = fullNameBachur[1];
+            if (!bachur || !bachura) {
+                return res.status(400).json({ message: "בחור/ה זה/ו לא קיים/מת במאגר המועמדים" })
+            }
 
-        // const fullNameBachura = bachuraName.split(' ');
-        // const firstNameBachura = fullNameBachura[0];
-        // const lastNameBachura = fullNameBachura[1];
+            const bachurRemoved = await Candidate.deleteOne({ _id: bachur._id }); //מחיקת בחור מטבלת מועמדים
 
-        // const bachur = await Candidate.findOne({ firstName: firstNameBachur, lastName: lastNameBachur, fatherName: bachurFather, yeshivaOrSeminar: bachurYeshiva, city: bachurCity });
-        // if (!bachur) {
-        //      res.status(400).json({ message: "בחור זה לא קיים במאגר המועמדים" })
-        // }
-        // const bachura = await Candidate.findOne({ firstName: firstNameBachura, lastName: lastNameBachura, fatherName: bachuraFather, yeshivaOrSeminar: bachuraSeminar, city: bachuraCity });
-        // if (!bachura) {
-        //      res.status(400).json({ message: "בחורה זו לא קיימת במאגר המועמדים" })
-        // }
+            const bachuraRemoved = await Candidate.deleteOne({ _id: bachura._id }); //מחיקת בחורה מטבלת מועמדים
 
-        // await Candidate.deleteOne({ _id: bachur._id });
+            if (!bachurRemoved || !bachuraRemoved) {
+                 return res.status(500).json({ message: "אירעה תקלה במחיקת הבחור/ה המאורס/ת מטבלת המועמדים" });
+            }
 
-        // await Candidate.deleteOne({ _id: bachura._id });
-
-        // res.status(200).json({ message: "המאורסים הוסרו ממאגר המועמדים" });
-
+            res.status(201).json({
+                message1: "השידוך נוסף בהצלחה למאגר המאורסים",
+                message2: "המאורסים הוסרו ממאגר המועמדים"
+            });
+        }
     }
     catch (err) {
         next(err)
@@ -175,5 +202,6 @@ module.exports = {
     addCandidateToCart,
     deleteCandidateFromCart,
     sendMessageToManager,
-    getDoneShiduchimOfMatchmaker
+    getDoneShiduchimOfMatchmaker,
+    markingCandidateForRemoval
 }

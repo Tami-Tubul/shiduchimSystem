@@ -50,6 +50,10 @@ const candidateSchema = mongoose.Schema({
     isApproved: {  // האם המועמד אושר ע"י המנהל או בהמתנה
         type: Boolean,
         default: false
+    },
+    pendingDeletion: { //האם המועמד סומן למחיקה או לא
+        type: Boolean,
+        default: false
     }
 });
 

@@ -174,6 +174,35 @@ const deleteMessageFromMatchmaker = async (req, res, next) => { //מחיקת ה�
 
 }
 
+const removingIrrelevantCandidate = async (req, res, next) => { // המנהל מוחק מועמד לא רלוונטי שסומן להסרה ע"י השדכן
+    try {
+        const candidateID = req.params.id;
+
+        const candidateExist = await Candidate.findOne({_id: candidateID});
+        
+        if (!candidateExist) {
+            return res.status(404).json({ message: "מועמד לא נמצא" });
+        }
+
+        const markToRemoval = await Candidate.findOneAndRemove({ _id: candidateID, pendingDeletion: true });
+       
+        if (!markToRemoval) {
+            return res.status(400).json({ message: "מועמד לא סומן להסרה על ידי השדכן" });
+        }
+
+        else {
+            res.status(200).json({ message: "המועמד הוסר בהצלחה מהמערכת" });
+        }
+    }
+    catch (err) {
+        next(err)
+    }
+
+}
+
+
+
+
 
 module.exports = {
     approveMatchmaker,
@@ -182,5 +211,6 @@ module.exports = {
     deleteCandidate,
     getAllMatchmakersCards,
     getAllMassagesFromMatchmakers,
-    deleteMessageFromMatchmaker
+    deleteMessageFromMatchmaker,
+    removingIrrelevantCandidate
 }
