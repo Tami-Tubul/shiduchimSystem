@@ -1,4 +1,4 @@
-const initialState = {
+//const initialState = {
     // user: {},
     //    details: [
     //         firstName = { type: String },//שם פרטי
@@ -44,16 +44,15 @@ const initialState = {
     //         casherPhone = { type: Boolean },//טלפון כשר
     //         licence = { type: Boolean },//רישיון
     //     ]
-}
+//}
 
-export const userReducer = (state = initialState, action) => {
+export const userReducer = (state ={ currentUser : {} , registers: []}, action) => {
     switch (action.type) {
         case "USER_LOGIN":
             return {
                 ...state,
                 currentUser: action.payload
             }
-        break;
         case "ADD_REGISTER":
             return {
                 ...state,

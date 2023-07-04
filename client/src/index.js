@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { userReducer } from './store/user/userReducer';
 import { matchMakerReducer } from './store/matchMaker/matchMakerReducer';
@@ -39,7 +39,7 @@ const persistor = persistStore(store);
 // const store = createStore(rootReducer,composeWithDevTools());
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -48,8 +48,7 @@ ReactDOM.render(
         {/* </Router> */}
       </PersistGate>
     </Provider>
-  </React.StrictMode >,
-  document.getElementById('root')
+  </React.StrictMode >
 );
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(
