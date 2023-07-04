@@ -1,0 +1,18 @@
+#filter {
+    max-width: fit-content;
+    background-color: #796136;
+    align-items: center;
+}
+.searchAndMatchPage {
+    margin: 0 3%;
+    direction: rtl;
+    align-items: center;
+    color: #796136;
+    margin-top: 15%;
+}
+.css-11lq3yg-MuiGrid-root {
+    direction: rtl !important;
+}
+.css-5lbw0b-MuiTypography-root {
+    text-align: center !important;
+}

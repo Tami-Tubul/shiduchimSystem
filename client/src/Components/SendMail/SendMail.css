@@ -1,0 +1,17 @@
+.SendMail {
+    padding: 0 25%;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    direction: rtl;
+    justify-content: space-between;
+    text-align: center;
+    margin-top: 15%;
+}
+.css-1v5z4dq-MuiPaper-root-MuiCard-root {
+    margin: 20% !important;
+    direction: rtl;
+}
+.css-140i45m-JoyButton-root {
+    background-color: #7961369e !important;
+}

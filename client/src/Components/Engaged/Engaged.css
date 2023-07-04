@@ -1,0 +1,15 @@
+.Box {
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    color: #796136;
+}
+.Grid {
+    z-index: 6;
+    direction: rtl;
+    text-align: center;
+    .css-11lq3yg-MuiGrid-root{
+        flex-direction: column !important;
+       }
+}
+

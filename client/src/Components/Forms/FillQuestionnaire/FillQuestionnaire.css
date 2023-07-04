@@ -1,0 +1,36 @@
+.FillQuestionarie {
+    padding: 0 15%;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    direction: rtl;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.addContainer {
+    margin-top: 2%;
+}
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root {
+    color: #cd8e1d !important;
+}
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
+    color: #cd8e1d !important;
+}
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
+    color:#cd8e1d !important;
+}
+.css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
+    color: #cd8e1d !important;
+}
+.MuiFormLabel-root .MuiFormLabel-colorPrimary .Mui-focused .css-u4tvz2-MuiFormLabel-root {
+    color: #cd8e1d !important;
+}
+.css-u4tvz2-MuiFormLabel-root.Mui-focused {
+    color: #cd8e1d !important;
+}
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover {
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    background-color: #e8e0d1 !important;
+}

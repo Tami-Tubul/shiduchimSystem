@@ -1,0 +1,21 @@
+#app {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    direction: rtl;
+    justify-content: space-between;
+    text-align: center;
+    .css-sghohy-MuiButtonBase-root-MuiButton-root {
+        background-color: #7961369e !important;
+    }
+}
+
+.actions {
+    z-index: 5;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    .css-sghohy-MuiButtonBase-root-MuiButton-root {
+        width: fit-content;
+    }
+}

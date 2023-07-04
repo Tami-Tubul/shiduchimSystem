@@ -1,0 +1,30 @@
+.CheckingNewRegistered {
+    direction: rtl;
+    margin: 0 3%;
+    margin-top: 15%;
+}
+.css-78trlr-MuiButtonBase-root-MuiIconButton-root {
+    width: fit-content !important;
+    border-radius: 0% !important;
+    color: #796136 !important;
+    background-color: #77889924 !important;
+    margin-left: 3% !important;
+    margin-bottom: 1% !important;
+}
+.css-i4bv87-MuiSvgIcon-root {
+    color: #796136;
+    margin-bottom: -5px;
+}
+.css-1q8v7ak-MuiSvgIcon-root {
+    color: #796136 !important;
+}
+.css-13dyovk-MuiButtonBase-root-MuiButton-root {
+    background-color: #796136 !important;
+}
+
+.css-1lymaxv-MuiDataGrid-root .MuiDataGrid-row:not(.MuiDataGrid-row--dynamicHeight)>.MuiDataGrid-cell {
+    margin-top: auto !important;
+}
+.css-axafay-MuiDataGrid-virtualScroller + div {
+    display: none !important;
+}

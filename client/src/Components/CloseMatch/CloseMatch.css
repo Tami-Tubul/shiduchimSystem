@@ -1,0 +1,29 @@
+#CloseRegister {
+    padding: 0px 19%;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    direction: rtl;
+    justify-content: space-between;
+    text-align: center;
+    margin-top: 15%;
+}
+.container {
+    justify-content: center;
+}
+button {
+    width: 43%;
+}
+.css-sghohy-MuiButtonBase-root-MuiButton-root {
+    margin-top: 8% !important;
+}
+.css-sghohy-MuiButtonBase-root-MuiButton-root {
+    width: fit-content !important;
+}
+.css-1sasres {
+    margin-top: 5%;
+    width: max-content !important;
+}
+.css-1ld3b9g-MuiGrid-root {
+    margin: 0 16%;
+}
