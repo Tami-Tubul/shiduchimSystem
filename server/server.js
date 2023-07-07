@@ -12,7 +12,7 @@ app.get("/", async (req, res, next) => {
     res.json({ message: "API Running..." })
 })
 
-app.use("/api", apiRoutes);
+app.use("/api/shiduchim", apiRoutes);
 
 app.use((err, req, res, next) => {
     res.status(500).json({

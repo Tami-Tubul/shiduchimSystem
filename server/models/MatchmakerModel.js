@@ -15,11 +15,9 @@ const matchmakerSchema = mongoose.Schema({
     },
     livingPlace: {
         type: String,
-        required: true
     },
     age: {
-        type: String,
-        required: true
+        type: Number
     },
     email: {
         type: String,

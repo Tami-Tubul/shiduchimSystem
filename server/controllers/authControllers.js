@@ -6,8 +6,9 @@ let RSA_PRIVATE_KEY = crypto.randomBytes(64).toString('hex'); //יצירת מפ�
 
 const authLogin = async (req, res, next) => { //התחברות משתמש (מנהל/שדכן)
     try {
-        const { userName, password } = req.body;
-        const userExist = await User.findOne({ userName: userName, password: password });
+        const { name, password } = req.body;
+        console.log(req.body)
+        const userExist = await User.findOne({ userName: name, password: password });
         if (!userExist) {
             return res.status(401).json({ message: "משתמש זה לא קיים במערכת. יש לבצע הרשמה" })
         }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import { Card } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -9,15 +9,36 @@ import { LicenseInfo } from '@mui/x-license-pro';
 import MyModal from '../Modal/Modal'
 import Header from '../Header/Header';
 import './ShowMessages.css';
+import axios from 'axios';
+import { loadMessages } from './../../store/manager/managerActions';
 
 LicenseInfo.setLicenseKey('x0jTPl0USVkVZV0SsMjM1kDNyADM5cjM2ETPZJVSQhVRsIDN0YTM6IVREJ1T0b9586ef25c9853decfa7709eee27a1e');
 
 export default function ShowMessages() {
     const data = useSelector((state) => state.manager);
-    const rows = data.messages ? data.messages : [];
+    const token = useSelector((state) => state.user.currentUser.token);
+
+    const rows = data.messages ? data.messages.map((message) => ({ ...message, id: message._id })) : [];
     const [rowModesModel, setRowModesModel] = React.useState({});
     const [showModal, setShowModal] = React.useState(false);
     const [selectedMessage, setSelectedMessage] = React.useState({});
+
+    const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        const getMessagesFromServer = async () => {
+            try {
+                const resp = await axios.get("http://localhost:5000/api/shiduchim/manager/messages", {
+                    headers: { 'x-access-token': token }
+                });
+                const data = resp.data;
+                dispatch(loadMessages(data.messages));
+            } catch (error) {
+                console.error('Error retrieving messages:', error);
+            }
+        }
+        getMessagesFromServer();
+    }, []);
 
     const handleShowMessageClick = (id) => () => {
         console.log('show', id);
@@ -27,9 +48,16 @@ export default function ShowMessages() {
         // TODO: צפיה ושמירת ההודעה
     };
 
-    const handleDeleteMessageClick = (id) => () => {
-        console.log('delete', id)
-       //TODO: מחיקת ההודעה 
+    const handleDeleteMessageClick = (id) => async () => {
+        try {
+            const resp = await axios.delete("http://localhost:5000/api/shiduchim/manager/messages/" + id)
+            if (resp.status === 200) {
+                //dispatch(deleteMessage(id)) //TODO: מחיקת ההודעה 
+                alert(resp.status.data.message)
+            }
+        } catch (error) {
+            console.error('Error retrieving messages:', error);
+        }
     };
 
     const handleclose = () => {
@@ -39,14 +67,26 @@ export default function ShowMessages() {
     const columns = [
         { field: 'id', headerName: 'ID', width: 90 },
         {
-            field: 'from',
+            field: 'nameOfSender',
             headerName: 'מאת',
             width: 100,
             editable: true,
         },
         {
-            field: 'subject',
-            headerName: 'נושא',
+            field: 'emailofSender',
+            headerName: 'מייל השולח/ת',
+            width: 100,
+            editable: true,
+        },
+        {
+            field: 'textMessage',
+            headerName: 'גוף ההודעה',
+            width: 100,
+            editable: true,
+        },
+        {
+            field: 'dateOfSending',
+            headerName: 'תאריך שליחה',
             width: 100,
             editable: true,
         },

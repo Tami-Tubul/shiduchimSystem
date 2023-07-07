@@ -1,6 +1,15 @@
+import { LOAD_MESSAGES, SAVE_MESSAGE } from "./managerTypes";
+
 export const managerReducer = (state = {messages: []}, action) => {
     switch (action.type) {
-        case "SAVE_MESSAGE":
+       
+        case LOAD_MESSAGES:
+            return {
+                ...state,
+                messages: action.payload
+            }   
+       
+        case SAVE_MESSAGE:
             return {
                 ...state,
                 messages: action.payload

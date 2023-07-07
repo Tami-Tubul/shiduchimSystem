@@ -8,7 +8,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Checkbox from '@mui/material/Checkbox';
 import Card from '@mui/material/Card';
-import { Button, Divider, Grid } from '@mui/material';
+import { Alert, Button, Divider, Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { userLogin } from '../../store/user/userActions';
 import './Login.css';
@@ -26,6 +26,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [checked, setChecked] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [errorAfterSubmit, setErrorAfterSubmit] = useState(null);
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const userType = params.get("user");
@@ -39,10 +40,11 @@ const Login = () => {
     event.preventDefault();
   };
   const handleChange = (event) => {
+    setErrorAfterSubmit(null);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const { name, value } = event.target;
-    if (name === "name" && !/^[a-zA-Z]+$/.test(value.trim())) {
-      setFormErrors({ ...formErrors, name: 'Name can only contain letters' });
+    if (name === "name" && !/^[a-zA-Z0-9]+$/.test(value.trim())) {
+      setFormErrors({ ...formErrors, name: 'Name can only contain letters and numbers' });
     }
     else if (name === "email" && !emailRegex.test(value.trim())) {
       setFormErrors({ ...formErrors, email: 'Invalid Email format' });
@@ -76,17 +78,26 @@ const Login = () => {
     event.preventDefault();
     const errors = validateForm();
     if (!errors) {
-      // Handle form submission
-      // axios.post("/localhost:27017/shiduchim/login", {
-      //   name: formValues.name,
-      //   email: formValues.email,
-      //   password: formValues.password,
-      //   checked: checked
-      // })
-      //   .then(res => { console.log(res); dispatch(saveUser(res.data)); })
-      //   .catch(err => console.log(err)).navigate('/FillQuestionnaire')
-      dispatch(userLogin({ ...formValues, userType: userType }));
-      // TODO: בדיקת יוזר האם קיים במערכת ואם כן איזה סוג
+      //Handle form submission
+      axios.post("http://localhost:5000/api/shiduchim/auth/login", {
+        name: formValues.name,
+        email: formValues.email, //אין צורך במייל. בצד שרת מבצע בדיקה רק על שם משתמש וסיסמא
+        password: formValues.password
+      }).then(resp => {
+        if (resp.status === 200) {
+          let connectedUser = { ...resp.data.connectedUser, token: resp.data.token }
+          dispatch(userLogin(connectedUser));
+          if (connectedUser.role === "matchmaker") {
+            navigate("/MatchMakerPage")
+          }
+          else if (connectedUser.role === "admin") {
+            navigate("/ManagerPage")
+          }
+        }
+      }).catch(err => {
+        setErrorAfterSubmit(err.response.data.message)
+      })
+
     } else {
       setFormErrors(errors);
     }
@@ -98,8 +109,8 @@ const Login = () => {
     if (!(formValues.name && formValues.name.trim())) {
       setFormErrors({ ...formErrors, name: 'Name is required' });
     }
-    else if (!/^[a-zA-Z]+$/.test(formValues.name.trim())) {
-      setFormErrors({ ...formErrors, name: 'Name can only contain letters' });
+    else if (!/^[a-zA-Z0-9]+$/.test(formValues.name.trim())) {
+      setFormErrors({ ...formErrors, name: 'Name can only contain letters and numbers' });
     }
 
     // Validate email field
@@ -210,6 +221,9 @@ const Login = () => {
             מעונינת להצטרף למאגר השדכניות?
           </Typography>
           <Button onClick={handleRegisterClick} variant="outlined">להרשמה</Button>
+
+          {errorAfterSubmit && <Alert severity="error">{errorAfterSubmit}</Alert>}
+
         </Card>
       </div>
     </>

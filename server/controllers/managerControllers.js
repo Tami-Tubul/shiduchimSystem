@@ -38,7 +38,7 @@ const approveMatchmaker = async (req, res, next) => {   //אישור שדכן ח
             await user.save();
 
             const mailTo = matchmakerExist.email;
-            const textMail = `שלום ${matchmakerExist.firstName}. התקבלת להיות שדכנית במערכת השידוכים שלנו! זוהי סיסמתך למערכת: ${user.password}`;
+            const textMail = `שלום ${matchmakerExist.firstName}. התקבלת להיות שדכנית במערכת השידוכים שלנו! זהו שם המשתמש והסיסמא שלך למערכת: \n שם משתמש: ${user.userName} \n סיסמא: ${user.password}`;
 
             mail.sendMail(mailTo, textMail);
 
@@ -164,7 +164,6 @@ const deleteMessageFromMatchmaker = async (req, res, next) => { //מחיקת ה�
             return res.status(400).json({ message: "הודעה לא נמצאה" });
         }
         else {
-
             res.status(200).json({ message: "ההודעה הוסרה בהצלחה" });
         }
     }

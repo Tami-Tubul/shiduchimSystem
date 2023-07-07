@@ -7,9 +7,11 @@ import {
     LineSeries,
 } from '@devexpress/dx-react-chart-material-ui';
 import { Container } from '@mui/material';
-import Card from '@mui/material/Card/Card';
 import Header from '../Header/Header';
 import './StatisicsClosedMatchMakked.css';
+import { useSelector } from 'react-redux';
+
+
 const data = [
     { argument: 'תשרי', value: 1 },
     { argument: 'חשוון', value: 12 },
@@ -26,10 +28,20 @@ const data = [
 ];
 // TODO: לקבל את כל השידוכים שנעשו החודש ולהציג אותם
 
-export const StatisicsClosedMatchMakked = () => (
-    <>
-        <Header />
-        <div className='StatisicsClosedMatchMakked'>
+const StatisicsClosedMatchMakked = () => {
+
+    //const closedRegisters = useSelector((state) => state.matchMaker.closedRegisters);
+   // const datesArr = closedRegisters && closedRegisters.map(x => x.dateWort)
+
+    // const chartData = datesArr && datesArr.map((date, index) => ({
+    //     argument: `Date ${index + 1}`,
+    //     value: new Date(date).getDate(),
+    //   }));
+
+    return (
+        <>
+            <Header />
+            <div className='StatisicsClosedMatchMakked'>
                 <Container>
                     <h4>סטטיסטיקות שידוכים</h4>
                     <Paper>
@@ -43,7 +55,9 @@ export const StatisicsClosedMatchMakked = () => (
                         </Chart>
                     </Paper>
                 </Container>
-        </div>
-    </>
-);
+            </div>
+        </>
+    )
+};
+
 export default StatisicsClosedMatchMakked;

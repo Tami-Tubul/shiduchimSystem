@@ -1,14 +1,14 @@
 import { React, useState } from "react"
 import axios from "axios";
 import './Register.css';
-import { useSearchParams, useLocation } from "react-router-dom"
+import { useSearchParams, useLocation, Link } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux';
 import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Checkbox from '@mui/material/Checkbox';
 import Card from '@mui/material/Card';
-import { Button, Divider, Grid } from '@mui/material';
+import { Alert, Button, Divider, Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Header from '../Header/Header';
 import { addRegister } from '../../store/user/userActions';
@@ -25,7 +25,8 @@ const Register = () => {
     const [formErrors, setFormErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     const [checked, setChecked] = useState(false);
-    const [registerd, setRegisterd] = useState(false);
+    const [successRegistrationMessage, setSuccessRegistrationMessage] = useState(null);
+    const [errorAfterSubmit, setErrorAfterSubmit] = useState(null);
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const userType = params.get("userType");
@@ -39,12 +40,13 @@ const Register = () => {
         event.preventDefault();
     };
     const handleChange = (event) => {
+        setErrorAfterSubmit(null)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const { name, value } = event.target;
-        if (name === "firstName" && !/^[a-zA-Z]+$/.test(value.trim())) {
-            setFormErrors({ ...formErrors, firstName: 'Name can only contain letters' });
-        } else if (name === "lastName" && !/^[a-zA-Z]+$/.test(value.trim())) {
-            setFormErrors({ ...formErrors, lastName: 'Name can only contain letters' });
+        if (name === "firstName" && !/^[\u0590-\u05FF]+$/.test(value.trim())) {
+            setFormErrors({ ...formErrors, firstName: 'Name can only contain hebrew letters' });
+        } else if (name === "lastName" && !/^[\u0590-\u05FF]+$/.test(value.trim())) {
+            setFormErrors({ ...formErrors, lastName: 'Name can only contain hebrew letters' });
         }
         else if (name === "email" && !emailRegex.test(value.trim())) {
             setFormErrors({ ...formErrors, email: 'Invalid Email format' });
@@ -80,18 +82,23 @@ const Register = () => {
                 dispatch(addRegister(registeredList));
             }
             // Handle form submission
-            // axios.post("/localhost:27017/shiduchim/login", {
-            //     name: formValues.name,
-            //     email: formValues.email,
-            //     password: formValues.password,
-            //     checked: checked
-            // })
-            //     .then(res => { 
-            //         console.log(res);
-            //         dispatch(saveUser(res.data));
-            //         setRegisterd(true)
-            //     })
-            //     .catch(err => console.log(err)).navigate('/FillQuestionnaire')
+            axios.post("http://localhost:5000/api/shiduchim/public/register-matchmaker", {
+                firstName: formValues.firstName,
+                lastName: formValues.lastName,
+                email: formValues.email,
+                age: formValues.age,
+                phone: formValues.phone,
+                livingPlace: formValues.livingPlace
+            })
+                .then(resp => {
+                    if (resp.status === 201) {
+                        setSuccessRegistrationMessage(resp.data.message);
+                    }
+                })
+                .catch(err => {
+                    setErrorAfterSubmit(err.response.data.message)
+                    //.navigate('/FillQuestionnaire')
+                })
         } else {
             setFormErrors(errors);
         }
@@ -103,15 +110,15 @@ const Register = () => {
         if (!(formValues.firstName && formValues.firstName.trim())) {
             setFormErrors({ ...formErrors, firstName: 'Name is required' });
         }
-        else if (!/^[a-zA-Z]+$/.test(formValues.firstName.trim())) {
-            setFormErrors({ ...formErrors, firstName: 'Name can only contain letters' });
+        else if (!/^[\u0590-\u05FF]+$/.test(formValues.firstName.trim())) {
+            setFormErrors({ ...formErrors, firstName: 'Name can only contain hebrew letters' });
         }
         // Validate lastName field
         if (!(formValues.lastName && formValues.lastName.trim())) {
             setFormErrors({ ...formErrors, lastName: 'Name is required' });
         }
-        else if (!/^[a-zA-Z]+$/.test(formValues.lastName.trim())) {
-            setFormErrors({ ...formErrors, lastName: 'Name can only contain letters' });
+        else if (!/^[\u0590-\u05FF]+$/.test(formValues.lastName.trim())) {
+            setFormErrors({ ...formErrors, lastName: 'Name can only contain hebrew letters' });
         }
 
         // Validate email field
@@ -167,6 +174,7 @@ const Register = () => {
                             <Grid item>
                                 <TextField
                                     label="גיל"
+                                    type="number"
                                     name="age"
                                     onChange={handleChange}
                                     error={formErrors.age}
@@ -194,10 +202,10 @@ const Register = () => {
                             <Grid item>
                                 <TextField
                                     label="אזור מגורים"
-                                    name="area"
+                                    name="livingPlace"
                                     onChange={handleChange}
-                                    error={formErrors.area}
-                                    helperText={formErrors.area}
+                                    error={formErrors.livingPlace}
+                                    helperText={formErrors.livingPlace}
                                     variant="outlined"
                                     margin="normal"
                                 />
@@ -250,10 +258,13 @@ const Register = () => {
                         </Grid>
                         {/* <button type="submit">Submit</button> */}
                         <Button type="submit" disabled={validation} variant="contained">הרשמה</Button>
+                        {errorAfterSubmit && <Alert severity="error">{errorAfterSubmit}</Alert>}
+
                     </form>
                 </Card>
-                {registerd && <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    נרשמת בהצלחה! פרטיך נבדקים במערכת, במידה והתקבלת תקבלי סיסמא למייל. לצפייה בכרטיסי שידוכים
+                {successRegistrationMessage && <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    {successRegistrationMessage}
+                    <Link to="/CloseEngagedPage">לצפייה בכרטיסי שידוכים</Link>
                 </Typography>}
             </div>
         </>

@@ -44,7 +44,7 @@ const meorasimSchema = mongoose.Schema({
         required: true
     },
     dateWort: {
-        type: String,
+        type: Date,
         required: true
     },
     matchmakerId: {

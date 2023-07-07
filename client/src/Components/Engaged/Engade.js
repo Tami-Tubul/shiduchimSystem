@@ -9,7 +9,19 @@ import Typography from '@mui/material/Typography';
 import './Engaged.css';
 
 const Engaged = ({ closedRegister }) => {
-    console.log(closedRegister)
+
+    //צריך להמיר לתאריך עברי 
+    const handleDate = () => {
+        const dateSTR = closedRegister.dateWort; 
+        const date = new Date(dateSTR);
+        const hebrewOptions = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        };
+        const hebrewDateWort = date.toLocaleDateString('he-IL', hebrewOptions);
+        return hebrewDateWort;
+    }
 
     return (
         <Card sx={{ maxWidth: 345 }}>
@@ -24,21 +36,21 @@ const Engaged = ({ closedRegister }) => {
                     <div className='Grid'>
                         <Grid container spacing={2}>
                             <Grid item>
-                                <p style={{fontSize: "larger", fontWeight: 600}}>{closedRegister.bachurName}</p>
-                                <p>בן הרב <span style={{fontSize: "large"}}>{closedRegister.bachurFather}</span> שליט"א</p>
+                                <p style={{ fontSize: "larger", fontWeight: 600 }}>{closedRegister.bachurName}</p>
+                                <p>בן הרב <span style={{ fontSize: "large" }}>{closedRegister.bachurFather}</span> שליט"א</p>
                                 <p>ישיבת {closedRegister.bachurYeshiva}</p>
                                 <p>{closedRegister.bachurCity}</p>
                             </Grid>
                             <Grid item>
-                                <p style={{fontSize: "larger", fontWeight: 600}}>{closedRegister.bachuraName}</p>
-                                <p>בת הרב <span style={{fontSize: "large"}}>{closedRegister.bachuraFather}</span> שליט"א</p>
+                                <p style={{ fontSize: "larger", fontWeight: 600 }}>{closedRegister.bachuraName}</p>
+                                <p>בת הרב <span style={{ fontSize: "large" }}>{closedRegister.bachuraFather}</span> שליט"א</p>
                                 <p>סמינר {closedRegister.bachuraSeminar}</p>
                                 <p>{closedRegister.bachuraCity}</p>
                             </Grid>
                         </Grid>
                         <Grid container>
-                            <p style={{fontSize: "larger", fontWeight: 800, color: "#c87009"}}>מאורסים</p>
-                            <p>אור ל{closedRegister.dateWort}</p>
+                            <p style={{ fontSize: "larger", fontWeight: 800, color: "#c87009" }}>מאורסים</p>
+                            <p>אור ל{handleDate()}</p>
                         </Grid>
                     </div>
                 </Typography>

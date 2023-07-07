@@ -9,10 +9,28 @@ import { redirect } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import wedding1 from '../../assets/wedding1.png';
 import './HomePage.css';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { loadMeorasim } from '../../store/matchMaker/matchMakerActions';
 
 
 function HomePage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getShiduchimFromServer = async () => { //שליפת שידוכים שנסגרו בדף הבית כדי שיהיה ניתן להציג אותם גם בסטטיסטיקות וגם בדף שידוכים שנסגרו בלי לפנות פעמיים לשרת
+        try {
+            const resp = await axios.get("http://localhost:5000/api/shiduchim/public/meorasim-cards");
+            const data = resp.data;
+            dispatch(loadMeorasim(data.meorasim));
+        } catch (error) {
+            console.error('Error retrieving messages:', error);
+        }
+    }
+    getShiduchimFromServer();
+}, []);
+
 
   //   const ref = useRef(null);
   //   const [height, setHeight] = useState(144)

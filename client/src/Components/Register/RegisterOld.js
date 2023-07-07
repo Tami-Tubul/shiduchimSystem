@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { saveUser } from "../../store/user/userActions";
+import { userLogin } from "../../store/user/userActions";
 import { useSelector, useDispatch } from 'react-redux';
 //import { useHistory } from "react-router-dom";
 import axios from "axios";
@@ -83,7 +83,7 @@ const Register = () => {
       axios.post("http://localhost:5000/user/login", {
         name: formValues.name, password: formValues.password, email: formValues.email
       })
-        .then(res => { console.log(res); dispatch(saveUser(res.data)); })
+        .then(res => { console.log(res); dispatch(userLogin(res.data)); })
         .catch(err => console.log(err)).navigate('/login')
     } else {
       setErrors(errors);

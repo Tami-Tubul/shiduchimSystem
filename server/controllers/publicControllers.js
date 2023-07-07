@@ -6,10 +6,10 @@ const Meorasim = require("../models/MeorasimModel");
 const registerMatchmaker = async (req, res, next) => {  //הרשמת שדכן
     try {
         const { firstName, lastName, phone, livingPlace, age, email } = req.body;
-        if (!(firstName && lastName && phone && livingPlace && age && email)) {
+        if (!(firstName && lastName && phone && email)) {
             return res.status(400).json({ message: "יש למלא את כל שדות החובה" });
         }
-        const matchmakerExist = await Matchmaker.findOne({ email, phone });
+        const matchmakerExist = await Matchmaker.findOne({ $or: [{ email: email }, { phone: phone }] });
 
         if (matchmakerExist) {
             return res.status(400).json({ message: "שדכן זה כבר קיים במערכת" });
@@ -23,6 +23,7 @@ const registerMatchmaker = async (req, res, next) => {  //הרשמת שדכן
                 age: age,
                 email: email
             })
+            console.log(newMatchmaker)
             await newMatchmaker.save();
             res.status(201).json({ message: "נרשמת בהצלחה! פרטיך נבדקים במערכת, במידה והתקבלת תקבלי סיסמא למייל.", newMatchmaker: newMatchmaker })
         }

@@ -1,4 +1,12 @@
-import {SAVE_MESSAGE} from './managerTypes';
+import { LOAD_MESSAGES, SAVE_MESSAGE } from './managerTypes';
+
+export const loadMessages = (messages) => {
+    return {
+        type: LOAD_MESSAGES,
+        payload: messages
+    }
+}
+
 
 export const saveMessage = (message) => {
     return {
@@ -7,6 +15,14 @@ export const saveMessage = (message) => {
     }
 }
 
+export const deleteMessage = (id) => { //צריך לממש
+    return {
+       
+    }
+}
+
 export default {
-    saveMessage
+    loadMessages,
+    saveMessage,
+    deleteMessage
 }
