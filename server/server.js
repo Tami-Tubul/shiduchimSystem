@@ -14,7 +14,7 @@ app.get("/", async (req, res, next) => {
 
 app.use("/api/shiduchim", apiRoutes);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res, next) => { //טיפול בשגיאות
     res.status(500).json({
         message: err.message,
         stack: err.stack

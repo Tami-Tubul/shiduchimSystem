@@ -661,6 +661,14 @@ export default function FormPropsTextFields() {
               </Grid>
               <Grid item>
                 <TextField
+                  label="מין"
+                  name="gender"
+                  defaultValue=""
+                  onChange={handleChangeInput}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
                   label="גיל"
                   name="age"
                   type="numer"
@@ -693,9 +701,24 @@ export default function FormPropsTextFields() {
                 />
               </Grid>
               <Grid item>
+                  <TextField
+                    label="ארץ לידה"
+                    name="countryBirth"
+                    defaultValue=""
+                    onChange={handleChangeInput}
+                  />
+                </Grid>
+              <Grid item>
                 <TextField
                   label="טלפון"
                   name="telphone"
+                  defaultValue=""
+                  onChange={handleChangeInput}
+                /></Grid>
+                 <Grid item>
+                <TextField
+                  label="מייל"
+                  name="email"
                   defaultValue=""
                   onChange={handleChangeInput}
                 /></Grid>
@@ -781,6 +804,14 @@ export default function FormPropsTextFields() {
               </Grid>
               <Grid item>
                 <TextField
+                  label="עידה"
+                  name="origin"
+                  defaultValue=""
+                  onChange={handleChangeInput}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
                   label="תמונת המועמד"
                   name="pictue"
                   type="file"
@@ -814,13 +845,13 @@ export default function FormPropsTextFields() {
                   onChange={handleChangeInput}
                 />
               </Grid>
-              <Grid item>
+              {/* <Grid item>
                 <TextField
                   label="רקע דתי"
                   name="religiousBackground          "
                   defaultValue=""
                   onChange={handleChangeInput}
-                /> </Grid>
+                /> </Grid> */}
               <Grid item>
                 <TextField
                   label="עובד/לומד"
@@ -863,7 +894,7 @@ export default function FormPropsTextFields() {
               </Grid>
               <Grid item>
                 <TextField
-                  label="מצוא האב"
+                  label="מוצא האב"
                   name="father'sAncestry"
                   defaultValue=""
                   onChange={handleChangeInput}
@@ -902,6 +933,7 @@ export default function FormPropsTextFields() {
                   onChange={handleChangeInput}
                 />
               </Grid>
+              
             </Grid>)}
           {activeStep === 1 && (
             <Grid container spacing={2}>
@@ -987,20 +1019,6 @@ export default function FormPropsTextFields() {
             <Grid container spacing={2}>
               <Grid item>
                 <FormControl>
-                  <FormLabel id="demo-radio-buttons-group-label">האם בעל/ת משקפיים?</FormLabel>
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="no"
-                    name="glasses"
-                    onChange={handleChangeInput}
-                  >
-                    <FormControlLabel value="yes" control={<Radio />} label="כן" />
-                    <FormControlLabel value="no" control={<Radio />} label="לא" />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-              <Grid item>
-                <FormControl>
                   <FormLabel id="demo-radio-buttons-group-label">האם בעל/ת טלפון כשר?</FormLabel>
                   <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
@@ -1013,7 +1031,7 @@ export default function FormPropsTextFields() {
                   </RadioGroup>
                 </FormControl>
               </Grid>
-              <Grid item>
+              {/* <Grid item>
                 <FormControl>
                   <FormLabel id="demo-radio-buttons-group-label">האם בעל/ת מחשב?</FormLabel>
                   <RadioGroup
@@ -1026,7 +1044,7 @@ export default function FormPropsTextFields() {
                     <FormControlLabel value="no" control={<Radio />} label="לא" />
                   </RadioGroup>
                 </FormControl>
-              </Grid>
+              </Grid> */}
               <Grid item>
                 <FormControl>
                   <FormLabel id="demo-radio-buttons-group-label">האם בעל/ת רישיון?</FormLabel>
@@ -1034,6 +1052,20 @@ export default function FormPropsTextFields() {
                     aria-labelledby="demo-radio-buttons-group-label"
                     defaultValue="no"
                     name="license"
+                    onChange={handleChangeInput}
+                  >
+                    <FormControlLabel value="yes" control={<Radio />} label="כן" />
+                    <FormControlLabel value="no" control={<Radio />} label="לא" />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <FormControl>
+                  <FormLabel id="demo-radio-buttons-group-label">האם מעשן?</FormLabel>
+                  <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    defaultValue="no"
+                    name="glasses"
                     onChange={handleChangeInput}
                   >
                     <FormControlLabel value="yes" control={<Radio />} label="כן" />
@@ -1125,13 +1157,13 @@ export default function FormPropsTextFields() {
                   onChange={handleChangeInput}
                 />
               </Grid>
-              <Grid item>
+              {/* <Grid item>
                 <TextField
                   label="התחייבות לשדכנת"
                   name="commitmentToTheMatchmaker"
                   onChange={handleChangeInput}
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
           )}
           {activeStep < 6 && <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>

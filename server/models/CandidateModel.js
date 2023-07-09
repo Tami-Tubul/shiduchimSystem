@@ -19,6 +19,7 @@ const candidateSchema = mongoose.Schema({
     healthCondition: { type: String, required: true },//מצב בריאותי
     economicCondition: { type: String },//מצב כלכלי
     look: { type: String, required: true },//מראה כללי
+    clothingStyle: { type: String, required: true },//סגנון לבוש
     sector: { type: String, required: true },//מגזר
     picture: { type: String },//תמונה
     requireMoney: { type: Number },//דרישות כספיות
@@ -28,6 +29,7 @@ const candidateSchema = mongoose.Schema({
     origin: { type: String, required: true },//עידה
     fatherName: { type: String, required: true },//שם האב
     motherName: { type: String, required: true },//שם האם
+    parentStatus: { type: String, required: true },//סטטוס הורים
     fatherDoing: { type: String, required: true },//עיסוק אב
     motherDoing: { type: String, required: true },//עיסוק אם
     mozaAv: { type: String, required: true },//מוצא אב
@@ -47,6 +49,19 @@ const candidateSchema = mongoose.Schema({
     casherPhone: { type: Boolean, required: true },//טלפון כשר
     licence: { type: Boolean, required: true },//רישיון
     smoking: { type: Boolean, required: true },//מעשן
+    inLaws: [{ // מערך מחותנים
+        fatherInLawName: { type: String, required: true },
+        fatherInLawCity: { type: String, required: true },
+        fatherInLawPhone: { type: String, required: true }
+    }], 
+    recomendedPeople: [{  //מערך מקורות לברורים
+        RecommendName: { type: String, required: true },
+        RecommendPhone: { type: String, required: true },
+        RecommendRelative: { type: String, required: true }
+    }],
+    fillQuestionarieName: { type: String, required: true },//שם ממלא הטופס
+    fillQuestionariePhone: { type: String, required: true }, //טלפון ממלא הטופס
+    fillQuestionarieRelative: { type: String, required: true }, //קרבת ממלא הטופס למועמד
     isApproved: {  // האם המועמד אושר ע"י המנהל או בהמתנה
         type: Boolean,
         default: false

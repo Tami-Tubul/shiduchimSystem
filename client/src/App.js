@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Register from './Components/Register/Register';
-import UserList from './Components/UserList/UserList';
 import Login from './Components/Login/Login';
 import FillQuestionnaire from './Components/Forms/FillQuestionnaire/FillQuestionnaire';
 import HomePage from './Components/HomePage/HomePage';
@@ -33,7 +32,7 @@ function App() {
         <Route path="/StatisicsClosedMatchMakked" element={<StatisicsClosedMatchMakked />} />
         <Route path="/PersonalArea" element={<PersonalArea />} />
         <Route path="/MatchMakerPage" element={<MatchMakerPage />} />
-        <Route path="/CheckingNewRegistered" element={<CheckingNewRegistered />} />
+        <Route path="/CheckingNewRegistered" elemeFnt={<CheckingNewRegistered />} />
         <Route path="/CloseMatch" element={<CloseMatch />} />
         <Route path="/Engaged" element={<Engaged />} />
         <Route path="/CloseEngagedPage" element={<CloseEngagedPage />} />

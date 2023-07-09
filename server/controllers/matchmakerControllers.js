@@ -20,7 +20,6 @@ const markingCandidateForRemoval = async (req, res, next) => { //סימון מו
 
         res.status(200).json({ message: "המועמד סומן למחיקה" })
 
-
     } catch (err) {
         next(err)
     }

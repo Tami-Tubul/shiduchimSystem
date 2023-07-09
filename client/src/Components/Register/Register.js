@@ -97,7 +97,6 @@ const Register = () => {
                 })
                 .catch(err => {
                     setErrorAfterSubmit(err.response.data.message)
-                    //.navigate('/FillQuestionnaire')
                 })
         } else {
             setFormErrors(errors);
