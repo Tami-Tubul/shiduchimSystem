@@ -1,53 +1,38 @@
 import { React, useState } from "react"
 import axios from "axios";
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import TextField from '@mui/material/TextField';
-import Card from '@mui/material/Card';
-import { Button, Divider, Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import SearchedCard from "../SearchedCard/SearchedCard";
-import data from "../../data";
 import './SearchAndMatch.css';
 import Header from "../Header/Header";
+
 const SearchAndMatch = () => {
     const [formValues, setFormValues] = useState({});
     const [matches, setMatches] = useState([]);
-    const navigate = useNavigate();
+
+    const currentUser = useSelector((state) => state.user.currentUser);
+    const candidates = useSelector((state) => state.matchMaker.candidates);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormValues({ ...formValues, [name]: value });
     }
-    const hanleGoBack = () => {
-        navigate(-1);
-    }
+
     const handleSubmit = () => {
+
         // TODO: שליחת פרטי סינון מועמדים 
-        let matched = [];
-        let counter = 0;
-        data.map((person) => {
-            Object.keys(formValues).map((property) => {
-                if (person[property] === formValues[property]) {
-                    counter = counter + 1;
-                }
-                if (property === "fromAge" || property === "tillAge") {
-                    if (parseInt(person.age) >= parseInt(formValues.fromAge) && parseInt(person.age) <= parseInt(formValues.tillAge)) {
-                        counter = counter + 1;
-                    }
-                }
-                if (property === "fromHeight" || property === "tillHeight") {
-                    if (parseInt(person.height) >= parseInt(formValues.fromHeight) && parseInt(person.height) <= parseInt(formValues.tillHeight)) {
-                        counter = counter + 1;
-                    }
-                }
-            });
-            if (counter === Object.keys(formValues).length) {
-                matched.push({ ...person })
-                setMatches(matched);
+        axios.post(`http://localhost:5000/api/shiduchim/${currentUser.role}/filter-candidates`, formValues, {
+            headers: { 'x-access-token': currentUser.token }
+        }).then(resp => {
+            if(resp.status === 200){
+                setMatches(resp.data.filteredCandidates)
             }
-            counter = 0;
-        });
+
+        }).catch(err => {
+            console.error('Error retrieving messages:', err);
+        })
     }
 
 
@@ -63,7 +48,7 @@ const SearchAndMatch = () => {
                         <Grid item>
                             <TextField
                                 label="שיוך מגזרי"
-                                name="sectoralAssociation"
+                                name="sector"
                                 onChange={handleChange}
                                 variant="outlined"
                                 margin="normal"
@@ -82,7 +67,7 @@ const SearchAndMatch = () => {
                         <Grid item>
                             <TextField
                                 label='עד גיל'
-                                name='tillAge'
+                                name='mostAge'
                                 type="number"
                                 onChange={handleChange}
                                 variant="outlined"
@@ -111,7 +96,7 @@ const SearchAndMatch = () => {
                         <Grid item>
                             <TextField
                                 label='עד גובה'
-                                name='tillHeight'
+                                name='mostHeight'
                                 onChange={handleChange}
                                 type='number'
                                 variant="outlined"
@@ -121,7 +106,7 @@ const SearchAndMatch = () => {
                         <Grid item>
                             <TextField
                                 label='מראה כללי'
-                                name='generalLook'
+                                name='look'
                                 onChange={handleChange}
                                 variant="outlined"
                                 margin="normal"
@@ -130,7 +115,7 @@ const SearchAndMatch = () => {
                         <Grid item>
                             <TextField
                                 label='גוון עור'
-                                name='skinTone'
+                                name='colorSkin'
                                 onChange={handleChange}
                                 variant="outlined"
                                 margin="normal"
@@ -139,7 +124,7 @@ const SearchAndMatch = () => {
                         <Grid item>
                             <TextField
                                 label='ארץ לידה'
-                                name='countryBorn'
+                                name='countryBirth'
                                 onChange={handleChange}
                                 variant="outlined"
                                 margin="normal"
@@ -148,7 +133,7 @@ const SearchAndMatch = () => {
                         <Grid item>
                             <TextField
                                 label='ארץ מוצא מועדף'
-                                name='preferedCountry'
+                                name='drishotFavoriteMoza'
                                 onChange={handleChange}
                                 variant="outlined"
                                 margin="normal"
@@ -157,7 +142,7 @@ const SearchAndMatch = () => {
                         <Grid item>
                             <TextField
                                 label='לא ממוצא'
-                                name='noOrigin'
+                                name='drishotNotMoza'
                                 onChange={handleChange}
                                 variant="outlined"
                                 margin="normal"
@@ -175,7 +160,7 @@ const SearchAndMatch = () => {
                         <Grid item>
                             <TextField
                                 label='תכונות אופי'
-                                name='characteristics'
+                                name='characters'
                                 onChange={handleChange}
                                 variant="outlined"
                                 margin="normal"
@@ -184,7 +169,7 @@ const SearchAndMatch = () => {
                         <Grid item>
                             <TextField
                                 label='כיסוי ראש'
-                                name='headDress'
+                                name='headdress'
                                 onChange={handleChange}
                                 variant="outlined"
                                 margin="normal"
@@ -203,7 +188,7 @@ const SearchAndMatch = () => {
                         <Grid item>
                             <TextField
                                 label='שיטה הלכתית'
-                                name='HalachicMethod'
+                                name='halachaMethod'
                                 onChange={handleChange}
                                 variant="outlined"
                                 margin="normal"
@@ -216,7 +201,12 @@ const SearchAndMatch = () => {
                 </form>
             </div>
             <Grid container>
-                {matches && matches.map((person) => <SearchedCard candidate={person} />)}
+                {matches.length === 0 ?
+                    candidates.map(cand => <SearchedCard candidate={cand} />)
+                    :
+                    matches.map((person) => <SearchedCard candidate={person} />)
+                }
+
             </Grid>
         </>
     );

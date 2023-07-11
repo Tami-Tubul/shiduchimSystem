@@ -1,64 +1,46 @@
-import { React, useEffect, useState } from "react"
+import { React, useState } from "react"
 import axios from "axios";
-import { useSearchParams, useLocation } from "react-router-dom"
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Checkbox from '@mui/material/Checkbox';
 import Card from '@mui/material/Card';
-import { Alert, Button, Divider, Grid } from '@mui/material';
+import { Alert, Button, Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { userLogin } from '../../store/user/userActions';
 import './Login.css';
 import Header from "../Header/Header";
+import authService from './../../authService';
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
-    name: '',
-    email: '',
+    userName: '',
     password: '',
   });
   const [formErrors, setFormErrors] = useState({});
-  const [showPassword, setShowPassword] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
   const [errorAfterSubmit, setErrorAfterSubmit] = useState(null);
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const userType = params.get("user");
 
   const handleCheck = (event) => {
     setChecked(event.target.checked);
   };
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+
   const handleChange = (event) => {
     setErrorAfterSubmit(null);
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const { name, value } = event.target;
-    if (name === "name" && !/^[a-zA-Z0-9]+$/.test(value.trim())) {
-      setFormErrors({ ...formErrors, name: 'Name can only contain letters and numbers' });
-    }
-    else if (name === "email" && !emailRegex.test(value.trim())) {
-      setFormErrors({ ...formErrors, email: 'Invalid Email format' });
+    if (name === "userName" && !/^[a-zA-Z0-9]+$/.test(value.trim())) {
+      setFormErrors({ ...formErrors, userName: 'userName can only contain letters and numbers' });
     }
     else if (name === "password" && value.trim().length < 8) {
       setFormErrors({ ...formErrors, password: 'Password must be at least 8 characters long' });
     }
     else {
       switch (name) {
-        case "name":
-          setFormErrors({ ...formErrors, name: "" });
-          break;
-        case "email":
-          setFormErrors({ ...formErrors, email: "" });
+        case "userName":
+          setFormErrors({ ...formErrors, userName: "" });
           break;
         case "password":
           setFormErrors({ ...formErrors, password: "" });
@@ -72,27 +54,34 @@ const Login = () => {
 
   const handleRegisterClick = () => {
     navigate('/Register');
-    // navigate(`/Register?userType=${userType}`);
   }
   const handleSubmit = (event) => {
     event.preventDefault();
     const errors = validateForm();
     if (!errors) {
+
       //Handle form submission
       axios.post("http://localhost:5000/api/shiduchim/auth/login", {
-        name: formValues.name,
-        email: formValues.email, //אין צורך במייל. בצד שרת מבצע בדיקה רק על שם משתמש וסיסמא
+
+        userName: formValues.userName,
         password: formValues.password
+
       }).then(resp => {
+
         if (resp.status === 200) {
+
           let connectedUser = { ...resp.data.connectedUser, token: resp.data.token }
+          authService.saveUser(connectedUser);
+
           dispatch(userLogin(connectedUser));
+
           if (connectedUser.role === "matchmaker") {
             navigate("/MatchMakerPage")
           }
-          else if (connectedUser.role === "admin") {
+          else if (connectedUser.role === "manager") {
             navigate("/ManagerPage")
           }
+
         }
       }).catch(err => {
         setErrorAfterSubmit(err.response.data.message)
@@ -105,20 +94,12 @@ const Login = () => {
 
   const validateForm = () => {
 
-    // Validate name field
-    if (!(formValues.name && formValues.name.trim())) {
-      setFormErrors({ ...formErrors, name: 'Name is required' });
+    // Validate userName field
+    if (!(formValues.userName && formValues.userName.trim())) {
+      setFormErrors({ ...formErrors, userName: 'User Name is required' });
     }
-    else if (!/^[a-zA-Z0-9]+$/.test(formValues.name.trim())) {
-      setFormErrors({ ...formErrors, name: 'Name can only contain letters and numbers' });
-    }
-
-    // Validate email field
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!(formValues.email && formValues.email.trim())) {
-      setFormErrors({ ...formErrors, email: 'Email is required' });
-    } else if (!emailRegex.test(formValues.email.trim())) {
-      setFormErrors({ ...formErrors, email: 'Invalid email format' });
+    else if (!/^[a-zA-Z0-9]+$/.test(formValues.userName.trim())) {
+      setFormErrors({ ...formErrors, userName: 'User Name can only contain letters and numbers' });
     }
 
     // Validate password field
@@ -128,9 +109,9 @@ const Login = () => {
     } else if (formValues.password.trim().length < 8) {
       setFormErrors({ ...formErrors, password: 'Password must be at least 8 characters long' });
     }
-    return (!!formErrors.name || !!formErrors.email || !!formErrors.password || !checked) || !(formValues.name !== "" && formValues.email !== "" && formValues.password !== "");
+    return (!!formErrors.userName || !!formErrors.password || !checked) || !(formValues.userName !== "" && formValues.password !== "");
   };
-  const validation = (!!formErrors.name || !!formErrors.email || !!formErrors.password || !checked) || !(formValues.name !== "" && formValues.email !== "" && formValues.password !== "");
+  const validation = (!!formErrors.userName || !!formErrors.password || !checked) || !(formValues.userName !== "" && formValues.password !== "");
 
   return (
     <>
@@ -138,56 +119,23 @@ const Login = () => {
       <div id="login">
         <Card variant="outlined">
           <Typography variant="h4" component="div">
-            {/* {userType && userType === "matchMaker" ? 'כניסת שדכנית' : 'כניסת מועמד/ת'} */}
             כניסה
           </Typography>
           <form onSubmit={handleSubmit}>
             <Grid container className="container">
               <Grid item>
                 <TextField
-                  label="שם"
-                  name="name"
+                  label="שם משתמש"
+                  name="userName"
                   onChange={handleChange}
-                  error={formErrors.name}
-                  helperText={formErrors.name}
+                  error={formErrors.userName}
+                  helperText={formErrors.userName}
                   variant="outlined"
                   margin="normal"
+                  required
                 />
               </Grid>
             </Grid>
-            <Grid container className="container">
-              <Grid item>
-                <TextField
-                  label="מייל"
-                  name="email"
-                  onChange={handleChange}
-                  error={formErrors.email}
-                  helperText={formErrors.email}
-                  variant="outlined"
-                  margin="normal"
-                />
-              </Grid>
-            </Grid>
-            {/* <FormControl onChange={handleChange} value={formValues.password} sx={{ m: 1, width: '25ch' }} variant="outlined">
-        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-        <OutlinedInput
-          id="outlined-adornment-password"
-          type={showPassword ? 'text' : 'password'}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                edge="end"
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
-          label="Password"
-        />
-      </FormControl> */}
             <Grid container className="container">
               <Grid item>
                 <TextField
@@ -214,7 +162,6 @@ const Login = () => {
                 </span>
               </Grid>
             </Grid>
-            {/* <button type="submit">Submit</button> */}
             <Button type="submit" disabled={validation} variant="contained">כניסה</Button>
           </form>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>

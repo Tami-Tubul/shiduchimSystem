@@ -10,34 +10,41 @@ import { Container } from '@mui/material';
 import Header from '../Header/Header';
 import './StatisicsClosedMatchMakked.css';
 import { useSelector } from 'react-redux';
+import { convertDateToHebrew } from '../../reusableCode/formateDate';
 
 
 const data = [
-    { argument: 'תשרי', value: 1 },
-    { argument: 'חשוון', value: 12 },
-    { argument: 'כסלו', value: 3 },
-    { argument: 'טבת', value: 5 },
+    { argument: 'תשרי', value: 0 },
+    { argument: 'חשוון', value: 0 },
+    { argument: 'כסלו', value: 0 },
+    { argument: 'טבת', value: 0 },
     { argument: 'שבט', value: 0 },
-    { argument: 'אדר', value: 1 },
-    { argument: 'ניסן', value: 8 },
-    { argument: 'איר', value: 5 },
-    { argument: 'סיוון', value: 7 },
-    { argument: 'תמוז', value: 9 },
-    { argument: 'אב', value: 10 },
-    { argument: 'אלול', value: 8 }
+    { argument: 'אדר', value: 0 },
+    { argument: 'ניסן', value: 0 },
+    { argument: 'אייר', value: 0 },
+    { argument: 'סיוון', value: 0 },
+    { argument: 'תמוז', value: 0 },
+    { argument: 'אב', value: 0 },
+    { argument: 'אלול', value: 0 }
 ];
+
 // TODO: לקבל את כל השידוכים שנעשו החודש ולהציג אותם
 
 const StatisicsClosedMatchMakked = () => {
 
-    //const closedRegisters = useSelector((state) => state.matchMaker.closedRegisters);
-   // const datesArr = closedRegisters && closedRegisters.map(x => x.dateWort)
+    const closedRegisters = useSelector((state) => state.matchMaker.closedRegisters);
+    const datesArr = closedRegisters && closedRegisters.map(x => convertDateToHebrew(x.dateWort)) //מערך תאריכי שידוכים
+   
+    const allMonthArr = datesArr.map(m => m.split(" ")[3].replace(/ב/, '')) // מערך חודשי שידוכים
+    console.log(allMonthArr);
 
-    // const chartData = datesArr && datesArr.map((date, index) => ({
-    //     argument: `Date ${index + 1}`,
-    //     value: new Date(date).getDate(),
-    //   }));
-
+    allMonthArr.forEach((value) => { //מעבר על כל החודשים שנעשו בהם שידוכים והלאת הערך ב1
+        const monthIndex = data.findIndex((month) => month.argument === value);
+        if (monthIndex !== -1) {
+          data[monthIndex].value += 1;
+        }
+      });
+ 
     return (
         <>
             <Header />

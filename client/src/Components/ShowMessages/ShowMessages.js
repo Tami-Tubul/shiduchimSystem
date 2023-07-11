@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
-import { Card } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { DataGridPro, GridActionsCellItem, } from '@mui/x-data-grid-pro';
@@ -10,22 +9,29 @@ import MyModal from '../Modal/Modal'
 import Header from '../Header/Header';
 import './ShowMessages.css';
 import axios from 'axios';
-import { loadMessages } from './../../store/manager/managerActions';
+import { deleteMessage, loadMessages } from './../../store/manager/managerActions';
+import { useEffect } from 'react';
+import { handaleLongDate } from '../../reusableCode/formateDate';
+import { useState } from 'react';
+import toast from 'toast-me';
+
 
 LicenseInfo.setLicenseKey('x0jTPl0USVkVZV0SsMjM1kDNyADM5cjM2ETPZJVSQhVRsIDN0YTM6IVREJ1T0b9586ef25c9853decfa7709eee27a1e');
 
+
 export default function ShowMessages() {
-    const data = useSelector((state) => state.manager);
+    const messages = useSelector((state) => state.manager.messages);
     const token = useSelector((state) => state.user.currentUser.token);
 
-    const rows = data.messages ? data.messages.map((message) => ({ ...message, id: message._id })) : [];
-    const [rowModesModel, setRowModesModel] = React.useState({});
-    const [showModal, setShowModal] = React.useState(false);
-    const [selectedMessage, setSelectedMessage] = React.useState({});
+    const rows = messages ? messages.map((message) => ({ ...message, id: message._id })) : [];
+   
+    const [rowModesModel, setRowModesModel] = useState({});
+    const [showModal, setShowModal] = useState(false);
+    const [selectedMessage, setSelectedMessage] = useState({});
 
     const dispatch = useDispatch();
 
-    React.useEffect(() => {
+    useEffect(() => {
         const getMessagesFromServer = async () => {
             try {
                 const resp = await axios.get("http://localhost:5000/api/shiduchim/manager/messages", {
@@ -38,25 +44,27 @@ export default function ShowMessages() {
             }
         }
         getMessagesFromServer();
-    }, []);
+    }, [dispatch]);
 
-    const handleShowMessageClick = (id) => () => {
-        console.log('show', id);
-        const selected = rows && rows.find((row) => row.id === id);
-        setSelectedMessage(selected);
+    const handleShowMessageClick = (messageID) => () => {
+        const selectedMsg = rows && rows.find((mesg) => mesg.id === messageID);
+        setSelectedMessage(selectedMsg);
         setShowModal(true);
-        // TODO: צפיה ושמירת ההודעה
     };
 
-    const handleDeleteMessageClick = (id) => async () => {
-        try {
-            const resp = await axios.delete("http://localhost:5000/api/shiduchim/manager/messages/" + id)
-            if (resp.status === 200) {
-                //dispatch(deleteMessage(id)) //TODO: מחיקת ההודעה 
-                alert(resp.status.data.message)
+    const handleDeleteMessageClick = (messageID) => async () => {
+        if (window.confirm("האם אתה בטוח שברצונך למחוק את ההודעה?")) {
+            try {
+                const resp = await axios.delete("http://localhost:5000/api/shiduchim/manager/messages/" + messageID, {
+                    headers: { 'x-access-token': token }
+                })
+                if (resp.status === 200) {
+                    dispatch(deleteMessage(messageID))
+                    toast(resp.data.message, { duration: 5000 })
+                }
+            } catch (error) {
+                console.error('Error retrieving messages:', error);
             }
-        } catch (error) {
-            console.error('Error retrieving messages:', error);
         }
     };
 
@@ -65,7 +73,7 @@ export default function ShowMessages() {
     }
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 90 },
+        // { field: 'id', headerName: 'ID', width: 90 },
         {
             field: 'nameOfSender',
             headerName: 'מאת',
@@ -89,6 +97,7 @@ export default function ShowMessages() {
             headerName: 'תאריך שליחה',
             width: 100,
             editable: true,
+            valueGetter: (params) => handaleLongDate(params.row.dateOfSending),
         },
         {
             field: 'actions',
@@ -131,7 +140,7 @@ export default function ShowMessages() {
                             rowModesModel={rowModesModel}
                         />
                     </Box>
-                    {showModal && <MyModal header={selectedMessage.subject} body={selectedMessage.body} show={showModal} handleClose={handleclose} />}
+                    {showModal && <MyModal header={selectedMessage.nameOfSender} body={selectedMessage.textMessage} show={showModal} handleClose={handleclose} />}
                 </div>
             </div>
         </>

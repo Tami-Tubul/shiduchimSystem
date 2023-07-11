@@ -1,27 +1,14 @@
 import React from 'react';
-import { styled } from '@mui/material/styles';
 import { Grid } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-
 import './Engaged.css';
+import { convertDateToHebrew } from '../../reusableCode/formateDate';
 
 const Engaged = ({ closedRegister }) => {
 
-    //צריך להמיר לתאריך עברי 
-    const handleDate = () => {
-        const dateSTR = closedRegister.dateWort; 
-        const date = new Date(dateSTR);
-        const hebrewOptions = {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        };
-        const hebrewDateWort = date.toLocaleDateString('he-IL', hebrewOptions);
-        return hebrewDateWort;
-    }
 
     return (
         <Card sx={{ maxWidth: 345 }}>
@@ -50,7 +37,7 @@ const Engaged = ({ closedRegister }) => {
                         </Grid>
                         <Grid container>
                             <p style={{ fontSize: "larger", fontWeight: 800, color: "#c87009" }}>מאורסים</p>
-                            <p>אור ל{handleDate()}</p>
+                            <p>אור ל{convertDateToHebrew(closedRegister.dateWort)}</p>
                         </Grid>
                     </div>
                 </Typography>

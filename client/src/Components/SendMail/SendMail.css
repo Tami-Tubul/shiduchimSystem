@@ -8,10 +8,23 @@
     text-align: center;
     margin-top: 15%;
 }
+
 .css-1v5z4dq-MuiPaper-root-MuiCard-root {
     margin: 20% !important;
     direction: rtl;
 }
+
 .css-140i45m-JoyButton-root {
     background-color: #7961369e !important;
+}
+
+.css-18m3si8-JoyButton-root {
+    background-color: #7961369e !important;
+}
+
+.css-18m3si8-JoyButton-root {
+    margin: 3% !important;
+}
+.css-hz1bth-MuiDialog-container {
+    direction: rtl;
 }

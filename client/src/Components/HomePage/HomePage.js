@@ -1,11 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Container from '@mui/material/Container';
+import React, {  useEffect} from 'react';
 import { Button } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { redirect } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import wedding1 from '../../assets/wedding1.png';
 import './HomePage.css';
@@ -29,7 +26,7 @@ function HomePage() {
         }
     }
     getShiduchimFromServer();
-}, []);
+}, [dispatch]);
 
 
   //   const ref = useRef(null);

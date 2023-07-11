@@ -1,22 +1,19 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Collapse from '@mui/material/Collapse';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { Grid } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { addFavoritedCandidate } from '../../store/matchMaker/matchMakerActions';
 import './SearchedCard.css';
+import { useState } from 'react';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -34,8 +31,9 @@ export default function SearchedCard(props) {
     const matchMaker = useSelector((state) => state.matchMaker);
     const { candidate } = props;
     const moreDetails = { ...candidate, firstName: "", lastName: "", age: "" }
-    const [expanded, setExpanded] = React.useState(false);
-    const [addFavorited, setAddFavorited] = React.useState(true);
+    const [expanded, setExpanded] = useState(false);
+    const [addFavorited, setAddFavorited] = useState(false);
+    
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
@@ -63,7 +61,7 @@ export default function SearchedCard(props) {
     };
 
     return (
-        <Card sx={{ maxWidth: 345, margin: 2, minWidth: 200, maxWidth: 300 }}>
+        <Card sx={{ maxWidth: 345, margin: 2, minWidth: 200 }}>
             <CardHeader
                 action={
                     <IconButton aria-label="favorite" onClick={handleAddToFavorite}>
@@ -80,15 +78,7 @@ export default function SearchedCard(props) {
                     {`גיל:${candidate.age}`}
                 </Typography>
             </CardContent>
-            {/* <CardActions disableSpacing>
-                        <div className='button'>
-                            <Button size="small" onClick={handleShowMore} >
-                                <Typography variant="h4" color="text.secondary">
-                                    {showMore ? '-' : '+'}
-                                </Typography>
-                            </Button>
-                        </div>
-                    </CardActions> */}
+      
             <CardActions disableSpacing>
                 <ExpandMore
                     expand={expanded}
@@ -101,7 +91,7 @@ export default function SearchedCard(props) {
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                    {Object.values(moreDetails).map((property) => {
+                    {Object.values(moreDetails).map((property) => { //צריך לכתוב את כל שמות השדות 
                         return (<Typography sx={{ fontSize: 14 }} color="text.secondary">
                             {property}
                         </Typography>);

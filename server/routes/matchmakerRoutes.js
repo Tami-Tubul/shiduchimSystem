@@ -12,10 +12,10 @@ router.get("/cart", authenticateToken, checkUserRole("matchmaker"), matchmakerCo
 router.delete("/cart/:id", authenticateToken, checkUserRole("matchmaker"), matchmakerControllers.deleteCandidateFromCart);
 router.put("/candidates-cards/:id", authenticateToken, checkUserRole("matchmaker"), matchmakerControllers.addCandidateToCart);
 router.post("/message", authenticateToken, checkUserRole("matchmaker"), matchmakerControllers.sendMessageToManager);
-router.get("/your-meorasim-cards", checkUserRole("matchmaker"), authenticateToken, matchmakerControllers.getDoneShiduchimOfMatchmaker);
+router.get("/your-meorasim-cards",authenticateToken, checkUserRole("matchmaker"), matchmakerControllers.getDoneShiduchimOfMatchmaker);
 
-router.post("/filter-candidates", checkUserRole("matchmaker"), authenticateToken, usersControllers.filterCandidatesCards);
-router.get("/candidates-cards", checkUserRole("matchmaker"), authenticateToken, usersControllers.getAllCandidatesCards);
+router.post("/filter-candidates",authenticateToken, checkUserRole("matchmaker"), usersControllers.filterCandidatesCards);
+router.get("/candidates-cards", authenticateToken, checkUserRole("matchmaker"), usersControllers.getAllCandidatesCards);
 
 
 module.exports = router;

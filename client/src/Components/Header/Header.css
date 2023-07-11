@@ -1,0 +1,22 @@
+.header {
+    height: 100px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    color: #796136 !important;
+    border-color: #796136 !important;
+    padding-top: 1%;
+    direction: rtl;
+    background-color: beige;
+    padding-right: 6%;
+}
+.actionsButtons {
+    width: fit-content;
+}
+.css-1lwgzeh-JoyButton-root > .css-1lwgzeh-JoyButton-root {
+    color: #8c6b44 !important;
+    background-color: #fdf8e0 !important;
+}
+.css-1lwgzeh-JoyButton-root > .css-78trlr-MuiButtonBase-root-MuiIconButton-root {
+    color: #8c6b44 !important;
+    background-color: #fdf8e0 !important;
+}

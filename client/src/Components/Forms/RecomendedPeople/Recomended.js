@@ -12,24 +12,24 @@ export default function Recomended(props) {
                 <Grid item>
                     <TextField
                         label="שם"
-                        name="RecommendName"
-                        //defaultValue={(props && props.data )? props.data.RecommendName: ""}
+                        name="recommendName"
+                        //defaultValue={(props && props.data )? props.data.recommendName: ""}
                         onChange={handleChangeInput}
                     />
                 </Grid>
                 <Grid item>
                     <TextField
                         label="טלפון"
-                        name="RecommendPhone"
-                        //defaultValue={props && props.data && props.data.RecommendPhone}
+                        name="recommendPhone"
+                        //defaultValue={props && props.data && props.data.recommendPhone}
                         onChange={handleChangeInput}
                     />
                 </Grid>
                 <Grid item>
                     <TextField
                         label="קרבה"
-                        name="RecommendRelative"
-                        // defaultValue={props && props.data && props.data.RecommendRelative}
+                        name="recommendRelative"
+                        // defaultValue={props && props.data && props.data.recommendRelative}
                         onChange={handleChangeInput}
                     />
                 </Grid>

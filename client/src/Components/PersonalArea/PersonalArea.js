@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 import SearchedCard from '../SearchedCard/SearchedCard';
 import Header from '../Header/Header';
@@ -31,7 +31,7 @@ export default function PersonalArea(props) {
         }
     }
     getFavoritedCandidatesFromServer();
-   },[])
+   },[token])
 
     return (
         <>

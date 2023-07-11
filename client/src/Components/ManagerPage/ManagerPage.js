@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
 import { Button } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { Box } from '@mui/material';
@@ -50,9 +50,9 @@ function ManagerPage() {
       case "showMessages":
         navigate('/ShowMessages');
         break;
-        case "checkingNewRegisterd":
-          console.log('jdksj');
-          break;
+      case "SearchAndMatch":
+        navigate('/SearchAndMatch');
+        break;
       default:
         navigate('/login');
     }
@@ -89,10 +89,12 @@ function ManagerPage() {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                <MenuItem name="checkingNewRegisterd" onClick={handleCheckingNews}>צפיה בכרטיסי משתמשים</MenuItem>
                 <MenuItem name="checkingNewRegisterd" onClick={handleCheckingNews}>בדיקת שדכנים חדשים</MenuItem>
                 <MenuItem name="checkingNewRegisterd" onClick={handleCheckingNews}>בדיקת מועמדים חדשים</MenuItem>
               </Menu>
+            </Grid>
+            <Grid item>
+              <Button variant="contained" onClick={handleClick} name="SearchAndMatch">צפיה בכרטיסי משתמשים</Button>
             </Grid>
             <Grid item>
               <Button variant="contained" onClick={handleClick} name="showMessages">צפיה בהודעות</Button>

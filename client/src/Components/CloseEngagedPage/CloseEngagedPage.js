@@ -14,7 +14,7 @@ const CloseEngagedPage = () => {
             <div className='closeEngagedPage'>
                 <Grid container spacing={3}>
                     {data && Array.isArray(data.closedRegisters) && data.closedRegisters.map((closedRegister) => {
-                        return (<Grid item>
+                        return (<Grid item key={closedRegister._id}>
                             <Card sx={{ maxWidth: 345 }}>
                                 <Engaged closedRegister={closedRegister} />
                             </Card>

@@ -7,7 +7,7 @@ const candidateSchema = mongoose.Schema({
     gender: { type: String, required: true }, //מין
     age: { type: Number, required: true },//גיל
     email: { type: String, required: true }, // מייל
-    status: { type: String, required: true },//מצב משפחתי
+    familyStatus: { type: String, required: true },//מצב משפחתי
     bornDate: { type: Date, required: true },//תאריך לידה
     countryBirth: { type: String, required: true },//ארץ לידה
     city: { type: String, required: true },//עיר
@@ -23,8 +23,8 @@ const candidateSchema = mongoose.Schema({
     sector: { type: String, required: true },//מגזר
     picture: { type: String },//תמונה
     requireMoney: { type: Number },//דרישות כספיות
-    CommitMoney: { type: Number },//התחייבויות כספיות
-    yeshivaOrSeminar: { type: String, required: true },//שם מקום לימודים
+    commitMoney: { type: Number },//התחייבויות כספיות
+    yeshivaOrSeminar: { type: String, required: true },//שם מקום לימודים או עבודה
     doingToday: { type: String, required: true },//עיסוק כיום
     origin: { type: String, required: true },//עידה
     fatherName: { type: String, required: true },//שם האב
@@ -41,11 +41,11 @@ const candidateSchema = mongoose.Schema({
     drishotCharacters: { type: String },//דרישות-תכונות אופי
     drishotFavoriteMoza: { type: String, required: true },//דרישות-ארץ מוצא מועדף
     drishotNotMoza: { type: String },//דרישות לא ממוצא
-    drishotHeaddress: { type: String, required: true },//דרישות-כיסוי ראש
+    headdress: { type: String, required: true },//כיסוי ראש
     fromAge: { type: Number, required: true },//מגיל
     mostAge: { type: Number, required: true },//עד גיל
-    fromHigh: { type: mongoose.Schema.Types.Decimal128, required: true },//מגובה
-    mostHigh: { type: mongoose.Schema.Types.Decimal128, required: true },//עד גובה
+    fromHeight: { type: mongoose.Schema.Types.Decimal128, required: true },//מגובה
+    mostHeight: { type: mongoose.Schema.Types.Decimal128, required: true },//עד גובה
     casherPhone: { type: Boolean, required: true },//טלפון כשר
     licence: { type: Boolean, required: true },//רישיון
     smoking: { type: Boolean, required: true },//מעשן
@@ -55,9 +55,9 @@ const candidateSchema = mongoose.Schema({
         fatherInLawPhone: { type: String, required: true }
     }], 
     recomendedPeople: [{  //מערך מקורות לברורים
-        RecommendName: { type: String, required: true },
-        RecommendPhone: { type: String, required: true },
-        RecommendRelative: { type: String, required: true }
+        recommendName: { type: String, required: true },
+        recommendPhone: { type: String, required: true },
+        recommendRelative: { type: String, required: true }
     }],
     fillQuestionarieName: { type: String, required: true },//שם ממלא הטופס
     fillQuestionariePhone: { type: String, required: true }, //טלפון ממלא הטופס

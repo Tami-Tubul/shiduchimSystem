@@ -9,8 +9,8 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
             fromAge,
             mostAge,
             economicCondition, 
-            fromHigh,
-            mostHigh,
+            fromHeight,
+            mostHeight,
             look,
             colorSkin,
             countryBirth,
@@ -18,7 +18,7 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
             drishotNotMoza, 
             city,
             characters,
-            drishotHeaddress,
+            headdress,
             healthCondition,
             halachaMethod
         } = req.body
@@ -45,12 +45,12 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
             query.economicCondition = economicCondition
         }
 
-        if (fromHigh) {
-            query.height = { $gte: fromHigh }
+        if (fromHeight) {
+            query.height = { $gte: fromHeight }
         }
 
-        if (mostHigh) {
-            query.height = { $lte: mostHigh }
+        if (mostHeight) {
+            query.height = { $lte: mostHeight }
         }
 
         if (look) {
@@ -81,8 +81,8 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
             query.characters = { $all: characters }
         }
 
-        if (drishotHeaddress) {
-            query.drishotHeaddress = drishotHeaddress
+        if (headdress) {
+            query.headdress = headdress
         }
 
         if (healthCondition) {

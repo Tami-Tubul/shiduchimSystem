@@ -35,8 +35,9 @@ const registerMatchmaker = async (req, res, next) => {  //הרשמת שדכן
 }
 
 const registerCandidate = async (req, res, next) => {  //מילוי שאלון הרשמה למועמד
+    console.log(req.body);
     try {
-        const nonMandatoryFields = ["picture", "requireMoney", "CommitMoney", "drishotCharacters", "drishotNotMoza"] //שדות לא חובה
+        const nonMandatoryFields = ["picture", "requireMoney", "commitMoney", "drishotCharacters", "drishotNotMoza"] //שדות לא חובה
         const mandatoryFields = Object.keys(req.body).filter(field => !nonMandatoryFields.includes(field)); //שדות חובה
         const candidate = req.body;  //כל השדות 
         const missingFields = [];
@@ -46,6 +47,7 @@ const registerCandidate = async (req, res, next) => {  //מילוי שאלון �
                 missingFields.push(field);
             }
         });
+
 
         if (missingFields.length > 0) {
             return res.status(400).json({ message: `יש למלא את כל שדות החובה. השדות החסרים הם: ${missingFields.join(', ')}` });

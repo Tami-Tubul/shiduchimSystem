@@ -1,4 +1,18 @@
-import {Add_CANDIDATE, CLOSE_MATCH, LOAD_MEORASIM} from './matchMakerTypes';
+import {LOAD_CANDIDATES, DELETE_CANDIDATE ,ADD_CANDIDATE, CLOSE_MATCH, LOAD_MEORASIM} from './matchMakerTypes';
+
+export const loadCandidates = (candidates) => {
+    return {
+        type: LOAD_CANDIDATES,
+        payload: candidates
+    }
+}
+
+export const deleteCandidate = (candidateID) => {
+    return {
+        type: DELETE_CANDIDATE,
+        payload: candidateID
+    }
+}
 
 export const loadMeorasim = (meorasim) => {
     return {
@@ -6,20 +20,24 @@ export const loadMeorasim = (meorasim) => {
         payload: meorasim
     }
 }
+
 export const addFavoritedCandidate = (candidate) => {
     return {
-        type: Add_CANDIDATE,
+        type: ADD_CANDIDATE,
         payload: candidate
     }
 }
-export const closedMatched = (matchList) => {
+export const closedMatched = (matchObj) => {
     return {
         type: CLOSE_MATCH,
-        payload: matchList
+        payload: matchObj
     }
 }
 export default {
+    loadCandidates,
+    deleteCandidate,
     loadMeorasim,
-    addFavoritedCandidate,
-    closedMatched
+    closedMatched,
+    addFavoritedCandidate
+    
 }

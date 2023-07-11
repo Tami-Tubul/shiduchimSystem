@@ -6,7 +6,7 @@
     direction: rtl;
     justify-content: space-between;
     text-align: center;
-    margin-top: 15%;
+    margin-top: 5%;
 }
 .container {
     justify-content: center;
@@ -20,4 +20,7 @@ button {
 }
 .css-sghohy-MuiButtonBase-root-MuiButton-root {
     background-color: #7961369e !important;
+}
+.css-bdhsul-MuiTypography-root-MuiDialogTitle-root {
+    direction: rtl;
 }

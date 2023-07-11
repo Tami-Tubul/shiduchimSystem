@@ -6,17 +6,18 @@ const usersControllers = require('../controllers/usersControllers');
 
 const { authenticateToken, checkUserRole } = require('../controllers/authControllers'); // בכל בקשה לשרת מופעלת פונקציה שמאמתת את הטוקן ופונקציה נוספת שבודקת אם זה המנהל
 
-router.put("/new-matchmakers/:id", authenticateToken, checkUserRole('admin'), managerController.approveMatchmaker);
-router.delete("/new-matchmakers/:id", authenticateToken, checkUserRole('admin'), managerController.deleteMatchmaker);
-router.put("/new-candidates/:id", authenticateToken, checkUserRole('admin'), managerController.approveCandidate);
-router.delete("/new-candidates/:id", authenticateToken, checkUserRole('admin'), managerController.deleteCandidate);
-router.get("/matchmakers-cards", authenticateToken, checkUserRole('admin'), managerController.getAllMatchmakersCards);
-router.get("/messages", authenticateToken, checkUserRole('admin'), managerController.getAllMassagesFromMatchmakers);
-router.delete("/messages/:id", authenticateToken, checkUserRole('admin'), managerController.deleteMessageFromMatchmaker);
-router.delete("/remoal-candidates/:id", authenticateToken, checkUserRole('admin'), managerController.removingIrrelevantCandidate);
+router.put("/new-matchmakers/:id", authenticateToken, checkUserRole('manager'), managerController.approveMatchmaker);
+router.delete("/new-matchmakers/:id", authenticateToken, checkUserRole('manager'), managerController.deleteMatchmaker);
+router.put("/new-candidates/:id", authenticateToken, checkUserRole('manager'), managerController.approveCandidate);
+router.delete("/new-candidates/:id", authenticateToken, checkUserRole('manager'), managerController.deleteCandidate);
+router.get("/matchmakers-cards", authenticateToken, checkUserRole('manager'), managerController.getAllMatchmakersCards);
+router.get("/messages", authenticateToken, checkUserRole('manager'), managerController.getAllMassagesFromMatchmakers);
+router.delete("/messages/:id", authenticateToken, checkUserRole('manager'), managerController.deleteMessageFromMatchmaker);
+router.delete("/removal-candidates/:id", authenticateToken, checkUserRole('manager'), managerController.removingIrrelevantCandidate);
+router.post("/candidates-cards/:id", authenticateToken, checkUserRole('manager'), managerController.sendMailToCandidateCheckIfRelelevant);
 
-router.post("/filter-candidates", authenticateToken, checkUserRole('admin'), usersControllers.filterCandidatesCards);
-router.get("/candidates-cards", authenticateToken, checkUserRole('admin'), usersControllers.getAllCandidatesCards);
+router.post("/filter-candidates", authenticateToken, checkUserRole('manager'), usersControllers.filterCandidatesCards);
+router.get("/candidates-cards", authenticateToken, checkUserRole('manager'), usersControllers.getAllCandidatesCards);
 
 module.exports = router;
 

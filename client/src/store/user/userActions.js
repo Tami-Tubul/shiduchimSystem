@@ -1,4 +1,4 @@
-import {USER_LOGIN, ADD_REGISTER, DELETE_REGISTER} from './userType';
+import { USER_LOGIN } from './userType';
 
 export const userLogin = (currentUser) => {
     return {
@@ -7,23 +7,9 @@ export const userLogin = (currentUser) => {
     }
 }
 
-export const addRegister = (registers) => {
-    return {
-        type: ADD_REGISTER,
-        payload: registers
-    }
-}
-export const deleteRegister = (registers) => {
-    return {
-        type: DELETE_REGISTER,
-        payload: registers
-    }
-}
 
 export default {
     userLogin,
-    addRegister,
-    deleteRegister
 }
 
 

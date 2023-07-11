@@ -91,11 +91,11 @@ const approveCandidate = async (req, res, next) => {   // אישור מועמד
 
             res.status(201).json({ message: "המועמד נוסף בהצלחה למאגר" })
 
-            //תזמון שליחת מייל פעם בחודש מתאריך זה
-            const mailTo = candidateExist.email;
-            const textMail = `שלום ${candidateExist.firstName}. זוהי בדיקת רלוונטיות חודשית. האם אתה עדיין מחפש שידוך? השב בכן או לא כדי שהמערכת תדע האם להסיר אותך מהמאגר. תודה.`;
+            //תזמון שליחת מייל פעם בחודש מתאריך זה --- בוטל ---- הועבר לפונקציה שבלחיצת כפתור שולחת לו מייל
 
-            const task = mail.sendMail(mailTo, textMail, true);
+            // const mailTo = candidateExist.email;
+            // const textMail = `שלום ${candidateExist.firstName}. זוהי בדיקת רלוונטיות חודשית. האם אתה עדיין מחפש שידוך? השב בכן או לא כדי שהמערכת תדע האם להסיר אותך מהמאגר. תודה.`;
+            // const task = mail.sendMail(mailTo, textMail, true);
 
             //במידה והמועמד השיב שהוא כבר לא רלוונטי
             //candidateExist.remove();   //הסרת המועמד מטבלת המועמדים
@@ -177,14 +177,14 @@ const removingIrrelevantCandidate = async (req, res, next) => { // המנהל מ
     try {
         const candidateID = req.params.id;
 
-        const candidateExist = await Candidate.findOne({_id: candidateID});
-        
+        const candidateExist = await Candidate.findOne({ _id: candidateID });
+
         if (!candidateExist) {
             return res.status(404).json({ message: "מועמד לא נמצא" });
         }
 
         const markToRemoval = await Candidate.findOneAndRemove({ _id: candidateID, pendingDeletion: true });
-       
+
         if (!markToRemoval) {
             return res.status(400).json({ message: "מועמד לא סומן להסרה על ידי השדכן" });
         }
@@ -199,8 +199,29 @@ const removingIrrelevantCandidate = async (req, res, next) => { // המנהל מ
 
 }
 
+const sendMailToCandidateCheckIfRelelevant = async (req, res, next) => {  //כשהמנהל לוחץ על כפתור שליחת מייל למועמד כדי לבדוק אם הוא עדיין רלוונטי
+    
+    try {
 
+        const candidateID = req.params.id;
+        const candidateExist = await Candidate.findOne({ _id: candidateID })
+       
+        if (!candidateExist) {
+            return res.status(400).json({ message: "מועמד לא נמצא" });
+        }
 
+        else{
+            const mailTo = candidateExist.email;
+            const textMail = `שלום ${candidateExist.firstName}.  האם אתה עדיין מחפש שידוך? השב בכן או לא כדי שהמערכת תדע האם להסיר אותך מהמאגר. תודה.`;
+            mail.sendMail(mailTo, textMail);
+        }
+    }
+
+    catch (err) {
+        next(err)
+    }
+
+}
 
 
 module.exports = {
@@ -211,5 +232,6 @@ module.exports = {
     getAllMatchmakersCards,
     getAllMassagesFromMatchmakers,
     deleteMessageFromMatchmaker,
-    removingIrrelevantCandidate
+    removingIrrelevantCandidate,
+    sendMailToCandidateCheckIfRelelevant
 }

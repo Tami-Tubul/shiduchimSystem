@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const cron = require('node-cron');
 
-exports.sendMail = (mailTo, textMail, schedule = false) => {
+exports.sendMail = (mailTo, textMail) => {
 
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -18,28 +18,14 @@ exports.sendMail = (mailTo, textMail, schedule = false) => {
         text: textMail
     };
 
-    if (schedule) { //קוד זה מתזמן את השליחה פעם בחודש
-        const task = cron.schedule('0 0 1 * *', () => {
-            transporter.sendMail(mailOptions, function (error, info) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email sent: ' + info.response);
-                }
-            })
-        });
-
-        return task;
-    }
-    else { //שליחת מייל ללא תזמון
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('Email sent: ' + info.response);
-            }
-        })
-    }
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    })
 }
+
 
 
