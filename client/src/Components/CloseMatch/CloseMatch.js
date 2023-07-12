@@ -16,7 +16,7 @@ const CloseMatch = () => {
     const dispatch = useDispatch();
     const token = useSelector((state) => state.user.currentUser.token);
 
-    const candidates = useSelector((state) => state.matchMaker.candidates);
+    const candidates = useSelector((state) => state.user.candidates);
     const bachurNames = candidates.filter(cand => cand.gender === "זכר").map(cand => ({ _id: cand._id, name: cand.firstName + " " + cand.lastName }));
     const bachuraNames = candidates.filter(cand => cand.gender === "נקבה").map(cand => ({ _id: cand._id, name: cand.firstName + " " + cand.lastName }));
     const [valBachur, setValBachur] = useState({}) //ערך בשדה השלמה אוטומטית בחור
@@ -49,7 +49,7 @@ const CloseMatch = () => {
                 dispatch(deleteCandidate(meorasimObj.bachurId))//מחיקת בחור מטבלת מועמדים
                 dispatch(deleteCandidate(meorasimObj.bachuraId))//מחיקת בחורה מטבלת מועמדים
 
-                setSuccessCloseShiduchMessage(`${resp.data.message1}. ${resp.data.message2}. `);
+                setSuccessCloseShiduchMessage(`${resp.data.message1}. ${resp.data.message2}. ${resp.data.message3}.`);
                 
             }
         }).catch(err => {

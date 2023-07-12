@@ -56,9 +56,9 @@ const closingMatch = async (req, res, next) => { //סגירת שידוך
         })
 
         const saveShiduch = await newShiduch.save();  //הוספת שידוך לטבלת מאורסים
-       
+
         if (saveShiduch) {
-          
+
             const bachur = await Candidate.findOne({ _id: bachurId });
             const bachura = await Candidate.findOne({ _id: bachuraId });
 
@@ -70,13 +70,27 @@ const closingMatch = async (req, res, next) => { //סגירת שידוך
 
             const bachuraRemoved = await Candidate.deleteOne({ _id: bachura._id }); //מחיקת בחורה מטבלת מועמדים
 
+            //מחיקת בחור ובחורה מהאזור האישי של השדכן
+            const matchmakerID = req.userConnect.id;
+            const bachurID = bachur._id;
+            const bachuraID = bachura._id;
+            const matchmakerAfterRemoveCandidate = await Matchmaker.findByIdAndUpdate(
+                matchmakerID,
+                { $pull: { candidates: { $in: [bachurID, bachuraID] } } }, //מחיקת ID של המאורסים מהשדכן
+                { new: true })  //החזרת אובייקט שדכן מעודכן לאחר ההסרה    
+
+
             if (!bachurRemoved || !bachuraRemoved) {
-                 return res.status(500).json({ message: "אירעה תקלה במחיקת הבחור/ה המאורס/ת מטבלת המועמדים" });
+                return res.status(500).json({ message: "אירעה תקלה במחיקת הבחור/ה המאורס/ת מטבלת המועמדים" });
+            }
+            if(!matchmakerAfterRemoveCandidate){
+                return res.status(500).json({ message: "אירעה תקלה במחיקת המאורסים מהסל של השדכן" });
             }
 
             res.status(201).json({
                 message1: "השידוך נוסף בהצלחה למאגר המאורסים",
-                message2: "המאורסים הוסרו ממאגר המועמדים"
+                message2: "המאורסים הוסרו ממאגר המועמדים",
+                message3: "המאורסים הוסרו מהסל של השדכן בהצלחה"
             });
         }
     }
@@ -85,6 +99,23 @@ const closingMatch = async (req, res, next) => { //סגירת שידוך
     }
 
 }
+
+const deleteCandidateFromCart = async (req, res, next ) => { //הסרת מועמד מהאזור האישי
+    try {
+        const matchmakerID = req.userConnect.id;
+        const candidateID = req.params.id;
+        const matchmakerAfterRemoveCandidate = await Matchmaker.findByIdAndUpdate(
+            matchmakerID,
+            { $pull: { candidates: candidateID } }, //מחיקת ID של המועמד מהשדכן
+            { new: true })  //החזרת אובייקט שדכן מעודכן לאחר ההסרה
+        res.status(200).json({ message: "המועמד הוסר מהסל בהצלחה", candidates: matchmakerAfterRemoveCandidate.candidates }) //החזרת מערך מועמדים מעודכן לאחר ההסרה
+    }
+    catch (err) {
+        next(err)
+    }
+
+}
+
 
 const getAllCandidateOnCart = async (req, res, next) => { //שליפת מועמדים מהאזור האישי
     try {
@@ -124,21 +155,6 @@ const addCandidateToCart = async (req, res, next) => { // הוספת מועמד 
     }
 }
 
-const deleteCandidateFromCart = async (req, res, next) => { //הסרת מועמד מהאזור האישי
-    try {
-        const matchmakerID = req.userConnect.id;
-        const candidateID = req.params.id;
-        const matchmakerAfterRemoveCandidate = await Matchmaker.findByIdAndUpdate(
-            matchmakerID,
-            { $pull: { candidates: candidateID } }, //מחיקת ID של המועמד מהשדכן
-            { new: true })  //החזרת אובייקט שדכן מעודכן לאחר ההסרה
-        res.status(200).json({ message: "המועמד הוסר מהסל בהצלחה", candidates: matchmakerAfterRemoveCandidate.candidates }) //החזרת מערך מועמדים מעודכן לאחר ההסרה
-    }
-    catch (err) {
-        next(err)
-    }
-
-}
 
 
 const sendMessageToManager = async (req, res, next) => { //שליחת הודעה למנהל
@@ -175,25 +191,6 @@ const getDoneShiduchimOfMatchmaker = async (req, res, next) => { //שליפת כ
 
 }
 
-const sendLinkOfWebsite = async (req, res, next) => { //שיתוף קישור האתר
-
-    try {
-        // אין לוגיקה לשרת. אמור להיות מיושם בצד לקוח
-    }
-    catch (err) {
-        next(err)
-    }
-
-}
-const printQuestionPage = async (req, res, next) => { //הדפסת שאלון.
-    try {
-        //אין לוגיקה לשרת. אמור להיות מיושם בצד לקוח
-    }
-    catch (err) {
-        next(err)
-    }
-
-}
 
 module.exports = {
     closingMatch,

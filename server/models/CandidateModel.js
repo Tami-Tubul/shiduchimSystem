@@ -50,10 +50,10 @@ const candidateSchema = mongoose.Schema({
     licence: { type: Boolean, required: true },//רישיון
     smoking: { type: Boolean, required: true },//מעשן
     inLaws: [{ // מערך מחותנים
-        fatherInLawName: { type: String, required: true },
-        fatherInLawCity: { type: String, required: true },
-        fatherInLawPhone: { type: String, required: true }
-    }], 
+        fatherInLawName: { type: String },
+        fatherInLawCity: { type: String },
+        fatherInLawPhone: { type: String }
+    }],
     recomendedPeople: [{  //מערך מקורות לברורים
         recommendName: { type: String, required: true },
         recommendPhone: { type: String, required: true },

@@ -1,4 +1,4 @@
-import { USER_LOGIN } from './userType';
+import { USER_LOGIN ,LOAD_CANDIDATES} from './userType';
 
 export const userLogin = (currentUser) => {
     return {
@@ -7,9 +7,17 @@ export const userLogin = (currentUser) => {
     }
 }
 
+export const loadCandidates = (candidates) => {
+    return {
+        type: LOAD_CANDIDATES,
+        payload: candidates
+    }
+}
+
 
 export default {
     userLogin,
+    loadCandidates
 }
 
 

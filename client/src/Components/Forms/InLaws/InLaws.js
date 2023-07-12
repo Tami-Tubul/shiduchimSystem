@@ -13,7 +13,7 @@ export default function InLaws(props) {
           <TextField
             label="שם"
             name="fatherInLawName"
-            defaultValue=""
+            defaultValue={(props && props.data && props.back && props.data.fatherInLawName) ? props.data.fatherInLawName : ""}
             onChange={handleChangeInput}
           />
         </Grid>
@@ -21,7 +21,7 @@ export default function InLaws(props) {
           <TextField
             label="טלפון"
             name="fatherInLawPhone"
-            defaultValue=""
+            defaultValue={(props && props.data && props.back && props.data.fatherInLawPhone) ? props.data.fatherInLawPhone : ""}
             onChange={handleChangeInput}
           />
         </Grid>
@@ -29,7 +29,7 @@ export default function InLaws(props) {
           <TextField
             label="עיר"
             name="fatherInLawCity"
-            defaultValue=""
+            defaultValue={(props && props.data && props.back && props.data.fatherInLawCity) ? props.data.fatherInLawCity : ""}
             onChange={handleChangeInput}
           />
         </Grid>

@@ -13,7 +13,7 @@ const matchmakerSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    livingPlace: {
+    city: {
         type: String,
     },
     age: {

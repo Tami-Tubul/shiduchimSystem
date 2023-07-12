@@ -13,7 +13,7 @@ const SearchAndMatch = () => {
     const [matches, setMatches] = useState([]);
 
     const currentUser = useSelector((state) => state.user.currentUser);
-    const candidates = useSelector((state) => state.matchMaker.candidates);
+    const candidates = useSelector((state) => state.user.candidates);
 
     const handleChange = (event) => {
         const { name, value } = event.target;

@@ -1,6 +1,6 @@
 import { LOAD_MEORASIM, LOAD_CANDIDATES, DELETE_CANDIDATE, ADD_CANDIDATE, CLOSE_MATCH } from "./matchMakerTypes"
 
-export const matchMakerReducer = (state = { faoritedCandidates: [], closedRegisters: [], candidates: [] }, action) => {
+export const matchMakerReducer = (state = { faoritedCandidates: [], closedRegisters: [] }, action) => {
     switch (action.type) {
 
         case LOAD_MEORASIM:
@@ -13,12 +13,6 @@ export const matchMakerReducer = (state = { faoritedCandidates: [], closedRegist
             return {
                 ...state,
                 closedRegisters: [...state.closedRegisters, action.payload]
-            }
-
-        case LOAD_CANDIDATES:
-            return {
-                ...state,
-                candidates: action.payload
             }
 
         case DELETE_CANDIDATE:

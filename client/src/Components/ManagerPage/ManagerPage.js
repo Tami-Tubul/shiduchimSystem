@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { Box } from '@mui/material';
@@ -8,9 +8,15 @@ import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
 import rings2 from '../../assets/rings2.jpg';
 import './ManagerPage.css';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadCandidates } from '../../store/user/userActions';
 
 function ManagerPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -31,8 +37,14 @@ function ManagerPage() {
     setAnchorEl(null);
   };
 
-  const handleCheckingNews = () => {
-    navigate('/CheckingNewRegistered');
+  const handleCheckingNewMatchmakers = (e) => {
+    navigate('/CheckingNews?eventType=newMatchmakers');
+  }
+  const handleCheckingNewCandidates = (e) => {
+    navigate('/CheckingNews?eventType=newCandidates');
+  }
+  const handleCheckingUnRelevantMatchmakers = (e) => {
+    navigate('/CheckingNews?eventType=unrelevantCandidates');
   }
 
   const handleClick = (e) => {
@@ -50,14 +62,33 @@ function ManagerPage() {
       case "showMessages":
         navigate('/ShowMessages');
         break;
-      case "SearchAndMatch":
-        navigate('/SearchAndMatch');
-        break;
+        case "SearchAndMatch":
+          navigate('/SearchAndMatch');
+          break;
       default:
         navigate('/login');
     }
 
   }
+
+  
+  //שליפת מועמדים מהשרת 
+  useEffect(() => {
+    const getCandidatesFromServer = async () => {
+      try {
+        const resp = await axios.get(`http://localhost:5000/api/shiduchim/${currentUser.role}/candidates-cards`, {
+          headers: { 'x-access-token': currentUser.token }
+        });
+        const allCandidates = resp.data.candidates;
+        const aproveCandidates = allCandidates.filter(cand => cand.isApproved === true);
+        dispatch(loadCandidates(aproveCandidates));
+      } catch (error) {
+        console.error('Error retrieving messages:', error);
+      }
+    }
+    getCandidatesFromServer();
+  }, [dispatch])
+
 
   return (
     <div id="app">
@@ -89,8 +120,9 @@ function ManagerPage() {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                <MenuItem name="checkingNewRegisterd" onClick={handleCheckingNews}>בדיקת שדכנים חדשים</MenuItem>
-                <MenuItem name="checkingNewRegisterd" onClick={handleCheckingNews}>בדיקת מועמדים חדשים</MenuItem>
+                <MenuItem name="checkingUnrelevantMatchmakers" onClick={handleCheckingUnRelevantMatchmakers}>בדיקת מועמדים לא רלוונטיים</MenuItem>
+                <MenuItem name="checkingNewCandidates" onClick={handleCheckingNewMatchmakers}>בדיקת שדכנים חדשים</MenuItem>
+                <MenuItem name="checkingNewMatchmakers" onClick={handleCheckingNewCandidates}>בדיקת מועמדים חדשים</MenuItem>
               </Menu>
             </Grid>
             <Grid item>

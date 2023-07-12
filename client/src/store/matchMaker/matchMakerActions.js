@@ -1,11 +1,4 @@
-import {LOAD_CANDIDATES, DELETE_CANDIDATE ,ADD_CANDIDATE, CLOSE_MATCH, LOAD_MEORASIM} from './matchMakerTypes';
-
-export const loadCandidates = (candidates) => {
-    return {
-        type: LOAD_CANDIDATES,
-        payload: candidates
-    }
-}
+import { DELETE_CANDIDATE ,ADD_CANDIDATE, CLOSE_MATCH, LOAD_MEORASIM} from './matchMakerTypes';
 
 export const deleteCandidate = (candidateID) => {
     return {
@@ -34,7 +27,6 @@ export const closedMatched = (matchObj) => {
     }
 }
 export default {
-    loadCandidates,
     deleteCandidate,
     loadMeorasim,
     closedMatched,

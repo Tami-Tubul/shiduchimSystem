@@ -1,4 +1,4 @@
-import { LOAD_MESSAGES, SAVE_MESSAGE, DELETE_MESSAGE, LOAD_NEW_CANDIDATES, LOAD_NEW_MATCHMAKERS } from './managerTypes';
+import { LOAD_MESSAGES, SAVE_MESSAGE, DELETE_MESSAGE, LOAD_NEW_CANDIDATES, DELETE_NEW_CANDIDATE, LOAD_NEW_MATCHMAKERS,DELETE_NEW_MATCHMAKER } from './managerTypes';
 
 export const loadMessages = (messages) => {
     return {
@@ -28,6 +28,13 @@ export const loadNewCandidates = (newCandidates) => {
     }
 }
 
+export const deleteNewCandidate = (candidateID) => {
+    return {
+        type: DELETE_NEW_CANDIDATE,
+        payload: candidateID
+    }
+}
+
 export const loadNewMatchMakers = (newMatchmakers) => {
     return {
         type: LOAD_NEW_MATCHMAKERS,
@@ -35,11 +42,21 @@ export const loadNewMatchMakers = (newMatchmakers) => {
     }
 }
 
+export const deleteNewMatchMaker = (matchmakerID) => {
+    return {
+        type: DELETE_NEW_MATCHMAKER,
+        payload: matchmakerID
+    }
+}
+
 
 export default {
     loadMessages,
-    loadNewCandidates,
-    loadNewMatchMakers,
     saveMessage,
-    deleteMessage
+    deleteMessage,
+    loadNewCandidates,
+    deleteNewCandidate,
+    loadNewMatchMakers,
+    deleteNewMatchMaker
+   
 }

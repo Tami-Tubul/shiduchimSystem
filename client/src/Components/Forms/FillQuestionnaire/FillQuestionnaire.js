@@ -1,4 +1,7 @@
 import React from 'react';
+import axios from 'axios';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
@@ -6,24 +9,26 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import FormHelperText from '@mui/material/FormHelperText';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Typography from '@mui/material/Typography';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import { Button, Grid, Card, Alert } from '@mui/material';
 import Header from '../../Header/Header';
 import Recomended from '../RecomendedPeople/Recomended';
 import InLaws from '../InLaws/InLaws';
 import './FillQuestionnaire.css';
-import axios from 'axios';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 
 export default function FormPropsTextFields() {
   const [form, setForm] = React.useState({ recomendedPeople: [], inLaws: [] });
   const [recomendForm, setRecomendForm] = React.useState([]);
   const [inLawsForm, setInLawsForm] = React.useState([]);
-
+  const [formErrors, setFormErrors] = useState({});
   const [successRegistrationMessage, setSuccessRegistrationMessage] = useState(null);
   const [errorAfterSubmit, setErrorAfterSubmit] = useState(null);
 
@@ -31,11 +36,13 @@ export default function FormPropsTextFields() {
   const handleChangeInput = (e) => {
     const currentField = { [e.target.name]: e.target.value }
     setForm({ ...form, ...currentField });
+    setFormErrors({ ...formErrors, [e.target.name]: "" });
   }
 
   const handleChangeInputRecomended = (e) => {
     const currentField = { [e.target.name]: e.target.value }
     setRecomendForm({ ...recomendForm, ...currentField });
+    setFormErrors({ ...formErrors, [e.target.name]: "" });
   }
 
   const handleChangeInputInLaw = (e) => {
@@ -51,8 +58,6 @@ export default function FormPropsTextFields() {
     else {
       setForm({ ...form, recomendedPeople: [recomendForm] });
     }
-    console.log('form', form)
-
     setRecomendForm([]);
   }
 
@@ -69,10 +74,75 @@ export default function FormPropsTextFields() {
     setInLawsForm([]);
   }
 
+  const handleValidateStep = () => {
+    const RequiredFieldsStep1 = ['firstName', 'lastName', 'gender', 'age', 'familyStatus', 'bornDate', 'city', 'countryBirth', 'phone', 'email', 'characters', 'colorSkin', 'height', 'bodyStracture', 'healthCondition', 'economicSituation', 'clothingStyle', 'look', 'headdress', 'sector', 'origin', 'yeshivaOrSeminar', 'doingToday', 'fatherName', 'fatherDoing', 'motherName', 'motherDoing', 'mozaAv', 'mozaEm', 'siblings', 'parentStatus', 'halachaMethod'];
+    const RequiredFieldsStep2 = ['drishotSector', 'drishotLook', 'drishotFavoriteMoza', 'fromAge', 'mostAge', 'fromHeight', 'mostHeight'];
+    const RequiredFieldsStep3 = ['casherPhone', 'licence', 'smoking'];
+    const RequiredFieldsStep6 = ['fillQuestionarieName', 'fillQuestionariePhone', 'fillQuestionarieRelative'];
+
+    let errors = {};
+    const filledFields = Object.keys(form);
+    if (activeStep === 0) {
+      RequiredFieldsStep1.map((required) => {
+        const isFilled = filledFields.find((field) => field === required);
+        if (!isFilled) {
+          errors = { ...errors, [required]: "נא למלא שדה חובה" };
+        }
+        if (isFilled) {
+          errors = { ...errors, [required]: "" };
+        }
+      });
+    }
+    if (activeStep === 1) {
+      RequiredFieldsStep2.map((required) => {
+        const isFilled = filledFields.find((field) => field === required);
+        if (!isFilled) {
+          errors = { ...errors, [required]: "נא למלא שדה חובה" };
+        }
+        if (isFilled) {
+          errors = { ...errors, [required]: "" };
+        }
+      });
+    }
+    if (activeStep === 2) {
+      RequiredFieldsStep3.map((required) => {
+        const isFilled = filledFields.find((field) => field === required);
+        if (!isFilled) {
+          errors = { ...errors, [required]: "נא למלא שדה חובה" };
+        }
+        if (isFilled) {
+          errors = { ...errors, [required]: "" };
+        }
+      });
+    }
+    if (activeStep === 3) {
+      if (recomendForm.length === 0 && form.recomendedPeople.length === 0)
+        errors = { ...errors, recommendName: "נא למלא שדה חובה", recommendPhone: "נא למלא שדה חובה", recommendRelative: "נא למלא שדה חובה" }
+    }
+    if (activeStep === 5) {
+      RequiredFieldsStep6.map((required) => {
+        const isFilled = filledFields.find((field) => field === required);
+        if (!isFilled) {
+          errors = { ...errors, [required]: "נא למלא שדה חובה" };
+        }
+        if (isFilled) {
+          errors = { ...errors, [required]: "" };
+        }
+      });
+    }
+    const isNotValidStep = (errors !== {}) && Object.values(errors).find((error) => {
+      return error === "נא למלא שדה חובה"
+    }
+    );
+    setFormErrors(errors);
+    return isNotValidStep;
+  }
+
   const handleSubmitForm = async () => {
 
     form.inLaws.push(inLawsForm);
     form.recomendedPeople.push(recomendForm);
+    console.log(form);
 
     axios.post("http://localhost:5000/api/shiduchim/public/register-candidate", form)
       .then(resp => {
@@ -87,6 +157,7 @@ export default function FormPropsTextFields() {
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [returnedBack, setReturenedBack] = React.useState(false);
 
   const isStepOptional = (step) => {
     return step === 4;
@@ -98,19 +169,26 @@ export default function FormPropsTextFields() {
 
   const handleNext = () => {
     let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
+    if (activeStep === 3) {
+      handleAddRecomended();
     }
+    const isNotValidStep = handleValidateStep();
+    if (!isNotValidStep) {
+      if (isStepSkipped(activeStep)) {
+        newSkipped = new Set(newSkipped.values());
+        newSkipped.delete(activeStep);
+      }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setSkipped(newSkipped);
+    }
     if (activeStep === 6 || (activeStep + 1 === 6)) {
       handleSubmitForm();
     }
   };
 
   const handleBack = () => {
+    setReturenedBack(true);
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
@@ -168,7 +246,9 @@ export default function FormPropsTextFields() {
                     required
                     label="שם פרטי"
                     name="firstName"
-                    defaultValue=""
+                    error={formErrors.firstName}
+                    helperText={formErrors.firstName}
+                    defaultValue={form.firstName}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -177,18 +257,29 @@ export default function FormPropsTextFields() {
                     required
                     label="שם משפחה"
                     name="lastName"
-                    defaultValue=""
+                    error={formErrors.lastName}
+                    helperText={formErrors.lastName}
+                    defaultValue={form.lastName}
                     onChange={handleChangeInput}
                   />
                 </Grid>
                 <Grid item>
-                  <TextField
-                    required
-                    label="מין"
-                    name="gender"
-                    defaultValue=""
-                    onChange={handleChangeInput}
-                  />
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">מין</InputLabel>
+                    <Select
+                      required
+                      name='gender'
+                      label="מין"
+                      onChange={handleChangeInput}
+                      error={formErrors.gender}
+                      helperText={formErrors.gender}
+                      defaultValue={form.gender}
+                    >
+                      <MenuItem value="זכר" >זכר</MenuItem>
+                      <MenuItem value="נקבה">נקבה</MenuItem>
+                    </Select>
+                    {formErrors.gender && <FormHelperText>{formErrors.gender}</FormHelperText>}
+                  </FormControl>
                 </Grid>
                 <Grid item>
                   <TextField
@@ -196,6 +287,9 @@ export default function FormPropsTextFields() {
                     label="גיל"
                     name="age"
                     type="number"
+                    error={formErrors.age}
+                    helperText={formErrors.age}
+                    defaultValue={form.age}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -204,7 +298,9 @@ export default function FormPropsTextFields() {
                     required
                     label="מצב משפחתי"
                     name="familyStatus"
-                    defaultValue=""
+                    error={formErrors.familyStatus}
+                    helperText={formErrors.familyStatus}
+                    defaultValue={form.familyStatus}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -214,7 +310,9 @@ export default function FormPropsTextFields() {
                     label="תאריך לידה"
                     name="bornDate"
                     type="date"
-                    defaultValue=""
+                    error={formErrors.bornDate}
+                    helperText={formErrors.bornDate}
+                    defaultValue={form.bornDate}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -223,7 +321,9 @@ export default function FormPropsTextFields() {
                     required
                     label="עיר"
                     name="city"
-                    defaultValue=""
+                    error={formErrors.city}
+                    helperText={formErrors.city}
+                    defaultValue={form.city}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -232,7 +332,9 @@ export default function FormPropsTextFields() {
                     required
                     label="ארץ לידה"
                     name="countryBirth"
-                    defaultValue=""
+                    error={formErrors.countryBirth}
+                    helperText={formErrors.countryBirth}
+                    defaultValue={form.countryBirth}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -241,7 +343,9 @@ export default function FormPropsTextFields() {
                     required
                     label="טלפון"
                     name="phone"
-                    defaultValue=""
+                    error={formErrors.phone}
+                    helperText={formErrors.phone}
+                    defaultValue={form.phone}
                     onChange={handleChangeInput}
                   /></Grid>
                 <Grid item>
@@ -249,7 +353,9 @@ export default function FormPropsTextFields() {
                     required
                     label="מייל"
                     name="email"
-                    defaultValue=""
+                    error={formErrors.email}
+                    helperText={formErrors.email}
+                    defaultValue={form.email}
                     onChange={handleChangeInput}
                   /></Grid>
                 <Grid item>
@@ -257,7 +363,9 @@ export default function FormPropsTextFields() {
                     required
                     label="תכונות אופי"
                     name="characters"
-                    defaultValue=""
+                    error={formErrors.characters}
+                    helperText={formErrors.characters}
+                    defaultValue={form.characters}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -266,7 +374,9 @@ export default function FormPropsTextFields() {
                     required
                     label="גוון עור"
                     name="colorSkin"
-                    defaultValue=""
+                    error={formErrors.colorSkin}
+                    helperText={formErrors.colorSkin}
+                    defaultValue={form.colorSkin}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -276,7 +386,9 @@ export default function FormPropsTextFields() {
                     label="גובה"
                     name="height"
                     type="number"
-                    defaultValue=""
+                    error={formErrors.colorSkin}
+                    helperText={formErrors.colorSkin}
+                    defaultValue={form.colorSkin}
                     onChange={handleChangeInput}
                   /></Grid>
                 <Grid item>
@@ -284,7 +396,9 @@ export default function FormPropsTextFields() {
                     required
                     label="מבנה גוף"
                     name="bodyStracture"
-                    defaultValue=""
+                    error={formErrors.bodyStracture}
+                    helperText={formErrors.bodyStracture}
+                    defaultValue={form.bodyStracture}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -293,7 +407,9 @@ export default function FormPropsTextFields() {
                     required
                     label="מצב בריאותי"
                     name="healthCondition"
-                    defaultValue=""
+                    error={formErrors.healthCondition}
+                    helperText={formErrors.healthCondition}
+                    defaultValue={form.healthCondition}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -302,7 +418,9 @@ export default function FormPropsTextFields() {
                     required
                     label="מצב כלכלי"
                     name="economicSituation"
-                    defaultValue=""
+                    error={formErrors.economicSituation}
+                    helperText={formErrors.economicSituation}
+                    defaultValue={form.economicSituation}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -311,7 +429,9 @@ export default function FormPropsTextFields() {
                     required
                     label="סגנון לבוש"
                     name="clothingStyle"
-                    defaultValue=""
+                    error={formErrors.clothingStyle}
+                    helperText={formErrors.clothingStyle}
+                    defaultValue={form.clothingStyle}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -320,7 +440,9 @@ export default function FormPropsTextFields() {
                     required
                     label="מראה כללי"
                     name="look"
-                    defaultValue=""
+                    error={formErrors.look}
+                    helperText={formErrors.look}
+                    defaultValue={form.look}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -329,34 +451,41 @@ export default function FormPropsTextFields() {
                     required
                     label="כיסוי ראש"
                     name="headdress"
-                    defaultValue=""
+                    error={formErrors.headdress}
+                    helperText={formErrors.headdress}
+                    defaultValue={form.headdress}
                     onChange={handleChangeInput}
                   />
                 </Grid>
                 <Grid item>
-                  <TextField
-                    required
-                    label="שיוך מגזרי"
-                    name="sector"
-                    defaultValue=""
-                    onChange={handleChangeInput}
-                  />
+                   <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">שיוך מגזרי</InputLabel>
+                    <Select
+                      required
+                      name='sector'
+                      label="שיוך מגזרי"
+                      onChange={handleChangeInput}
+                      error={formErrors.gender}
+                      helperText={formErrors.gender}
+                      defaultValue={form.gender}
+                    >
+                      <MenuItem value="ספרדי" >ספרדי</MenuItem>
+                      <MenuItem value="חסידי" >חסידי</MenuItem>
+                      <MenuItem value="ליטאי">ליטאי</MenuItem>
+                      <MenuItem value="תימני">תימני</MenuItem>
+
+                    </Select>
+                    {formErrors.sector && <FormHelperText>{formErrors.sector}</FormHelperText>}
+                  </FormControl>
                 </Grid>
                 <Grid item>
                   <TextField
                     required
-                    label="עידה"
+                    label="עדה"
                     name="origin"
-                    defaultValue=""
-                    onChange={handleChangeInput}
-                  />
-                </Grid>
-                <Grid item>
-                  <TextField
-                    label="תמונת המועמד"
-                    name="picture"
-                    type="file"
-                    defaultValue=""
+                    error={formErrors.origin}
+                    helperText={formErrors.origin}
+                    defaultValue={form.origin}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -365,7 +494,9 @@ export default function FormPropsTextFields() {
                     label="התחייבות כספית"
                     name="commitMoney"
                     type="number"
-                    defaultValue=""
+                    error={formErrors.commitMoney}
+                    helperText={formErrors.commitMoney}
+                    defaultValue={form.commitMoney}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -374,7 +505,9 @@ export default function FormPropsTextFields() {
                     label="דרישה כספית"
                     name="requireMoney"
                     type="number"
-                    defaultValue=""
+                    error={formErrors.requireMoney}
+                    helperText={formErrors.requireMoney}
+                    defaultValue={form.requireMoney}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -383,7 +516,9 @@ export default function FormPropsTextFields() {
                     required
                     label="מקום לימודים/עבודה"
                     name="yeshivaOrSeminar"
-                    defaultValue=""
+                    error={formErrors.yeshivaOrSeminar}
+                    helperText={formErrors.yeshivaOrSeminar}
+                    defaultValue={form.yeshivaOrSeminar}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -392,7 +527,9 @@ export default function FormPropsTextFields() {
                     required
                     label="עובד/לומד"
                     name="doingToday"
-                    defaultValue=""
+                    error={formErrors.doingToday}
+                    helperText={formErrors.doingToday}
+                    defaultValue={form.doingToday}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -401,7 +538,9 @@ export default function FormPropsTextFields() {
                     required
                     label="שם האב"
                     name="fatherName"
-                    defaultValue=""
+                    error={formErrors.fatherName}
+                    helperText={formErrors.fatherName}
+                    defaultValue={form.fatherName}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -410,7 +549,9 @@ export default function FormPropsTextFields() {
                     required
                     label="עיסוק האב"
                     name="fatherDoing"
-                    defaultValue=""
+                    error={formErrors.fatherDoing}
+                    helperText={formErrors.fatherDoing}
+                    defaultValue={form.fatherDoing}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -419,7 +560,9 @@ export default function FormPropsTextFields() {
                     required
                     label="שם האם"
                     name="motherName"
-                    defaultValue=""
+                    error={formErrors.motherName}
+                    helperText={formErrors.motherName}
+                    defaultValue={form.motherName}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -428,7 +571,9 @@ export default function FormPropsTextFields() {
                     required
                     label="עיסוק האם"
                     name="motherDoing"
-                    defaultValue=""
+                    error={formErrors.motherDoing}
+                    helperText={formErrors.motherDoing}
+                    defaultValue={form.motherDoing}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -437,7 +582,9 @@ export default function FormPropsTextFields() {
                     required
                     label="מוצא האב"
                     name="mozaAv"
-                    defaultValue=""
+                    error={formErrors.mozaAv}
+                    helperText={formErrors.mozaAv}
+                    defaultValue={form.mozaAv}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -446,7 +593,9 @@ export default function FormPropsTextFields() {
                     required
                     label="מוצא האם"
                     name="mozaEm"
-                    defaultValue=""
+                    error={formErrors.mozaEm}
+                    helperText={formErrors.mozaEm}
+                    defaultValue={form.mozaEm}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -456,7 +605,9 @@ export default function FormPropsTextFields() {
                     label="מס' אחים ואחיות"
                     name="siblings"
                     type="number"
-                    defaultValue=""
+                    error={formErrors.siblings}
+                    helperText={formErrors.siblings}
+                    defaultValue={form.siblings}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -465,7 +616,9 @@ export default function FormPropsTextFields() {
                     required
                     label="סטטוס הורים"
                     name="parentStatus"
-                    defaultValue=""
+                    error={formErrors.parentStatus}
+                    helperText={formErrors.parentStatus}
+                    defaultValue={form.parentStatus}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -474,7 +627,9 @@ export default function FormPropsTextFields() {
                     required
                     label="שיטה הלכתית"
                     name="halachaMethod"
-                    defaultValue=""
+                    error={formErrors.halachaMethod}
+                    helperText={formErrors.halachaMethod}
+                    defaultValue={form.halachaMethod}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -487,7 +642,9 @@ export default function FormPropsTextFields() {
                     required
                     label="שיוך מגזרי"
                     name="drishotSector"
-                    defaultValue=""
+                    error={formErrors.drishotSector}
+                    helperText={formErrors.drishotSector}
+                    defaultValue={form.drishotSector}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -496,7 +653,9 @@ export default function FormPropsTextFields() {
                     required
                     label="מראה כללי"
                     name="drishotLook"
-                    defaultValue=""
+                    error={formErrors.drishotLook}
+                    helperText={formErrors.drishotLook}
+                    defaultValue={form.drishotLook}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -504,7 +663,9 @@ export default function FormPropsTextFields() {
                   <TextField
                     label="תכונות אופי"
                     name="drishotCharacters"
-                    defaultValue=""
+                    error={formErrors.drishotCharacters}
+                    helperText={formErrors.drishotCharacters}
+                    defaultValue={form.drishotCharacters}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -513,7 +674,9 @@ export default function FormPropsTextFields() {
                     required
                     label="ארץ מוצא מועדף"
                     name="drishotFavoriteMoza"
-                    defaultValue=""
+                    error={formErrors.drishotFavoriteMoza}
+                    helperText={formErrors.drishotFavoriteMoza}
+                    defaultValue={form.drishotFavoriteMoza}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -521,7 +684,9 @@ export default function FormPropsTextFields() {
                   <TextField
                     label="לא ממוצא"
                     name="drishotNotMoza"
-                    defaultValue=""
+                    error={formErrors.drishotNotMoza}
+                    helperText={formErrors.drishotNotMoza}
+                    defaultValue={form.drishotNotMoza}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -531,7 +696,9 @@ export default function FormPropsTextFields() {
                     label="מגיל"
                     name="fromAge"
                     type="number"
-                    defaultValue=""
+                    error={formErrors.fromAge}
+                    helperText={formErrors.fromAge}
+                    defaultValue={form.fromAge}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -541,7 +708,9 @@ export default function FormPropsTextFields() {
                     label="עד גיל"
                     name="mostAge"
                     type="number"
-                    defaultValue=""
+                    error={formErrors.mostAge}
+                    helperText={formErrors.mostAge}
+                    defaultValue={form.mostAge}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -551,7 +720,9 @@ export default function FormPropsTextFields() {
                     label="מגובה"
                     name="fromHeight"
                     type="number"
-                    defaultValue=""
+                    error={formErrors.fromHeight}
+                    helperText={formErrors.fromHeight}
+                    defaultValue={form.fromHeight}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -561,7 +732,9 @@ export default function FormPropsTextFields() {
                     label="עד גובה"
                     name="mostHeight"
                     type="number"
-                    defaultValue=""
+                    error={formErrors.mostHeight}
+                    helperText={formErrors.mostHeight}
+                    defaultValue={form.mostHeight}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -574,13 +747,14 @@ export default function FormPropsTextFields() {
                     <FormLabel id="demo-radio-buttons-group-label">האם בעל/ת טלפון כשר?</FormLabel>
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue="no"
+                      defaultValue={form.casherPhone || "no"}
                       name="casherPhone"
                       onChange={handleChangeInput}
                     >
                       <FormControlLabel value="yes" control={<Radio />} label="כן" />
                       <FormControlLabel value="no" control={<Radio />} label="לא" />
                     </RadioGroup>
+                    {formErrors.casherPhone && <FormHelperText>{formErrors.casherPhone}</FormHelperText>}
                   </FormControl>
                 </Grid>
                 <Grid item>
@@ -588,13 +762,14 @@ export default function FormPropsTextFields() {
                     <FormLabel id="demo-radio-buttons-group-label">האם בעל/ת רישיון?</FormLabel>
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue="no"
+                      defaultValue={form.licence || "no"}
                       name="licence"
                       onChange={handleChangeInput}
                     >
                       <FormControlLabel value="yes" control={<Radio />} label="כן" />
                       <FormControlLabel value="no" control={<Radio />} label="לא" />
                     </RadioGroup>
+                    {formErrors.licence && <FormHelperText>{formErrors.licence}</FormHelperText>}
                   </FormControl>
                 </Grid>
                 <Grid item>
@@ -602,13 +777,14 @@ export default function FormPropsTextFields() {
                     <FormLabel id="demo-radio-buttons-group-label">האם מעשן?</FormLabel>
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue="no"
+                      defaultValue={form.smoking || "no"}
                       name="smoking"
                       onChange={handleChangeInput}
                     >
                       <FormControlLabel value="yes" control={<Radio />} label="כן" />
                       <FormControlLabel value="no" control={<Radio />} label="לא" />
                     </RadioGroup>
+                    {formErrors.smoking && <FormHelperText>{formErrors.smoking}</FormHelperText>}
                   </FormControl>
                 </Grid>
               </Grid>
@@ -620,6 +796,9 @@ export default function FormPropsTextFields() {
                     required
                     label="שם"
                     name="recommendName"
+                    error={formErrors.recommendName}
+                    helperText={formErrors.recommendName}
+                    //defaultValue={recomendForm.recommendName}
                     onChange={handleChangeInputRecomended}
                   />
                 </Grid>
@@ -628,6 +807,9 @@ export default function FormPropsTextFields() {
                     required
                     label="טלפון"
                     name="recommendPhone"
+                    error={formErrors.recommendPhone}
+                    helperText={formErrors.recommendPhone}
+                    //defaultValue={recomendForm.recommendName}
                     onChange={handleChangeInputRecomended}
                   />
                 </Grid>
@@ -636,10 +818,17 @@ export default function FormPropsTextFields() {
                     required
                     label="קרבה"
                     name="recommendRelative"
+                    error={formErrors.recommendRelative}
+                    helperText={formErrors.recommendRelative}
+                    // defaultValue={recomendForm.recommendRelative}
                     onChange={handleChangeInputRecomended}
                   />
                 </Grid>
-                {form.recomendedPeople && form.recomendedPeople.map((recomend, index) => <Recomended index={index + 1} data={recomend} handleChange={handleChangeInputRecomended} />)}
+                {form.recomendedPeople && form.recomendedPeople.map((recomend, index) => {
+                  if (recomend.recommendRelative || recomend.recommendPhone || recomend.recommendName) {
+                    return <Recomended key={index + 1} data={recomend} back={returnedBack} handleChange={handleChangeInputRecomended} />
+                  }
+                })}
                 <Button onClick={handleAddRecomended}>הוסף</Button>
               </Grid>
             )}
@@ -648,34 +837,35 @@ export default function FormPropsTextFields() {
                 <Grid container spacing={2}>
                   <Grid item>
                     <TextField
-                      required
                       label="שם"
                       name="fatherInLawName"
-                      defaultValue=""
+                      defaultValue={inLawsForm.fatherInLawName}
                       onChange={handleChangeInputInLaw}
                     />
                   </Grid>
                   <Grid item>
                     <TextField
-                      required
                       label="טלפון"
                       name="fatherInLawPhone"
-                      defaultValue=""
+                      defaultValue={inLawsForm.fatherInLawPhone}
                       onChange={handleChangeInputInLaw}
                     />
                   </Grid>
                   <Grid item>
                     <TextField
-                      required
                       label="עיר"
                       name="fatherInLawCity"
-                      defaultValue=""
+                      defaultValue={inLawsForm.fatherInLawCity}
                       onChange={handleChangeInputInLaw}
                     />
                   </Grid>
-                  {form.inLaws && form.inLaws.map(() => <InLaws handleChange={handleChangeInputInLaw} />)}
+                  {form.inLaws && form.inLaws.map((inLaw, index) => {
+                  if (inLaw.fatherInLawName || inLaw.fatherInLawPhone || inLaw.fatherInLawCity) {
+                    return <InLaws key={index + 1} data={inLaw} back={returnedBack} handleChange={handleChangeInputRecomended} />
+                  }
+                })}
                   <Button onClick={handleAddInLaws}>הוסף</Button>
-                </Grid>
+                </Grid> 
               )
             }
             {activeStep === 5 && (
@@ -685,6 +875,9 @@ export default function FormPropsTextFields() {
                     required
                     label="שם ממלא הטופס"
                     name="fillQuestionarieName"
+                    error={formErrors.fillQuestionarieName}
+                    helperText={formErrors.fillQuestionarieName}
+                    defaultValue={form.fillQuestionarieName}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -693,6 +886,9 @@ export default function FormPropsTextFields() {
                     required
                     label=" טלפון ממלא הטופס"
                     name="fillQuestionariePhone"
+                    error={formErrors.fillQuestionariePhone}
+                    helperText={formErrors.fillQuestionariePhone}
+                    defaultValue={form.fillQuestionariePhone}
                     onChange={handleChangeInput}
                   />
                 </Grid>
@@ -701,6 +897,9 @@ export default function FormPropsTextFields() {
                     required
                     label=" קרבה למועמד"
                     name="fillQuestionarieRelative"
+                    error={formErrors.fillQuestionarieRelative}
+                    helperText={formErrors.fillQuestionarieRelative}
+                    defaultValue={form.fillQuestionarieRelative}
                     onChange={handleChangeInput}
                   />
                 </Grid>

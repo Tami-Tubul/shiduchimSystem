@@ -35,16 +35,31 @@ const registerMatchmaker = async (req, res, next) => {  //הרשמת שדכן
 }
 
 const registerCandidate = async (req, res, next) => {  //מילוי שאלון הרשמה למועמד
-    console.log(req.body);
     try {
-        const nonMandatoryFields = ["picture", "requireMoney", "commitMoney", "drishotCharacters", "drishotNotMoza"] //שדות לא חובה
+        const nonMandatoryFields = ["picture", "requireMoney", "commitMoney", "drishotCharacters", "drishotNotMoza", "inLaws"] //שדות לא חובה
         const mandatoryFields = Object.keys(req.body).filter(field => !nonMandatoryFields.includes(field)); //שדות חובה
         const candidate = req.body;  //כל השדות 
         const missingFields = [];
+        console.log(missingFields);
 
         mandatoryFields.forEach(field => {  //בדיקה האם כל שדות החובה מולאו
             if (candidate[field] === undefined || candidate[field] === null) {
                 missingFields.push(field);
+            }
+
+            //ולידציה לשדה מקורות לברורים שהוא שדה מסוג מערך של אובייקטים והוא חובה
+            // בדיקה האם שדה מקורות לבירורים ריק
+            if (!candidate.recommendedPeople || candidate.recommendedPeople.length === 0) {
+                missingFields.push('recommendedPeople');
+            } else {
+                // בדיקה אם מכיל לפחות אובייקט אחד
+                const hasMissingRecommendedPeople = candidate.recommendedPeople.some(person => {
+                    return Object.values(person).some(value => value === undefined || value === null);
+                });
+
+                if (hasMissingRecommendedPeople) {
+                    missingFields.push('recommendedPeople');
+                }
             }
         });
 

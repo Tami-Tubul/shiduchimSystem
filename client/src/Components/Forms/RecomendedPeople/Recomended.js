@@ -13,7 +13,7 @@ export default function Recomended(props) {
                     <TextField
                         label="שם"
                         name="recommendName"
-                        //defaultValue={(props && props.data )? props.data.recommendName: ""}
+                        defaultValue={(props && props.data && props.back && props.data.recommendName) ? props.data.recommendName : ""}
                         onChange={handleChangeInput}
                     />
                 </Grid>
@@ -21,7 +21,7 @@ export default function Recomended(props) {
                     <TextField
                         label="טלפון"
                         name="recommendPhone"
-                        //defaultValue={props && props.data && props.data.recommendPhone}
+                        defaultValue={(props && props.data && props.back && props.data.recommendPhone)? props.data.recommendPhone : ""}
                         onChange={handleChangeInput}
                     />
                 </Grid>
@@ -29,7 +29,7 @@ export default function Recomended(props) {
                     <TextField
                         label="קרבה"
                         name="recommendRelative"
-                        // defaultValue={props && props.data && props.data.recommendRelative}
+                        defaultValue={(props && props.data && props.back && props.data.recommendRelative) ?  props.data.recommendRelative: ""}
                         onChange={handleChangeInput}
                     />
                 </Grid>

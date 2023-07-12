@@ -73,7 +73,7 @@ const Register = () => {
                 email: formValues.email,
                 age: formValues.age,
                 phone: formValues.phone,
-                livingPlace: formValues.livingPlace
+                city: formValues.city
             })
                 .then(resp => {
                     if (resp.status === 201) {
@@ -185,10 +185,10 @@ const Register = () => {
                             <Grid item>
                                 <TextField
                                     label="אזור מגורים"
-                                    name="livingPlace"
+                                    name="city"
                                     onChange={handleChange}
-                                    error={formErrors.livingPlace}
-                                    helperText={formErrors.livingPlace}
+                                    error={formErrors.city}
+                                    helperText={formErrors.city}
                                     variant="outlined"
                                     margin="normal"
                                 />

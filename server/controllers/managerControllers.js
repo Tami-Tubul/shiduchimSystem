@@ -110,7 +110,7 @@ const approveCandidate = async (req, res, next) => {   // אישור מועמד
 
 }
 
-const deleteCandidate = async (req, res, next) => { //מחיקת מועמד  ושליחת הודעה במייל
+const deleteCandidate = async (req, res, next) => { //מחיקת מועמד ושליחת הודעה במייל
     try {
         const candidateID = req.params.id;
         const candidateExist = await Candidate.findByIdAndDelete(candidateID);
