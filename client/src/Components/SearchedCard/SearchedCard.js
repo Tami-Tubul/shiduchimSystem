@@ -57,6 +57,11 @@ export default function SearchedCard(props) {
     const [deleteCandidate, setDeleteCandiidate] = useState(false);
     const [sendMail, setSendMail] = useState(false);
 
+
+    useEffect(() => {
+        setAddFavorited(faoritedCands.includes(candidate));
+    }, [favoritesIDs, faoritedCands, candidates])
+
     useEffect(() => {
         if (currentUser.role === "matchmaker") {
             const getFavoritedCandidatesFromServer = async () => {
@@ -73,24 +78,23 @@ export default function SearchedCard(props) {
             }
             getFavoritedCandidatesFromServer();
 
-            setAddFavorited(faoritedCands.includes(candidate));
         }
-        else{
+        else {
             const getCandidatesFromServer = async () => {
                 try {
-                  const resp = await axios.get(`http://localhost:5000/api/shiduchim/manager/candidates-cards`, {
-                    headers: { 'x-access-token': currentUser.token }
-                  });
-                  const allCandidates = resp.data.candidates;
-                  const aproveCandidates = allCandidates.filter(cand => cand.isApproved === true);
-                  dispatch(loadCandidates(aproveCandidates));
+                    const resp = await axios.get(`http://localhost:5000/api/shiduchim/manager/candidates-cards`, {
+                        headers: { 'x-access-token': currentUser.token }
+                    });
+                    const allCandidates = resp.data.candidates;
+                    const aproveCandidates = allCandidates.filter(cand => cand.isApproved === true);
+                    dispatch(loadCandidates(aproveCandidates));
                 } catch (error) {
-                  console.error('Error retrieving messages:', error);
+                    console.error('Error retrieving messages:', error);
                 }
-              }
-              getCandidatesFromServer();
+            }
+            getCandidatesFromServer();
         }
-    }, [ favoritesIDs, faoritedCands, candidate])
+    }, [])
 
 
     const handleExpandClick = () => {
@@ -144,10 +148,12 @@ export default function SearchedCard(props) {
         //מחיקת מועמד ע"י המנהל
         try {
             const resp = await axios.delete(`http://localhost:5000/api/shiduchim/manager/candidates-cards/${candidate._id}`, { headers: { 'x-access-token': currentUser.token } })
-            console.log(resp);
+           
             if (resp.status === 200) {
+                
                 toast(resp.data.message, { duration: 5000 })
-                dispatch(removeCandidate(candidate)) //מחיקת המועמד ממערך המועמדים
+
+                dispatch(removeCandidate(candidate._id)) //מחיקת המועמד ממערך המועמדים
                 setDeleteCandiidate(true);
             }
         } catch (error) {

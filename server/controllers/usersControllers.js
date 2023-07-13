@@ -93,6 +93,9 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
             query.halachaMethod = halachaMethod
         }
 
+        query.isApproved = true; // יציג רק מועמדים שאושרו ונמצאים כבר במערכת
+
+
         const filteredCandidates = await Candidate.find(query);
 
         return res.status(200).json({ filteredCandidates: filteredCandidates })

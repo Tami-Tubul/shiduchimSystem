@@ -7,8 +7,11 @@ import Typography from '@mui/material/Typography';
 import SearchedCard from "../SearchedCard/SearchedCard";
 import './SearchAndMatch.css';
 import Header from "../Header/Header";
+import { memo } from "react";
 
 const SearchAndMatch = () => {
+    console.log('SearchAndMatch rendered');
+
     const [formValues, setFormValues] = useState({});
     const [filteredCands, setFilteredCands] = useState([]);
 
@@ -21,6 +24,7 @@ const SearchAndMatch = () => {
     }
 
     const handleSubmit = () => {
+        console.log(formValues);
 
         // TODO: שליחת פרטי סינון מועמדים 
         axios.post(`http://localhost:5000/api/shiduchim/${currentUser.role}/filter-candidates`, formValues, {
@@ -212,4 +216,4 @@ const SearchAndMatch = () => {
         </>
     );
 }
-export default SearchAndMatch;
+export default memo(SearchAndMatch);
