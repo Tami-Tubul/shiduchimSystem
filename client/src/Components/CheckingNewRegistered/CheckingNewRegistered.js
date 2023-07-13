@@ -14,6 +14,8 @@ import { useLocation } from 'react-router-dom';
 import toast from 'toast-me';
 import { deleteCandidate } from './../../store/user/userActions';
 import ShowCandidate from '../ShowCandidate/ShowCandidate';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 LicenseInfo.setLicenseKey('x0jTPl0USVkVZV0SsMjM1kDNyADM5cjM2ETPZJVSQhVRsIDN0YTM6IVREJ1T0b9586ef25c9853decfa7709eee27a1e');
 
@@ -42,15 +44,29 @@ export default function CheckingNewRegistered() {
     }
 
     const [rowModesModel, setRowModesModel] = React.useState({});
-    const [isVisibility,setIsVisibility] = React.useState(false);
-    const [selectedCandidate,setSelectedCandidate] = React.useState(false);
+    const [isVisibility, setIsVisibility] = React.useState(false);
+    const [selected, setSelected] = React.useState(false);
 
-    // const handleVisiblityClick = (id) => () => {
-    //     setIsVisibility(true);
-    //     setSelectedCandidate(data[0]);
-    // }
-    
-    const handleCloseModal =() =>{
+    const handleVisiblityClick = (id) => () => {
+        setIsVisibility(true);
+        if (eventType === "newMatchmakers") {
+            // חיפוש שדכן לפי ID
+            const selectedMatchmaker = new_matchmaker.find(match => match._id === id)
+            setSelected(selectedMatchmaker)
+        }
+        else if (eventType === "newCandidates") {
+            // חיפוש מועמד לפי ID
+            const selectedCAndidate = new_candidates.find(cand => cand._id === id)
+            setSelected(selectedCAndidate)
+        }
+        else{
+            //חיפוש מועמד לא רלוונטי לפי ID
+            const selectedirelevantCAndidate = unrelevantCandidates.find(irelcand => irelcand._id === id)
+            setSelected(selectedirelevantCAndidate)
+        }
+    }
+
+    const handleCloseModal = () => {
         setIsVisibility(false);
     }
 
@@ -234,6 +250,12 @@ export default function CheckingNewRegistered() {
                         onClick={handleDeleteClick(id)}
                         color="inherit"
                     />,
+                    <GridActionsCellItem
+                        icon={<VisibilityIcon />}
+                        label="Visibility"
+                        onClick={handleVisiblityClick(id)}
+                        color="inherit"
+                    />,
                 ];
             },
         }
@@ -253,8 +275,33 @@ export default function CheckingNewRegistered() {
                     />
                 </Box>
             </div>
-            {isVisibility && <ShowCandidate show={isVisibility} handleClose={handleCloseModal} candidate={selectedCandidate} />}
+            <Dialog
+                open={isVisibility}
+                onClose={handleCloseModal}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    <Typography variant="h5" component="div">
+                        {`${selected.firstName} ${selected.lastName}`}
+                    </Typography>
 
+                </DialogTitle>
+                <DialogTitle id="alert-dialog-title">
+                    <Typography variant="h6" component="div">
+                        {`גיל:${selected.age}`}
+                    </Typography>
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        <ShowCandidate show={isVisibility} handleClose={handleCloseModal} candidate={selected} />
+                        {/* <ShowMatchMaker show={isVisibility} handleClose={handleCloseModal} matchMaker={selected}/> */}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseModal}>סגור</Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }

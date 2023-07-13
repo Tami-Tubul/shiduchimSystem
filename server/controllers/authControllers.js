@@ -32,7 +32,7 @@ const authLogin = async (req, res, next) => { //התחברות משתמש (מנ�
 const authLogout = async (req, res, next) => {
     try {
         RSA_PRIVATE_KEY = crypto.randomBytes(64).toString('hex'); // מפתח אבטחה חדש בהתנתקות
-        res.status(200).json({ message: "User disconnected successfully" });
+        res.status(200).json({ message: "התנתקת בהצלחה מהמערכת" });
     }
     catch (err) {
         next(err)

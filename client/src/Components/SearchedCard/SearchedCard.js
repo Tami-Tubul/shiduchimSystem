@@ -193,7 +193,7 @@ export default function SearchedCard(props) {
                             </Typography>
                         </Grid>}
                         {candidate.city && <Grid item xs={2} sm={4} md={4}>
-                            <Typography>`עיר:</Typography>
+                            <Typography>עיר:</Typography>
                             <Typography sx={{ fontSize: 14 }} color="text.secondary">
                                 {candidate.city}
                             </Typography>

@@ -7,13 +7,15 @@ import { useNavigate } from 'react-router-dom';
 import rings2 from '../../assets/rings2.jpg';
 import './MatchMakerPage.css';
 import SendEmail from '../SendMail/SendMail';
-import { loadCandidates } from '../../store/user/userActions';
+import { loadCandidates, userLogin } from '../../store/user/userActions';
 import axios from "axios";
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
+import authService from '../../authService';
+import toast from 'toast-me';
 
 function MatchMakerPage() {
 
@@ -96,9 +98,21 @@ function MatchMakerPage() {
   }
 
 
-  const handleLogout = () => {
-    navigate('/login');
-  }
+  const handleLogout = async () => {
+    try {
+      let resp = await axios.post("http://localhost:5000/api/shiduchim/auth/logout");
+      if (resp.status === 200) {
+            sessionStorage.clear();
+            dispatch(userLogin(authService.getUser()));
+            toast(resp.data.message, { duration: 5000 });
+            navigate('/login');
+        }
+
+    } catch (error) {
+        console.error('Error retrieving messages:', error);
+    }
+
+}
 
   return (
     <>

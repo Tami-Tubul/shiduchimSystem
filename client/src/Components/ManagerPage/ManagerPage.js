@@ -10,9 +10,11 @@ import rings2 from '../../assets/rings2.jpg';
 import './ManagerPage.css';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadCandidates } from '../../store/user/userActions';
+import { loadCandidates, userLogin } from '../../store/user/userActions';
 import logo from '../../assets/logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
+import toast from 'toast-me';
+import authService from '../../authService';
 
 function ManagerPage() {
   const navigate = useNavigate();
@@ -73,9 +75,21 @@ function ManagerPage() {
 
   }
 
-  const handleLogout = () => {
-    navigate('/login');
-  }
+  const handleLogout = async () => {
+    try {
+      let resp = await axios.post("http://localhost:5000/api/shiduchim/auth/logout");
+      if (resp.status === 200) {
+            sessionStorage.clear();
+            dispatch(userLogin(authService.getUser()));
+            toast(resp.data.message, { duration: 5000 });
+            navigate('/login');
+        }
+
+    } catch (error) {
+        console.error('Error retrieving messages:', error);
+    }
+
+}
   const handleBackToHomePage = () => {
     navigate('/ManagerPage');
     // navigate('/MatchMakerPage');

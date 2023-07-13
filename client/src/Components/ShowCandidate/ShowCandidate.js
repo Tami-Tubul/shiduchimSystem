@@ -61,7 +61,7 @@ export default function ShowCandidate(props) {
                                 </Typography>
                             </Grid>}
                             {candidate.city && <Grid item xs={2} sm={4} md={4}>
-                                <Typography>`עיר:</Typography>
+                                <Typography>עיר:</Typography>
                                 <Typography sx={{ fontSize: 14 }} color="text.secondary">
                                     {candidate.city}
                                 </Typography>
@@ -99,7 +99,7 @@ export default function ShowCandidate(props) {
                             {candidate.height && <Grid item xs={2} sm={4} md={4}>
                                 <Typography>גובה:</Typography>
                                 <Typography sx={{ fontSize: 14 }} color="text.secondary">
-                                    {candidate.height.toString()}
+                                    {Object.values(candidate.height)}
                                 </Typography>
                             </Grid>}
                             {candidate.bodyStracture && <Grid item xs={2} sm={4} md={4}>
@@ -228,7 +228,7 @@ export default function ShowCandidate(props) {
                                     {candidate.halachaMethod}
                                 </Typography>
                             </Grid>}
-                            <Grid container><Typography variant="h6" component="div">דרישות מבן/בת הזןג:</Typography></Grid>
+                            <Grid container><Typography variant="h6" component="div">דרישות מבן/בת הזוג:</Typography></Grid>
                             {candidate.drishotSector && <Grid item xs={2} sm={4} md={4}>
                                 <Typography>שיוך מגזרי:</Typography>
                                 <Typography sx={{ fontSize: 14 }} color="text.secondary">
@@ -274,13 +274,13 @@ export default function ShowCandidate(props) {
                             {candidate.fromHeight && <Grid item xs={2} sm={4} md={4}>
                                 <Typography>מגובה:</Typography>
                                 <Typography sx={{ fontSize: 14 }} color="text.secondary">
-                                    {candidate.fromHeight.toFixed(2)}
+                                    {Object.values(candidate.fromHeight)}
                                 </Typography>
                             </Grid>}
                             {candidate.mostHeight && <Grid item xs={2} sm={4} md={4}>
                                 <Typography>עד גובה:</Typography>
                                 <Typography sx={{ fontSize: 14 }} color="text.secondary">
-                                    {candidate.mostHeight.toFixed(2)}
+                                    {Object.values(candidate.mostHeight)}
                                 </Typography>
                             </Grid>}
                             <Grid container><Typography variant="h6" component="div">פרטים נוספים:</Typography></Grid>
