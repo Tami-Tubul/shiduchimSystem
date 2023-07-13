@@ -100,7 +100,7 @@ function ManagerPage() {
   useEffect(() => {
     const getCandidatesFromServer = async () => {
       try {
-        const resp = await axios.get(`http://localhost:5000/api/shiduchim/${currentUser.role}/candidates-cards`, {
+        const resp = await axios.get(`http://localhost:5000/api/shiduchim/manager/candidates-cards`, {
           headers: { 'x-access-token': currentUser.token }
         });
         const allCandidates = resp.data.candidates;

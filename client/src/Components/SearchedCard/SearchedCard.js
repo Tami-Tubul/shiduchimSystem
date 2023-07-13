@@ -23,6 +23,7 @@ import axios from 'axios';
 import toast from 'toast-me';
 import { addIrelevantCandidate, removeIrelevantCandidate } from './../../store/manager/managerActions';
 import { useEffect } from 'react';
+import { loadCandidates, removeCandidate } from '../../store/user/userActions';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -56,24 +57,39 @@ export default function SearchedCard(props) {
     const [sendMail, setSendMail] = useState(false);
 
     useEffect(() => {
-
-        const getFavoritedCandidatesFromServer = async () => {
-            try {
-                const resp = await axios.get("http://localhost:5000/api/shiduchim/matchmaker/cart", {
-                    headers: { 'x-access-token': currentUser.token }
-                });
-                const data = resp.data;
-                const candidatesIDs = data.candidatesOnCart
-                dispatch(loadFavoritedCandidates(candidatesIDs));
-            } catch (error) {
-                console.error('Error retrieving messages:', error);
+        if (currentUser.role === "matchmaker") {
+            const getFavoritedCandidatesFromServer = async () => {
+                try {
+                    const resp = await axios.get("http://localhost:5000/api/shiduchim/matchmaker/cart", {
+                        headers: { 'x-access-token': currentUser.token }
+                    });
+                    const data = resp.data;
+                    const candidatesIDs = data.candidatesOnCart
+                    dispatch(loadFavoritedCandidates(candidatesIDs));
+                } catch (error) {
+                    console.error('Error retrieving messages:', error);
+                }
             }
+            getFavoritedCandidatesFromServer();
+
+            setAddFavorited(faoritedCands.includes(candidate));
         }
-        getFavoritedCandidatesFromServer();
-
-        setAddFavorited(faoritedCands.includes(candidate));
-
-    }, [favoritesIDs, faoritedCands, candidate])
+        else{
+            const getCandidatesFromServer = async () => {
+                try {
+                  const resp = await axios.get(`http://localhost:5000/api/shiduchim/manager/candidates-cards`, {
+                    headers: { 'x-access-token': currentUser.token }
+                  });
+                  const allCandidates = resp.data.candidates;
+                  const aproveCandidates = allCandidates.filter(cand => cand.isApproved === true);
+                  dispatch(loadCandidates(aproveCandidates));
+                } catch (error) {
+                  console.error('Error retrieving messages:', error);
+                }
+              }
+              getCandidatesFromServer();
+        }
+    }, [ favoritesIDs, faoritedCands, candidate])
 
 
     const handleExpandClick = () => {
@@ -125,19 +141,20 @@ export default function SearchedCard(props) {
 
     const handleDelete = async () => {
         //מחיקת מועמד ע"י המנהל
-            try {
-                const resp = await axios.delete(`http://localhost:5000/api/shiduchim/manager/candidates-cards/${candidate._id}`, { headers: { 'x-access-token': currentUser.token } })
-                if (resp.status === 200) {
-                    toast(resp.data.message, { duration: 5000 })
-                    dispatch(deleteCandidate(candidate)) //מחיקת המועמד ממערך המועמדים
-                    setIsCheckedToRemove(true);
-                }
-            } catch (error) {
-                toast(error.response.data.message, { duration: 5000 })
+        try {
+            const resp = await axios.delete(`http://localhost:5000/api/shiduchim/manager/candidates-cards/${candidate._id}`, { headers: { 'x-access-token': currentUser.token } })
+            console.log(resp);
+            if (resp.status === 200) {
+                toast(resp.data.message, { duration: 5000 })
+                dispatch(removeCandidate(candidate)) //מחיקת המועמד ממערך המועמדים
+                setDeleteCandiidate(true);
             }
-            setDeleteCandiidate(true);
-        
+        } catch (error) {
+            toast(error.response.data.message, { duration: 5000 })
+        }
+
     }
+
     const handleSendMail = async () => {
         //שליחת מייל למועמד האם הוא עדיין רלוונטי ע"י המנהל
         try {

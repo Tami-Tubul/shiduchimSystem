@@ -1,5 +1,5 @@
 
-import { USER_LOGIN ,LOAD_CANDIDATES, DELETE_CANDIDATE} from './userType';
+import { USER_LOGIN ,LOAD_CANDIDATES, REMOVE_CANDIDATE} from './userType';
 import authService from './../../authService';
 
 export const userReducer = (state = { currentUser: authService.getUser(), candidates: [] }, action) => {
@@ -17,7 +17,7 @@ export const userReducer = (state = { currentUser: authService.getUser(), candid
                 candidates: action.payload
             }
 
-        case DELETE_CANDIDATE:
+        case REMOVE_CANDIDATE:
             let candidateID = action.payload;
             let allCandidates = [...state.candidates]
             let index = allCandidates.findIndex(x => x._id == candidateID)

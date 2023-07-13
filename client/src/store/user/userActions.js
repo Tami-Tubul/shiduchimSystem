@@ -1,4 +1,4 @@
-import { USER_LOGIN ,LOAD_CANDIDATES, DELETE_CANDIDATE} from './userType';
+import { USER_LOGIN ,LOAD_CANDIDATES, REMOVE_CANDIDATE} from './userType';
 
 export const userLogin = (currentUser) => {
     return {
@@ -14,9 +14,9 @@ export const loadCandidates = (candidates) => {
     }
 }
 
-export const deleteCandidate = (candidateID) => {
+export const removeCandidate = (candidateID) => {
     return {
-        type: DELETE_CANDIDATE,
+        type: REMOVE_CANDIDATE,
         payload: candidateID
     }
 }
@@ -27,7 +27,7 @@ export const deleteCandidate = (candidateID) => {
 export default {
     userLogin,
     loadCandidates,
-    deleteCandidate
+    removeCandidate
 }
 
 

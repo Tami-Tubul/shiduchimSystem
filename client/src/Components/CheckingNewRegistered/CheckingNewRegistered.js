@@ -12,7 +12,7 @@ import axios from 'axios';
 import { deleteNewCandidate, deleteNewMatchMaker, loadIrelevantCandidate, loadNewCandidates, loadNewMatchMakers, removeIrelevantCandidate } from '../../store/manager/managerActions';
 import { useLocation } from 'react-router-dom';
 import toast from 'toast-me';
-import { deleteCandidate } from './../../store/user/userActions';
+import { removeCandidate } from './../../store/user/userActions';
 import ShowCandidate from '../ShowCandidate/ShowCandidate';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -145,16 +145,7 @@ export default function CheckingNewRegistered() {
 
         else if (eventType === "newMatchmakers") {
             //אישור שדכן חדש
-            // try {
-            //     const resp = axios.put(`http://localhost:5000/api/shiduchim/manager/new-matchmakers/${id}`, null, { headers: { 'x-access-token': currentUser.token } })
-            //     if (resp.status === 201) {
-            //         toast(resp.data.message, { duration: 5000 })
-            //         dispatch(deleteNewMatchMaker(id)) //הסרה ממערך שדכנים חדשים
-            //     }
-            // } catch (error) {
-            //     toast(error.response.data.message, { duration: 5000 })
-            // }
-
+          
             axios.put(`http://localhost:5000/api/shiduchim/manager/new-matchmakers/${id}`, null,
                 {
                     headers: { 'x-access-token': currentUser.token }
@@ -218,7 +209,7 @@ export default function CheckingNewRegistered() {
                     if (resp.status === 200) {
                         toast(resp.data.message, { duration: 5000 })
                         dispatch(removeIrelevantCandidate(id)) //הסרה ממערך מועמדים להסרה
-                        dispatch(deleteCandidate(id)) //הסרה ממערך מועמדים
+                        dispatch(removeCandidate(id)) //הסרה ממערך מועמדים
                     }
                 }).catch(error => {
                     toast(error.response.data.message, { duration: 5000 })

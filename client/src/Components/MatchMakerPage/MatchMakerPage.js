@@ -61,7 +61,7 @@ function MatchMakerPage() {
     //שליפת מועמדים מהשרת 
     const getCandidatesFromServer = async () => {
       try {
-        const resp = await axios.get(`http://localhost:5000/api/shiduchim/${currentUser.role}/candidates-cards`, {
+        const resp = await axios.get(`http://localhost:5000/api/shiduchim/matchmaker/candidates-cards`, {
           headers: { 'x-access-token': currentUser.token }
         });
         const allCandidates = resp.data.candidates;

@@ -10,7 +10,7 @@ import Header from "../Header/Header";
 import Autocomplete from '@mui/material/Autocomplete';
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { deleteCandidate } from './../../store/user/userActions';
+import { removeCandidate } from './../../store/user/userActions';
 
 const CloseMatch = () => {
 
@@ -47,8 +47,8 @@ const CloseMatch = () => {
             if (resp.status === 201) {
                 
                 dispatch(closedMatched(meorasimObj))   //עדכון טבלת מאורסים ברידקס
-                dispatch(deleteCandidate(meorasimObj.bachurId))//מחיקת בחור מטבלת מועמדים
-                dispatch(deleteCandidate(meorasimObj.bachuraId))//מחיקת בחורה מטבלת מועמדים
+                dispatch(removeCandidate(meorasimObj.bachurId))//מחיקת בחור מטבלת מועמדים
+                dispatch(removeCandidate(meorasimObj.bachuraId))//מחיקת בחורה מטבלת מועמדים
 
                 setSuccessCloseShiduchMessage(`${resp.data.message1}. ${resp.data.message2}. ${resp.data.message3}.`);
                 
