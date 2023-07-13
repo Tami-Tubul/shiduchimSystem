@@ -125,7 +125,6 @@ export default function SearchedCard(props) {
 
     const handleDelete = async () => {
         //מחיקת מועמד ע"י המנהל
-        if (window.confirm("האם אתה בטוח שברצונך למחוק את המועמד?")) {
             try {
                 const resp = await axios.delete(`http://localhost:5000/api/shiduchim/manager/candidates-cards/${candidate._id}`, { headers: { 'x-access-token': currentUser.token } })
                 if (resp.status === 200) {
@@ -137,7 +136,7 @@ export default function SearchedCard(props) {
                 toast(error.response.data.message, { duration: 5000 })
             }
             setDeleteCandiidate(true);
-        }
+        
     }
     const handleSendMail = async () => {
         //שליחת מייל למועמד האם הוא עדיין רלוונטי ע"י המנהל

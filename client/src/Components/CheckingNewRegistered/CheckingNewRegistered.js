@@ -16,6 +16,7 @@ import { deleteCandidate } from './../../store/user/userActions';
 import ShowCandidate from '../ShowCandidate/ShowCandidate';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import ShowMatchMaker from './../ShowMatchMaker/ShowMatchMaker';
 
 LicenseInfo.setLicenseKey('x0jTPl0USVkVZV0SsMjM1kDNyADM5cjM2ETPZJVSQhVRsIDN0YTM6IVREJ1T0b9586ef25c9853decfa7709eee27a1e');
 
@@ -340,8 +341,8 @@ export default function CheckingNewRegistered() {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        <ShowCandidate show={isVisibility} handleClose={handleCloseModal} candidate={selected} />
-                        {/* <ShowMatchMaker show={isVisibility} handleClose={handleCloseModal} matchMaker={selected}/> */}
+                    {eventType !== "newMatchmakers" ? <ShowCandidate show={isVisibility} handleClose={handleCloseModal} candidate={selected} /> :
+                         <ShowMatchMaker show={isVisibility} handleClose={handleCloseModal} matchMaker={selected}/> }
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
