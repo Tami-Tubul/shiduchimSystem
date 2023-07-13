@@ -25,7 +25,7 @@ import './FillQuestionnaire.css';
 
 
 export default function FormPropsTextFields() {
-  const [form, setForm] = React.useState({ recomendedPeople: [], inLaws: [] });
+  const [form, setForm] = React.useState({ recomendedPeople: [], inLaws: [], casherPhone: false, licence: false, smoking: false });
   const [recomendForm, setRecomendForm] = React.useState([]);
   const [inLawsForm, setInLawsForm] = React.useState([]);
   const [formErrors, setFormErrors] = useState({});
@@ -749,12 +749,12 @@ export default function FormPropsTextFields() {
                     <FormLabel id="demo-radio-buttons-group-label">האם בעל/ת טלפון כשר?</FormLabel>
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue={form.casherPhone || "no"}
+                      defaultValue={form.casherPhone || false}
                       name="casherPhone"
                       onChange={handleChangeInput}
                     >
-                      <FormControlLabel value="yes" control={<Radio />} label="כן" />
-                      <FormControlLabel value="no" control={<Radio />} label="לא" />
+                      <FormControlLabel value={true} control={<Radio />} label="כן" />
+                      <FormControlLabel value={false} control={<Radio />} label="לא" />
                     </RadioGroup>
                     {formErrors.casherPhone && <FormHelperText>{formErrors.casherPhone}</FormHelperText>}
                   </FormControl>
@@ -764,12 +764,12 @@ export default function FormPropsTextFields() {
                     <FormLabel id="demo-radio-buttons-group-label">האם בעל/ת רישיון?</FormLabel>
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue={form.licence || "no"}
+                      defaultValue={form.licence || false}
                       name="licence"
                       onChange={handleChangeInput}
                     >
-                      <FormControlLabel value="yes" control={<Radio />} label="כן" />
-                      <FormControlLabel value="no" control={<Radio />} label="לא" />
+                      <FormControlLabel value={true} control={<Radio />} label="כן" />
+                      <FormControlLabel value={false} control={<Radio />} label="לא" />
                     </RadioGroup>
                     {formErrors.licence && <FormHelperText>{formErrors.licence}</FormHelperText>}
                   </FormControl>
@@ -779,12 +779,12 @@ export default function FormPropsTextFields() {
                     <FormLabel id="demo-radio-buttons-group-label">האם מעשן?</FormLabel>
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue={form.smoking || "no"}
+                      defaultValue={form.smoking || false}
                       name="smoking"
                       onChange={handleChangeInput}
                     >
-                      <FormControlLabel value="yes" control={<Radio />} label="כן" />
-                      <FormControlLabel value="no" control={<Radio />} label="לא" />
+                      <FormControlLabel value={true} control={<Radio />} label="כן" />
+                      <FormControlLabel value={false} control={<Radio />} label="לא" />
                     </RadioGroup>
                     {formErrors.smoking && <FormHelperText>{formErrors.smoking}</FormHelperText>}
                   </FormControl>

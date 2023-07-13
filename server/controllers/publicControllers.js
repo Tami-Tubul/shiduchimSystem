@@ -49,18 +49,18 @@ const registerCandidate = async (req, res, next) => {  //מילוי שאלון �
         });
         //ולידציה לשדה מקורות לברורים שהוא שדה מסוג מערך של אובייקטים והוא חובה
         // בדיקה האם שדה מקורות לבירורים ריק
-        if (!candidate.recommendedPeople || candidate.recommendedPeople.length === 0) {
-            missingFields.push('recommendedPeople');
-        } else {
-            // בדיקה אם מכיל לפחות אובייקט אחד
-            const hasMissingRecommendedPeople = candidate.recommendedPeople.some(person => {
-                return Object.values(person).some(value => value === undefined || value === null);
-            });
+        // if (!candidate.recommendedPeople || candidate.recommendedPeople.length === 0) {
+        //     missingFields.push('recommendedPeople');
+        // } else {
+        //     // בדיקה אם מכיל לפחות אובייקט אחד
+        //     const hasMissingRecommendedPeople = candidate.recommendedPeople.some(person => {
+        //         return Object.values(person).some(value => value === undefined || value === null);
+        //     });
 
-            if (hasMissingRecommendedPeople) {
-                missingFields.push('recommendedPeople');
-            }
-        }
+        //     if (hasMissingRecommendedPeople) {
+        //         missingFields.push('recommendedPeople');
+        //     }
+        // }
 
 
 
