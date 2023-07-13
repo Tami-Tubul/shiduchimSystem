@@ -9,7 +9,7 @@ import Header from '../Header/Header';
 import './CheckingNewRegistered.css';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { deleteNewCandidate, deleteNewMatchMaker, loadNewCandidates, loadNewMatchMakers, removeIrelevantCandidate } from '../../store/manager/managerActions';
+import { deleteNewCandidate, deleteNewMatchMaker, loadIrelevantCandidate, loadNewCandidates, loadNewMatchMakers, removeIrelevantCandidate } from '../../store/manager/managerActions';
 import { useLocation } from 'react-router-dom';
 import toast from 'toast-me';
 import { deleteCandidate } from './../../store/user/userActions';
@@ -74,15 +74,21 @@ export default function CheckingNewRegistered() {
 
 
     useEffect(() => {
-        //שליפת מועמדים שביצעו הרשמה ולא אושרו
+        //שליפת מועמדים שביצעו הרשמה ולא אושרו ומועמדים שסומנו להסרה ע"י השדכן
         const getNewCandidatesFromServer = async () => {
             try {
                 const resp = await axios.get(`http://localhost:5000/api/shiduchim/manager/candidates-cards/`, {
                     headers: { 'x-access-token': currentUser.token }
                 });
                 const allCandidates = resp.data.candidates;
+               
                 const newCandidates = allCandidates.filter(cand => cand.isApproved === false); //שליפת כל המועמדים שנשרמו ולא אושרו
+                const irelevantCandidates = allCandidates.filter(cand => cand.pendingDeletion === true); //שליפת מועמדים שסומנו להסרה ע"י השדכן
+              
                 dispatch(loadNewCandidates(newCandidates));
+                dispatch(loadIrelevantCandidate(irelevantCandidates));
+
+
             } catch (error) {
                 console.error('Error retrieving messages:', error);
             }
@@ -231,33 +237,41 @@ export default function CheckingNewRegistered() {
         {
             field: 'actions',
             type: 'actions',
-            headerName: 'אישור והוספה למאגר/מחיקה ושליחת הודעה',
+            headerName: eventType === "unrelevantCandidates" ? 'מחיקה מהמערכת / צפיה': 'אישור והוספה למאגר / מחיקה ושליחת הודעה / צפיה',
             width: 500,
             cellClassName: 'actions',
             getActions: ({ id }) => {
-                return [
-                    <GridActionsCellItem
-                        icon={<SaveIcon />}
-                        label="Save"
-                        sx={{
-                            color: 'primary.main',
-                        }}
-                        onClick={handleSaveClick(id)}
-                    />,
-                    <GridActionsCellItem
-                        icon={<DeleteIcon />}
-                        label="Delete"
-                        onClick={handleDeleteClick(id)}
-                        color="inherit"
-                    />,
-                    <GridActionsCellItem
-                        icon={<VisibilityIcon />}
-                        label="Visibility"
-                        onClick={handleVisiblityClick(id)}
-                        color="inherit"
-                    />,
+                const actions = [
+                  <GridActionsCellItem
+                    icon={<DeleteIcon />}
+                    label="Delete"
+                    onClick={handleDeleteClick(id)}
+                    color="inherit"
+                  />,
+                  <GridActionsCellItem
+                    icon={<VisibilityIcon />}
+                    label="Visibility"
+                    onClick={handleVisiblityClick(id)}
+                    color="inherit"
+                  />,
                 ];
-            },
+              
+                if (eventType !== "unrelevantCandidates") {
+                  actions.unshift(
+                    <GridActionsCellItem
+                      icon={<SaveIcon />}
+                      label="Save"
+                      sx={{
+                        color: 'primary.main',
+                      }}
+                      onClick={handleSaveClick(id)}
+                    />
+                  );
+                }
+              
+                return actions;
+              },
+              
         }
     ];
 
