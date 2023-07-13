@@ -105,7 +105,7 @@ function MatchMakerPage() {
             sessionStorage.clear();
             dispatch(userLogin(authService.getUser()));
             toast(resp.data.message, { duration: 5000 });
-            navigate('/login');
+            navigate('/');
         }
 
     } catch (error) {
