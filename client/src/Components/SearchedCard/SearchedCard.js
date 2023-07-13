@@ -24,6 +24,7 @@ import toast from 'toast-me';
 import { addIrelevantCandidate, removeIrelevantCandidate } from './../../store/manager/managerActions';
 import { useEffect } from 'react';
 import { loadCandidates, removeCandidate } from '../../store/user/userActions';
+import { handaleLongDate } from '../../reusableCode/formateDate';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -247,7 +248,7 @@ export default function SearchedCard(props) {
                         {candidate.bornDate && <Grid item xs={2} sm={4} md={4}>
                             <Typography>תאריך לידה:</Typography>
                             <Typography sx={{ fontSize: 14 }} color="text.secondary">
-                                {candidate.bornDate.toString()}
+                                {handaleLongDate(candidate.bornDate.toString())}
                             </Typography>
                         </Grid>}
                         {candidate.city && <Grid item xs={2} sm={4} md={4}>

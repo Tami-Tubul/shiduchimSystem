@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { styled } from '@mui/material/styles';
 import './ShowCandidate.css';
+import { handaleLongDate } from '../../reusableCode/formateDate';
 
 export default function ShowCandidate(props) {
     const { candidate, show, handleClose } = props;
@@ -57,7 +58,7 @@ export default function ShowCandidate(props) {
                             {candidate.bornDate && <Grid item xs={2} sm={4} md={4}>
                                 <Typography>תאריך לידה:</Typography>
                                 <Typography sx={{ fontSize: 14 }} color="text.secondary">
-                                    {candidate.bornDate.toString()}
+                                    {handaleLongDate(candidate.bornDate.toString())}
                                 </Typography>
                             </Grid>}
                             {candidate.city && <Grid item xs={2} sm={4} md={4}>

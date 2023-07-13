@@ -67,7 +67,6 @@ const authenticateToken = async (req, res, next) => { //בדיקת טוקן  - �
 };
 
 const checkUserRole = (role) => (req, res, next) => {  //בדיקת תפקיד היוזר כדי לדעת אילו דפים להציג לו ואיזה לא
-    console.log(role);
     const userRole = req.userConnect.role;
     if (userRole !== role) {
         return res.status(403).json({ message: `Access forbidden. Required role: ${role}` });
