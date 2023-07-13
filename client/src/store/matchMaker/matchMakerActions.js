@@ -1,5 +1,5 @@
 import {
-    ADD_CANDIDATE_TO_CART, LOAD_FAVORITED_CANDIDATES,
+    ADD_CANDIDATE_TO_CART, REMOVE_CANDIDATE_FROM_CART,LOAD_FAVORITED_CANDIDATES,
     CLOSE_MATCH, LOAD_MEORASIM
 } from './matchMakerTypes';
 
@@ -17,6 +17,14 @@ export const addCandidateToCart = (updatetedCart) => {
         payload: updatetedCart
     }
 }
+
+export const removeCandidateFromCart = (updatetedCart) => {
+    return {
+        type: REMOVE_CANDIDATE_FROM_CART,
+        payload: updatetedCart
+    }
+}
+
 
 export const loadFavoritedCandidates = (candidatesIDs) => {
     return {
@@ -36,6 +44,7 @@ export default {
     loadMeorasim,
     closedMatched,
     addCandidateToCart,
+    removeCandidateFromCart,
     loadFavoritedCandidates
 
 }

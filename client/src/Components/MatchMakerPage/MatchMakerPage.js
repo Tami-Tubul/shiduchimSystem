@@ -16,6 +16,7 @@ import logo from '../../assets/logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
 import authService from '../../authService';
 import toast from 'toast-me';
+import { loadFavoritedCandidates } from '../../store/matchMaker/matchMakerActions';
 
 function MatchMakerPage() {
 
@@ -71,6 +72,7 @@ function MatchMakerPage() {
       }
     }
     getCandidatesFromServer();
+
   }, [dispatch])
 
   const handleClick = (e) => {
@@ -102,21 +104,21 @@ function MatchMakerPage() {
     try {
       let resp = await axios.post("http://localhost:5000/api/shiduchim/auth/logout");
       if (resp.status === 200) {
-            sessionStorage.clear();
-            dispatch(userLogin(authService.getUser()));
-            toast(resp.data.message, { duration: 5000 });
-            navigate('/');
-        }
+        sessionStorage.clear();
+        dispatch(userLogin(authService.getUser()));
+        toast(resp.data.message, { duration: 5000 });
+        navigate('/');
+      }
 
     } catch (error) {
-        console.error('Error retrieving messages:', error);
+      console.error('Error retrieving messages:', error);
     }
 
-}
+  }
 
   return (
     <>
-     <div className='header' style={{ backgroundImage: `url(${logo})` }}  >  
+      <div className='header' style={{ backgroundImage: `url(${logo})` }}  >
         <Button variant="contained" onClick={handleLogout}>
           <LogoutIcon />
           יציאה

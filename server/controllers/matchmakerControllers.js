@@ -127,11 +127,11 @@ const deleteCandidateFromCart = async (req, res, next) => { //הסרת מועמ�
 const getAllCandidateOnCart = async (req, res, next) => { //שליפת מועמדים מהאזור האישי
     try {
         const matchmakerID = req.userConnect.id;
-        const matchmaker = await Matchmaker.findOne({ _id: matchmakerID });
-        if (!matchmaker) {
+        const matchmakerExist = await Matchmaker.findOne({ _id: matchmakerID });
+        if (!matchmakerExist) {
             return res.status(400).json({ message: "שדכן לא נמצא" });
         }
-        const candidatesForMatchmaker = matchmaker.candidates;
+        const candidatesForMatchmaker = matchmakerExist.candidates;
         res.status(200).json({ candidatesOnCart: candidatesForMatchmaker });
 
     }

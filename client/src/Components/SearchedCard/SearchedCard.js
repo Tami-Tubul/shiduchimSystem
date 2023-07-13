@@ -16,12 +16,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { addCandidateToCart, addFavoritedCandidate } from '../../store/matchMaker/matchMakerActions';
+import { addCandidateToCart, loadFavoritedCandidates, removeCandidateFromCart } from '../../store/matchMaker/matchMakerActions';
 import './SearchedCard.css';
 import { useState } from 'react';
 import axios from 'axios';
 import toast from 'toast-me';
 import { addIrelevantCandidate, removeIrelevantCandidate } from './../../store/manager/managerActions';
+import { useEffect } from 'react';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -37,8 +38,15 @@ const ExpandMore = styled((props) => {
 export default function SearchedCard(props) {
     const dispatch = useDispatch();
 
-    const matchMaker = useSelector((state) => state.matchMaker);
     const currentUser = useSelector((state) => state.user.currentUser);
+    const candidates = useSelector((state) => state.user.candidates);
+
+    const matchMaker = useSelector((state) => state.matchMaker);
+    const favoritesIDs = matchMaker.faoritedCandidates;
+
+    const faoritedCands = candidates.filter(cand => { //אובייקטים של מועמדים בסל
+        return favoritesIDs && favoritesIDs.includes(cand._id);
+    });
 
     const { candidate } = props;
     const [expanded, setExpanded] = useState(false);
@@ -47,6 +55,26 @@ export default function SearchedCard(props) {
     const [deleteCandidate, setDeleteCandiidate] = useState(false);
     const [sendMail, setSendMail] = useState(false);
 
+    useEffect(() => {
+
+        const getFavoritedCandidatesFromServer = async () => {
+            try {
+                const resp = await axios.get("http://localhost:5000/api/shiduchim/matchmaker/cart", {
+                    headers: { 'x-access-token': currentUser.token }
+                });
+                const data = resp.data;
+                const candidatesIDs = data.candidatesOnCart
+                dispatch(loadFavoritedCandidates(candidatesIDs));
+            } catch (error) {
+                console.error('Error retrieving messages:', error);
+            }
+        }
+        getFavoritedCandidatesFromServer();
+
+        setAddFavorited(faoritedCands.includes(candidate));
+
+    }, [favoritesIDs, faoritedCands, candidate])
+
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -54,15 +82,29 @@ export default function SearchedCard(props) {
 
     const handleAddToFavorite = async () => {
         //הוספה לאזור האישי של השדכן
-        try {
-            const resp = await axios.put(`http://localhost:5000/api/shiduchim/matchmaker/candidates-cards/${candidate._id}`, null, { headers: { 'x-access-token': currentUser.token } })
-            if (resp.status === 200) {
-                toast(resp.data.message, { duration: 5000 })
-                dispatch(addCandidateToCart(resp.data.candidatesOnCart))//הוספה ברידקס
-                setAddFavorited(!addFavorited);
+        if (!addFavorited) {
+            try {
+                const resp = await axios.put(`http://localhost:5000/api/shiduchim/matchmaker/candidates-cards/${candidate._id}`, null, { headers: { 'x-access-token': currentUser.token } })
+                if (resp.status === 200) {
+                    toast(resp.data.message, { duration: 5000 })
+                    dispatch(addCandidateToCart(resp.data.candidatesOnCart))//החזרת מערך מעודכן לאחר הוספה לרידקס
+                }
+            } catch (error) {
+                toast(error.response.data.message, { duration: 5000 })
             }
-        } catch (error) {
-            toast(error.response.data.message, { duration: 5000 })
+        }
+        else {
+            //הסרה מהאזור האישי של השדכן
+            try {
+                const resp = await axios.delete(`http://localhost:5000/api/shiduchim/matchmaker/cart/${candidate._id}`, { headers: { 'x-access-token': currentUser.token } })
+                if (resp.status === 200) {
+                    toast(resp.data.message, { duration: 5000 })
+                    dispatch(removeCandidateFromCart(resp.data.candidatesOnCart))//החזרת מערך מעודכן לאחר הסרה לרידקס
+                }
+            } catch (error) {
+                toast(error.response.data.message, { duration: 5000 })
+            }
+
         }
     }
 

@@ -59,7 +59,7 @@ export default function CheckingNewRegistered() {
             const selectedCAndidate = new_candidates.find(cand => cand._id === id)
             setSelected(selectedCAndidate)
         }
-        else{
+        else {
             //חיפוש מועמד לא רלוונטי לפי ID
             const selectedirelevantCAndidate = unrelevantCandidates.find(irelcand => irelcand._id === id)
             setSelected(selectedirelevantCAndidate)
@@ -81,10 +81,10 @@ export default function CheckingNewRegistered() {
                     headers: { 'x-access-token': currentUser.token }
                 });
                 const allCandidates = resp.data.candidates;
-               
+
                 const newCandidates = allCandidates.filter(cand => cand.isApproved === false); //שליפת כל המועמדים שנשרמו ולא אושרו
                 const irelevantCandidates = allCandidates.filter(cand => cand.pendingDeletion === true); //שליפת מועמדים שסומנו להסרה ע"י השדכן
-              
+
                 dispatch(loadNewCandidates(newCandidates));
                 dispatch(loadIrelevantCandidate(irelevantCandidates));
 
@@ -114,82 +114,114 @@ export default function CheckingNewRegistered() {
 
 
 
-    const handleSaveClick = (id) => async () => {
+    const handleSaveClick = (id) => () => {
         if (eventType === "newCandidates") {
-            //אישור מועמד
-            try {
-                const resp = await axios.put(`http://localhost:5000/api/shiduchim/manager/new-candidates/${id}`, null, { headers: { 'x-access-token': currentUser.token } })
-                if (resp.status === 201) {
-                    toast(resp.data.message, { duration: 5000 })
-                    dispatch(deleteNewCandidate(id)) //הסרה ממערך מועמדים חדשים
-                }
+            //אישור מועמד חדש
+            // try {
+            //     const resp = await axios.put(`http://localhost:5000/api/shiduchim/manager/new-candidates/${id}`, null, { headers: { 'x-access-token': currentUser.token } })
+            //     if (resp.status === 201) {
+            //         toast(resp.data.message, { duration: 5000 })
+            //         dispatch(deleteNewCandidate(id)) //הסרה ממערך מועמדים חדשים
+            //     }
 
-            } catch (error) {
-                toast(error.response.data.message, { duration: 5000 })
-            }
+            // } catch (error) {
+            //     toast(error.response.data.message, { duration: 5000 })
+            // }
 
+
+            axios.put(`http://localhost:5000/api/shiduchim/manager/new-candidates/${id}`, null,
+                {
+                    headers: { 'x-access-token': currentUser.token }
+                }).then(resp => {
+                    if (resp.status === 201) {
+                        toast(resp.data.message, { duration: 5000 })
+                        dispatch(deleteNewCandidate(id)) //הסרה ממערך מועמדים חדשים
+                    }
+                }).catch(error => {
+                    toast(error.response.data.message, { duration: 5000 })
+                })
         }
 
         else if (eventType === "newMatchmakers") {
-            //אישור שדכן 
-            try {
-                const resp = await axios.put(`http://localhost:5000/api/shiduchim/manager/new-matchmakers/${id}`, null, { headers: { 'x-access-token': currentUser.token } })
-                if (resp.status === 201) {
-                    toast(resp.data.message, { duration: 5000 })
-                    dispatch(deleteNewMatchMaker(id)) //הסרה ממערך שדכנים חדשים
-                }
-            } catch (error) {
-                toast(error.response.data.message, { duration: 5000 })
-            }
+            //אישור שדכן חדש
+            // try {
+            //     const resp = axios.put(`http://localhost:5000/api/shiduchim/manager/new-matchmakers/${id}`, null, { headers: { 'x-access-token': currentUser.token } })
+            //     if (resp.status === 201) {
+            //         toast(resp.data.message, { duration: 5000 })
+            //         dispatch(deleteNewMatchMaker(id)) //הסרה ממערך שדכנים חדשים
+            //     }
+            // } catch (error) {
+            //     toast(error.response.data.message, { duration: 5000 })
+            // }
+
+            axios.put(`http://localhost:5000/api/shiduchim/manager/new-matchmakers/${id}`, null,
+                {
+                    headers: { 'x-access-token': currentUser.token }
+                }).then(resp => {
+                    if (resp.status === 201) {
+                        toast(resp.data.message, { duration: 5000 })
+                        dispatch(deleteNewMatchMaker(id)) //הסרה ממערך שדכנים חדשים
+                    }
+                }).catch(error => {
+                    toast(error.response.data.message, { duration: 5000 })
+                })
 
         }
 
     };
 
-    const handleDeleteClick = (id) => async () => {
+    const handleDeleteClick = (id) => () => {
 
         if (eventType === "newCandidates") {
-            //מחיקת מועמד
-            try {
-                const resp = await axios.delete(`http://localhost:5000/api/shiduchim/manager/new-candidates/${id}`, null, { headers: { 'x-access-token': currentUser.token } })
-                if (resp.status === 200) {
-                    toast(resp.data.message, { duration: 5000 })
-                    dispatch(deleteNewCandidate(id)) //הסרה ממערך מועמדים חדשים
-                }
-
-            } catch (error) {
-                toast(error.response.data.message, { duration: 5000 })
-            }
-
+            //מחיקת מועמד חדש
+            axios.delete(`http://localhost:5000/api/shiduchim/manager/new-candidates/${id}`,
+                {
+                    headers: { 'x-access-token': currentUser.token }
+                })
+                .then(resp => {
+                    if (resp.status === 200) {
+                        toast(resp.data.message, { duration: 5000 })
+                        dispatch(deleteNewCandidate(id)) //הסרה ממערך מועמדים חדשים
+                    }
+                }).catch(error => {
+                    toast(error.response.data.message, { duration: 5000 })
+                })
         }
+
 
         else if (eventType === "newMatchmakers") {
-            //מחיקת שדכן 
-            try {
-                const resp = axios.delete(`http://localhost:5000/api/shiduchim/manager/new-matchmakers/${id}`, null, { headers: { 'x-access-token': currentUser.token } })
-                if (resp.status === 200) {
-                    toast(resp.data.message, { duration: 5000 })
-                    dispatch(deleteNewMatchMaker(id)) //הסרה ממערך שדכנים חדשים
-                }
-            }
-            catch (error) {
-                toast(error.response.data.message, { duration: 5000 })
-            }
+            //מחיקת שדכן חדש
+            axios.delete(`http://localhost:5000/api/shiduchim/manager/new-matchmakers/${id}`,
+                {
+                    headers: { 'x-access-token': currentUser.token }
+                })
+                .then(resp => {
+                    if (resp.status === 200) {
+                        toast(resp.data.message, { duration: 5000 })
+                        dispatch(deleteNewMatchMaker(id)) //הסרה ממערך שדכנים חדשים
+                    }
+                }).catch(error => {
+                    toast(error.response.data.message, { duration: 5000 })
+                })
         }
+
+
         else { //eventType ==="unrelevantCandidates"
 
             //מחיקת מועמד לא רלוונטי שסומן ע"י השדכן
-            try {
-                const resp = axios.delete(`http://localhost:5000/api/shiduchim/manager/removal-candidates/${id}`, null, { headers: { 'x-access-token': currentUser.token } })
-                if (resp.status === 200) {
-                    toast(resp.data.message, { duration: 5000 })
-                    dispatch(removeIrelevantCandidate(id)) //הסרה ממערך מועמדים להסרה
-                    dispatch(deleteCandidate(id)) //הסרה ממערך מועמדים
-                }
-            }
-            catch (error) {
-                toast(error.response.data.message, { duration: 5000 })
-            }
+            axios.delete(`http://localhost:5000/api/shiduchim/manager/removal-candidates/${id}`,
+                {
+                    headers: { 'x-access-token': currentUser.token }
+                })
+                .then(resp => {
+                    if (resp.status === 200) {
+                        toast(resp.data.message, { duration: 5000 })
+                        dispatch(removeIrelevantCandidate(id)) //הסרה ממערך מועמדים להסרה
+                        dispatch(deleteCandidate(id)) //הסרה ממערך מועמדים
+                    }
+                }).catch(error => {
+                    toast(error.response.data.message, { duration: 5000 })
+                })
         }
 
     };
@@ -237,41 +269,41 @@ export default function CheckingNewRegistered() {
         {
             field: 'actions',
             type: 'actions',
-            headerName: eventType === "unrelevantCandidates" ? 'מחיקה מהמערכת / צפיה': 'אישור והוספה למאגר / מחיקה ושליחת הודעה / צפיה',
+            headerName: eventType === "unrelevantCandidates" ? 'מחיקה מהמערכת / צפיה' : 'אישור והוספה למאגר / מחיקה ושליחת הודעה / צפיה',
             width: 500,
             cellClassName: 'actions',
             getActions: ({ id }) => {
                 const actions = [
-                  <GridActionsCellItem
-                    icon={<DeleteIcon />}
-                    label="Delete"
-                    onClick={handleDeleteClick(id)}
-                    color="inherit"
-                  />,
-                  <GridActionsCellItem
-                    icon={<VisibilityIcon />}
-                    label="Visibility"
-                    onClick={handleVisiblityClick(id)}
-                    color="inherit"
-                  />,
-                ];
-              
-                if (eventType !== "unrelevantCandidates") {
-                  actions.unshift(
                     <GridActionsCellItem
-                      icon={<SaveIcon />}
-                      label="Save"
-                      sx={{
-                        color: 'primary.main',
-                      }}
-                      onClick={handleSaveClick(id)}
-                    />
-                  );
+                        icon={<DeleteIcon />}
+                        label="Delete"
+                        onClick={handleDeleteClick(id)}
+                        color="inherit"
+                    />,
+                    <GridActionsCellItem
+                        icon={<VisibilityIcon />}
+                        label="Visibility"
+                        onClick={handleVisiblityClick(id)}
+                        color="inherit"
+                    />,
+                ];
+
+                if (eventType !== "unrelevantCandidates") {
+                    actions.unshift(
+                        <GridActionsCellItem
+                            icon={<SaveIcon />}
+                            label="Save"
+                            sx={{
+                                color: 'primary.main',
+                            }}
+                            onClick={handleSaveClick(id)}
+                        />
+                    );
                 }
-              
+
                 return actions;
-              },
-              
+            },
+
         }
     ];
 

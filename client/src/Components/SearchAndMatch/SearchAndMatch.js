@@ -10,7 +10,7 @@ import Header from "../Header/Header";
 
 const SearchAndMatch = () => {
     const [formValues, setFormValues] = useState({});
-    const [matches, setMatches] = useState([]);
+    const [filteredCands, setFilteredCands] = useState([]);
 
     const currentUser = useSelector((state) => state.user.currentUser);
     const candidates = useSelector((state) => state.user.candidates);
@@ -27,7 +27,7 @@ const SearchAndMatch = () => {
             headers: { 'x-access-token': currentUser.token }
         }).then(resp => {
             if(resp.status === 200){
-                setMatches(resp.data.filteredCandidates)
+                setFilteredCands(resp.data.filteredCandidates)
             }
 
         }).catch(err => {
@@ -35,6 +35,7 @@ const SearchAndMatch = () => {
         })
     }
 
+    
 
     return (
         <>
@@ -201,10 +202,10 @@ const SearchAndMatch = () => {
                 </form>
             </div>
             <Grid container>
-                {matches.length === 0 ?
+                {filteredCands.length === 0 ?
                     candidates.map(cand => <SearchedCard candidate={cand} />)
                     :
-                    matches.map((person) => <SearchedCard candidate={person} />)
+                    filteredCands.map((person) => <SearchedCard candidate={person} />)
                 }
 
             </Grid>
