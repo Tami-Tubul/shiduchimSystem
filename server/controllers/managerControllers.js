@@ -200,23 +200,52 @@ const removingIrrelevantCandidate = async (req, res, next) => { // המנהל מ
 }
 
 const sendMailToCandidateCheckIfRelelevant = async (req, res, next) => {  //כשהמנהל לוחץ על כפתור שליחת מייל למועמד כדי לבדוק אם הוא עדיין רלוונטי
-    
+
     try {
 
         const candidateID = req.params.id;
         const candidateExist = await Candidate.findOne({ _id: candidateID })
-       
+
         if (!candidateExist) {
             return res.status(400).json({ message: "מועמד לא נמצא" });
         }
 
-        else{
+        else {
             const mailTo = candidateExist.email;
             const textMail = `שלום ${candidateExist.firstName}.  האם אתה עדיין מחפש שידוך? השב בכן או לא כדי שהמערכת תדע האם להסיר אותך מהמאגר. תודה.`;
             mail.sendMail(mailTo, textMail);
+
+            res.status(200).json({ message: "המייל נשלח למועמד בהצלחה" });
         }
     }
 
+    catch (err) {
+        next(err)
+    }
+
+}
+
+const removeCandidate = async (req, res, next) => { // הסרת מועמד מהמערכת
+    try {
+        const candidateID = req.params.id;
+
+        const candidateExist = await Candidate.findOne({ _id: candidateID });
+
+        if (!candidateExist) {
+            return res.status(404).json({ message: "מועמד לא נמצא" });
+        }
+
+        // הסרת המועמד מאזור אישי של שדכנים שהוא נמצא אצלם
+        await Matchmaker.updateMany(
+            { candidates: candidateID },
+            { $pull: { candidates: candidateID } }
+        );
+
+        await Candidate.deleteOne({ _id: candidateID });
+
+        res.status(200).json({ message: "המועמד הוסר בהצלחה מהמערכת" });
+
+    }
     catch (err) {
         next(err)
     }
@@ -233,5 +262,6 @@ module.exports = {
     getAllMassagesFromMatchmakers,
     deleteMessageFromMatchmaker,
     removingIrrelevantCandidate,
-    sendMailToCandidateCheckIfRelelevant
+    sendMailToCandidateCheckIfRelelevant,
+    removeCandidate
 }

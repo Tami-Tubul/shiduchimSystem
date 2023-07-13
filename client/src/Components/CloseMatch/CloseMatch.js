@@ -5,11 +5,12 @@ import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
 import { Alert, Button, Divider, Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import { closedMatched, deleteCandidate } from '../../store/matchMaker/matchMakerActions';
+import { closedMatched } from '../../store/matchMaker/matchMakerActions';
 import Header from "../Header/Header";
 import Autocomplete from '@mui/material/Autocomplete';
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { deleteCandidate } from './../../store/user/userActions';
 
 const CloseMatch = () => {
 

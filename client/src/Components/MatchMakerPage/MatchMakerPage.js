@@ -12,6 +12,8 @@ import axios from "axios";
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import logo from '../../assets/logo.png';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 function MatchMakerPage() {
 
@@ -41,8 +43,19 @@ function MatchMakerPage() {
   }
 
 
-  //שליפת מועמדים מהשרת 
   useEffect(() => {
+
+    //בדיקה האם זה כניסה ראשונית לדף
+    const isFirstEnter = window.sessionStorage.getItem("firstEnter");
+    if (!isFirstEnter) {
+      window.sessionStorage.setItem("firstEnter", true);
+      setShowModal(true);
+    }
+    else {
+      setShowModal(false)
+    }
+
+    //שליפת מועמדים מהשרת 
     const getCandidatesFromServer = async () => {
       try {
         const resp = await axios.get(`http://localhost:5000/api/shiduchim/${currentUser.role}/candidates-cards`, {
@@ -82,8 +95,19 @@ function MatchMakerPage() {
     }
   }
 
+
+  const handleLogout = () => {
+    navigate('/login');
+  }
+
   return (
     <>
+     <div className='header' style={{ backgroundImage: `url(${logo})` }}  >  
+        <Button variant="contained" onClick={handleLogout}>
+          <LogoutIcon />
+          יציאה
+        </Button>
+      </div>
       <div id="app">
         <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
           <div className='actions'>

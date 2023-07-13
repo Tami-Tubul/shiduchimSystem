@@ -15,6 +15,7 @@ router.get("/messages", authenticateToken, checkUserRole('manager'), managerCont
 router.delete("/messages/:id", authenticateToken, checkUserRole('manager'), managerController.deleteMessageFromMatchmaker);
 router.delete("/removal-candidates/:id", authenticateToken, checkUserRole('manager'), managerController.removingIrrelevantCandidate);
 router.post("/candidates-cards/:id", authenticateToken, checkUserRole('manager'), managerController.sendMailToCandidateCheckIfRelelevant);
+router.delete("/candidates-cards/:id", authenticateToken, checkUserRole('manager'), managerController.removeCandidate);
 
 router.post("/filter-candidates", authenticateToken, checkUserRole('manager'), usersControllers.filterCandidatesCards);
 router.get("/candidates-cards", authenticateToken, checkUserRole('manager'), usersControllers.getAllCandidatesCards);

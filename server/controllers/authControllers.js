@@ -42,12 +42,12 @@ const authLogout = async (req, res, next) => {
 
 const authenticateToken = async (req, res, next) => { //בדיקת טוקן  - אם ליוזר שהתחבר יש הרשאת כניסה לאתר 
     let token = req.headers['x-access-token'];
-
     try {
         if (!token) {
             return res.status(401).json({ message: "No token provided." })
         }
         jwt.verify(token, RSA_PRIVATE_KEY, async function (err, decoded) {
+
             if (err)
                 return res.status(500).json({ message: "Failed to authenticate token." })
             else {

@@ -1,6 +1,17 @@
-import { LOAD_MESSAGES, SAVE_MESSAGE, DELETE_MESSAGE, LOAD_NEW_CANDIDATES, DELETE_NEW_CANDIDATE, LOAD_NEW_MATCHMAKERS, DELETE_NEW_MATCHMAKER } from "./managerTypes";
+import {
+    LOAD_MESSAGES,
+    SAVE_MESSAGE,
+    DELETE_MESSAGE,
+    LOAD_NEW_CANDIDATES,
+    DELETE_NEW_CANDIDATE,
+    LOAD_NEW_MATCHMAKERS,
+    DELETE_NEW_MATCHMAKER,
+    LOAD_IRELEVANT_CANDIDATE,
+    ADD_IRELEVANT_CANDIDATE,
+    REMOVE_IRELEVANT_CANDIDATE
+} from "./managerTypes";
 
-export const managerReducer = (state = { messages: [], newCandidates: [], newMatchmakers: [] }, action) => {
+export const managerReducer = (state = { messages: [], newCandidates: [], newMatchmakers: [], irelevantCandidates: [] }, action) => {
     switch (action.type) {
 
         case LOAD_MESSAGES:
@@ -43,6 +54,30 @@ export const managerReducer = (state = { messages: [], newCandidates: [], newMat
             return {
                 ...state,
                 newCandidates: allNewCandidates
+            }
+
+        case LOAD_IRELEVANT_CANDIDATE:
+            return {
+                ...state,
+                irelevantCandidates: action.payload
+            }
+
+        case ADD_IRELEVANT_CANDIDATE:
+            return {
+                ...state,
+                irelevantCandidates: [...state.irelevantCandidates, action.payload]
+            }
+
+        case REMOVE_IRELEVANT_CANDIDATE:
+            let irelCandID = action.payload;
+            let allIrelevant = [...state.irelevantCandidates]
+            let indexIrel = allIrelevant.findIndex(x => x._id == irelCandID)
+            if (indexIrel > -1) {
+                allIrelevant.splice(indexIrel, 1)
+            }
+            return {
+                ...state,
+                irelevantCandidates: allIrelevant
             }
 
         case LOAD_NEW_MATCHMAKERS:

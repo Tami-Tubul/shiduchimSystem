@@ -5,7 +5,7 @@ const Meorasim = require("../models/MeorasimModel");
 
 const registerMatchmaker = async (req, res, next) => {  //הרשמת שדכן
     try {
-        const { firstName, lastName, phone, livingPlace, age, email } = req.body;
+        const { firstName, lastName, phone, city, age, email } = req.body;
         if (!(firstName && lastName && phone && email)) {
             return res.status(400).json({ message: "יש למלא את כל שדות החובה" });
         }
@@ -19,7 +19,7 @@ const registerMatchmaker = async (req, res, next) => {  //הרשמת שדכן
                 firstName: firstName,
                 lastName: lastName,
                 phone: phone,
-                livingPlace: livingPlace,
+                city: city,
                 age: age,
                 email: email
             })

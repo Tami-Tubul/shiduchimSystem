@@ -1,4 +1,4 @@
-import { LOAD_MEORASIM, LOAD_CANDIDATES, DELETE_CANDIDATE, ADD_CANDIDATE, CLOSE_MATCH } from "./matchMakerTypes"
+import { LOAD_MEORASIM, LOAD_FAVORITED_CANDIDATES, ADD_CANDIDATE_TO_CART, CLOSE_MATCH } from "./matchMakerTypes"
 
 export const matchMakerReducer = (state = { faoritedCandidates: [], closedRegisters: [] }, action) => {
     switch (action.type) {
@@ -15,19 +15,14 @@ export const matchMakerReducer = (state = { faoritedCandidates: [], closedRegist
                 closedRegisters: [...state.closedRegisters, action.payload]
             }
 
-        case DELETE_CANDIDATE:
-            let candidateID = action.payload;
-            let allCandidates = [...state.candidates]
-            let index = allCandidates.findIndex(x => x._id == candidateID)
-            if (index > -1) {
-                allCandidates.splice(index, 1)
-            }
+       
+        case ADD_CANDIDATE_TO_CART:
             return {
                 ...state,
-                candidates: allCandidates
+                faoritedCandidates: action.payload
             }
 
-        case ADD_CANDIDATE:
+        case LOAD_FAVORITED_CANDIDATES:
             return {
                 ...state,
                 faoritedCandidates: action.payload

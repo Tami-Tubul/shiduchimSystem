@@ -10,13 +10,20 @@ const markingCandidateForRemoval = async (req, res, next) => { //סימון מו
     try {
 
         const candidateID = req.params.id;
-        const candidateExist = await Candidate.findByIdAndUpdate(candidateID, {
-            pendingDeletion: true
-        })
 
-        if (!candidateExist) {
+        const candidate = await Candidate.findById(candidateID);
+
+        if (!candidate) {
             return res.status(404).json({ message: "מועמד לא נמצא" })
         }
+
+        if (candidate.pendingDeletion) {
+            return res.status(400).json({ message: "מועמד זה כבר סומן למחיקה" });
+        }
+
+        await Candidate.findByIdAndUpdate(candidateID, {
+            pendingDeletion: true
+        })
 
         res.status(200).json({ message: "המועמד סומן למחיקה" })
 
@@ -83,7 +90,7 @@ const closingMatch = async (req, res, next) => { //סגירת שידוך
             if (!bachurRemoved || !bachuraRemoved) {
                 return res.status(500).json({ message: "אירעה תקלה במחיקת הבחור/ה המאורס/ת מטבלת המועמדים" });
             }
-            if(!matchmakerAfterRemoveCandidate){
+            if (!matchmakerAfterRemoveCandidate) {
                 return res.status(500).json({ message: "אירעה תקלה במחיקת המאורסים מהסל של השדכן" });
             }
 
@@ -100,7 +107,7 @@ const closingMatch = async (req, res, next) => { //סגירת שידוך
 
 }
 
-const deleteCandidateFromCart = async (req, res, next ) => { //הסרת מועמד מהאזור האישי
+const deleteCandidateFromCart = async (req, res, next) => { //הסרת מועמד מהאזור האישי
     try {
         const matchmakerID = req.userConnect.id;
         const candidateID = req.params.id;
@@ -173,6 +180,7 @@ const sendMessageToManager = async (req, res, next) => { //שליחת הודעה
 
     }
     catch (err) {
+        console.log(err);
         next(err)
     }
 

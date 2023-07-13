@@ -11,6 +11,8 @@ import './ManagerPage.css';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadCandidates } from '../../store/user/userActions';
+import logo from '../../assets/logo.png';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 function ManagerPage() {
   const navigate = useNavigate();
@@ -62,16 +64,24 @@ function ManagerPage() {
       case "showMessages":
         navigate('/ShowMessages');
         break;
-        case "SearchAndMatch":
-          navigate('/SearchAndMatch');
-          break;
+      case "SearchAndMatch":
+        navigate('/SearchAndMatch');
+        break;
       default:
         navigate('/login');
     }
 
   }
 
-  
+  const handleLogout = () => {
+    navigate('/login');
+  }
+  const handleBackToHomePage = () => {
+    navigate('/ManagerPage');
+    // navigate('/MatchMakerPage');
+  }
+
+
   //שליפת מועמדים מהשרת 
   useEffect(() => {
     const getCandidatesFromServer = async () => {
@@ -91,51 +101,59 @@ function ManagerPage() {
 
 
   return (
-    <div id="app">
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
-        <div className='actions'>
-          <Grid container spacing={{ xs: 2, md: 4 }}>
-            <Grid item>
-              <Button variant="contained" onClick={handleClick} name="matchMakingClosed">שידוכים שנסגרו</Button>
+    <>
+      <div className='header' style={{ backgroundImage: `url(${logo})` }}  >  {/*onClick={handleBackToHomePage}*/}
+        <Button variant="contained" onClick={handleLogout}>
+          <LogoutIcon />
+          יציאה
+        </Button>
+      </div>
+      <div id="app">
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
+          <div className='actions'>
+            <Grid container spacing={{ xs: 2, md: 4 }}>
+              <Grid item>
+                <Button variant="contained" onClick={handleClick} name="matchMakingClosed">שידוכים שנסגרו</Button>
+              </Grid>
+              <Grid item>
+                <Button variant="contained" onClick={handleClick} name="statistics">סטטיסטיקות שידוכים</Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  onClick={handleClickMangedUsers}
+                  name="mangedUsers"
+                  aria-controls={open ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}>
+                  ניהול משתמשים
+                </Button>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  <MenuItem name="checkingUnrelevantMatchmakers" onClick={handleCheckingUnRelevantMatchmakers}>בדיקת מועמדים לא רלוונטיים</MenuItem>
+                  <MenuItem name="checkingNewCandidates" onClick={handleCheckingNewMatchmakers}>בדיקת שדכנים חדשים</MenuItem>
+                  <MenuItem name="checkingNewMatchmakers" onClick={handleCheckingNewCandidates}>בדיקת מועמדים חדשים</MenuItem>
+                </Menu>
+              </Grid>
+              <Grid item>
+                <Button variant="contained" onClick={handleClick} name="SearchAndMatch">צפיה בכרטיסי משתמשים</Button>
+              </Grid>
+              <Grid item>
+                <Button variant="contained" onClick={handleClick} name="showMessages">צפיה בהודעות</Button>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Button variant="contained" onClick={handleClick} name="statistics">סטטיסטיקות שידוכים</Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                onClick={handleClickMangedUsers}
-                name="mangedUsers"
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}>
-                ניהול משתמשים
-              </Button>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button',
-                }}
-              >
-                <MenuItem name="checkingUnrelevantMatchmakers" onClick={handleCheckingUnRelevantMatchmakers}>בדיקת מועמדים לא רלוונטיים</MenuItem>
-                <MenuItem name="checkingNewCandidates" onClick={handleCheckingNewMatchmakers}>בדיקת שדכנים חדשים</MenuItem>
-                <MenuItem name="checkingNewMatchmakers" onClick={handleCheckingNewCandidates}>בדיקת מועמדים חדשים</MenuItem>
-              </Menu>
-            </Grid>
-            <Grid item>
-              <Button variant="contained" onClick={handleClick} name="SearchAndMatch">צפיה בכרטיסי משתמשים</Button>
-            </Grid>
-            <Grid item>
-              <Button variant="contained" onClick={handleClick} name="showMessages">צפיה בהודעות</Button>
-            </Grid>
-          </Grid>
-        </div>
-        <ImageSrc style={{ backgroundImage: `url(${rings2})` }} />
-      </Box>
-    </div>
+          </div>
+          <ImageSrc style={{ backgroundImage: `url(${rings2})` }} />
+        </Box>
+      </div>
+    </>
   );
 }
 

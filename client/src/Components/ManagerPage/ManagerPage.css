@@ -6,7 +6,16 @@
     justify-content: space-between;
     text-align: center;
 }
-
+.header {
+    height: 100px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    color: #796136 !important;
+    border-color: #796136 !important;
+    padding-top: 1%;
+    direction: rtl;
+    padding-right: 6%;
+}
 .actions {
     z-index: 5;
     margin-top: 40px;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { styled } from '@mui/material/styles';
+import { duration, styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -16,9 +16,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { addFavoritedCandidate } from '../../store/matchMaker/matchMakerActions';
+import { addCandidateToCart, addFavoritedCandidate } from '../../store/matchMaker/matchMakerActions';
 import './SearchedCard.css';
 import { useState } from 'react';
+import axios from 'axios';
+import toast from 'toast-me';
+import { addIrelevantCandidate, removeIrelevantCandidate } from './../../store/manager/managerActions';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -33,7 +36,10 @@ const ExpandMore = styled((props) => {
 
 export default function SearchedCard(props) {
     const dispatch = useDispatch();
+
     const matchMaker = useSelector((state) => state.matchMaker);
+    const currentUser = useSelector((state) => state.user.currentUser);
+
     const { candidate } = props;
     const [expanded, setExpanded] = useState(false);
     const [addFavorited, setAddFavorited] = useState(false);
@@ -41,43 +47,68 @@ export default function SearchedCard(props) {
     const [deleteCandidate, setDeleteCandiidate] = useState(false);
     const [sendMail, setSendMail] = useState(false);
 
-    const usertType = "manager";
-
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
-    const handleAddToFavorite = () => {
-        // TODO: שמירת מועמד באזור אישי של שדכנית
-        console.log('props', props);
-        console.log(matchMaker)
-        const favoritedList = matchMaker.faoritedCandidates;
-        const isExist = favoritedList && favoritedList.find((favorited) => {
-            return (favorited.firstName === candidate.firstName && favorited.lastName === candidate.lastName)
-        });
-        if (!isExist) {
-            if (!favoritedList)
-                dispatch(addFavoritedCandidate([candidate]));
-            else {
-                favoritedList.push(candidate);
-                dispatch(addFavoritedCandidate(favoritedList));
+    const handleAddToFavorite = async () => {
+        //הוספה לאזור האישי של השדכן
+        try {
+            const resp = await axios.put(`http://localhost:5000/api/shiduchim/matchmaker/candidates-cards/${candidate._id}`, null, { headers: { 'x-access-token': currentUser.token } })
+            if (resp.status === 200) {
+                toast(resp.data.message, { duration: 5000 })
+                dispatch(addCandidateToCart(resp.data.candidatesOnCart))//הוספה ברידקס
+                setAddFavorited(!addFavorited);
             }
-        } else {
-            const newFavoritedList = favoritedList.filter((fovorited) => (favoritedList.firstName !== candidate.firstName && fovorited.lastName !== candidate.lastName))
-            dispatch(addFavoritedCandidate(newFavoritedList));
+        } catch (error) {
+            toast(error.response.data.message, { duration: 5000 })
         }
-        setAddFavorited(!addFavorited);
-    };
-
-    const handleSendMailToManagerToDelete = () => {
-        setIsCheckedToRemove(true);
     }
 
-    const handleDelete = () => {
-        setDeleteCandiidate(true);
+
+    const handleMarkCandidateToDelete = async () => {
+        //שליחת מועמד למחיקה ע"י השדכן
+        try {
+            const resp = await axios.post(`http://localhost:5000/api/shiduchim/matchmaker/candidates-cards/${candidate._id}`, null, { headers: { 'x-access-token': currentUser.token } })
+            if (resp.status === 200) {
+                toast(resp.data.message, { duration: 5000 })
+                dispatch(addIrelevantCandidate({ ...candidate, pendingDeletion: true }))
+                setIsCheckedToRemove(true);
+            }
+        } catch (error) {
+            toast(error.response.data.message, { duration: 5000 })
+        }
     }
-    const handleSendMail = () => {
+
+    const handleDelete = async () => {
+        //מחיקת מועמד ע"י המנהל
+        if (window.confirm("האם אתה בטוח שברצונך למחוק את המועמד?")) {
+            try {
+                const resp = await axios.delete(`http://localhost:5000/api/shiduchim/manager/candidates-cards/${candidate._id}`, { headers: { 'x-access-token': currentUser.token } })
+                if (resp.status === 200) {
+                    toast(resp.data.message, { duration: 5000 })
+                    dispatch(deleteCandidate(candidate)) //מחיקת המועמד ממערך המועמדים
+                    setIsCheckedToRemove(true);
+                }
+            } catch (error) {
+                toast(error.response.data.message, { duration: 5000 })
+            }
+            setDeleteCandiidate(true);
+        }
+    }
+    const handleSendMail = async () => {
+        //שליחת מייל למועמד האם הוא עדיין רלוונטי ע"י המנהל
+        try {
+            const resp = await axios.post(`http://localhost:5000/api/shiduchim/manager/candidates-cards/${candidate._id}`, null, { headers: { 'x-access-token': currentUser.token } })
+            if (resp.status === 200) {
+                toast(resp.data.message, { duration: 5000 })
+                setIsCheckedToRemove(true);
+            }
+        } catch (error) {
+            toast(error.response.data.message, { duration: 5000 })
+        }
+
         setSendMail(true);
     }
 
@@ -87,32 +118,32 @@ export default function SearchedCard(props) {
             <CardHeader
                 action={
                     <>
-                        {usertType === "candidate" &&
+                        {currentUser.role === "matchmaker" &&
                             <>
                                 <div>
-                                    <IconButton aria-label="favorite" onClick={handleAddToFavorite}>
+                                    <IconButton title="הוסף/הסר לאזור האישי" onClick={handleAddToFavorite}>
                                         {addFavorited ? <FavoriteIcon /> :
                                             <FavoriteBorderIcon />}
                                     </IconButton>
                                 </div>
                                 <div>
-                                    <IconButton aria-label="mail" onClick={handleSendMailToManagerToDelete}>
+                                    <IconButton title='שלח מועמד לא רלוונטי למנהל למחיקה' onClick={handleMarkCandidateToDelete}>
                                         {isCheckedToRemove ? <ContactMailTwoToneIcon /> :
                                             <ContactMailIcon />}
                                     </IconButton>
                                 </div>
                             </>
                         }
-                        {usertType === "manager" &&
+                        {currentUser.role === "manager" &&
                             <>
                                 <div>
-                                    <IconButton aria-label="mail" onClick={handleSendMail}>
+                                    <IconButton title="שלח מייל אוטומטי למועמד לבדיקת רלוונטיות" onClick={handleSendMail}>
                                         {sendMail ? <ContactMailTwoToneIcon /> :
                                             <ContactMailIcon />}
                                     </IconButton>
                                 </div>
                                 <div>
-                                    <IconButton aria-label="delete" onClick={handleDelete}>
+                                    <IconButton title="הסר מועמד מהמערכת" onClick={handleDelete}>
                                         {deleteCandidate ? <DeleteForeverTwoToneIcon /> :
                                             <DeleteIcon />}
                                     </IconButton>
@@ -200,7 +231,7 @@ export default function SearchedCard(props) {
                         {candidate.height && <Grid item xs={2} sm={4} md={4}>
                             <Typography>גובה:</Typography>
                             <Typography sx={{ fontSize: 14 }} color="text.secondary">
-                                {candidate.height.toString()}
+                                {Object.values(candidate.height)}
                             </Typography>
                         </Grid>}
                         {candidate.bodyStracture && <Grid item xs={2} sm={4} md={4}>
@@ -329,7 +360,7 @@ export default function SearchedCard(props) {
                                 {candidate.halachaMethod}
                             </Typography>
                         </Grid>}
-                        <Grid container><Typography variant="h6" component="div">דרישות מבן/בת הזןג:</Typography></Grid>
+                        <Grid container><Typography variant="h6" component="div">דרישות מבן/בת הזוג:</Typography></Grid>
                         {candidate.drishotSector && <Grid item xs={2} sm={4} md={4}>
                             <Typography>שיוך מגזרי:</Typography>
                             <Typography sx={{ fontSize: 14 }} color="text.secondary">
@@ -375,13 +406,13 @@ export default function SearchedCard(props) {
                         {candidate.fromHeight && <Grid item xs={2} sm={4} md={4}>
                             <Typography>מגובה:</Typography>
                             <Typography sx={{ fontSize: 14 }} color="text.secondary">
-                                {candidate.fromHeight.toFixed(2)}
+                                {Object.values(candidate.fromHeight)}
                             </Typography>
                         </Grid>}
                         {candidate.mostHeight && <Grid item xs={2} sm={4} md={4}>
                             <Typography>עד גובה:</Typography>
                             <Typography sx={{ fontSize: 14 }} color="text.secondary">
-                                {candidate.mostHeight.toFixed(2)}
+                                {Object.values(candidate.mostHeight)}
                             </Typography>
                         </Grid>}
                         <Grid container><Typography variant="h6" component="div">פרטים נוספים:</Typography></Grid>

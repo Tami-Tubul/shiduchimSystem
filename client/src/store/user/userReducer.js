@@ -1,8 +1,8 @@
 
-import { USER_LOGIN ,LOAD_CANDIDATES } from "./userType";
+import { USER_LOGIN ,LOAD_CANDIDATES, DELETE_CANDIDATE} from './userType';
 import authService from './../../authService';
 
-export const userReducer = (state = { currentUser: authService.getUser() , candidates:[] }, action) => {
+export const userReducer = (state = { currentUser: authService.getUser(), candidates: [] }, action) => {
     switch (action.type) {
 
         case USER_LOGIN:
@@ -15,6 +15,18 @@ export const userReducer = (state = { currentUser: authService.getUser() , candi
             return {
                 ...state,
                 candidates: action.payload
+            }
+
+        case DELETE_CANDIDATE:
+            let candidateID = action.payload;
+            let allCandidates = [...state.candidates]
+            let index = allCandidates.findIndex(x => x._id == candidateID)
+            if (index > -1) {
+                allCandidates.splice(index, 1)
+            }
+            return {
+                ...state,
+                candidates: allCandidates
             }
 
         default:
