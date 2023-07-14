@@ -16,7 +16,7 @@ export default function PersonalArea(props) {
     const faoritedCandidatesIDs = useSelector((state) => state.matchMaker.faoritedCandidates);
 
     const faoritedCandidatesList = candidates.filter(cand => {
-        return faoritedCandidatesIDs.includes(cand._id);
+        return faoritedCandidatesIDs && faoritedCandidatesIDs.includes(cand._id);
     });
 
 

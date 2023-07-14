@@ -60,7 +60,7 @@ export default function SearchedCard(props) {
 
     useEffect(() => {
         setAddFavorited(faoritedCands.includes(candidate));
-    }, [favoritesIDs, faoritedCands, candidates])
+    }, [favoritesIDs, faoritedCands])
 
     useEffect(() => {
         if (currentUser.role === "matchmaker") {
@@ -109,6 +109,7 @@ export default function SearchedCard(props) {
                 if (resp.status === 200) {
                     toast(resp.data.message, { duration: 5000 })
                     dispatch(addCandidateToCart(resp.data.candidatesOnCart))//החזרת מערך מעודכן לאחר הוספה לרידקס
+
                 }
             } catch (error) {
                 toast(error.response.data.message, { duration: 5000 })
@@ -121,6 +122,9 @@ export default function SearchedCard(props) {
                 if (resp.status === 200) {
                     toast(resp.data.message, { duration: 5000 })
                     dispatch(removeCandidateFromCart(resp.data.candidatesOnCart))//החזרת מערך מעודכן לאחר הסרה לרידקס
+                    // Update favoritesIDs state
+                    const updatedFavoritesIDs = favoritesIDs.filter((id) => id !== candidate._id);
+                    dispatch(loadFavoritedCandidates(updatedFavoritesIDs));
                 }
             } catch (error) {
                 toast(error.response.data.message, { duration: 5000 })
@@ -148,9 +152,9 @@ export default function SearchedCard(props) {
         //מחיקת מועמד ע"י המנהל
         try {
             const resp = await axios.delete(`http://localhost:5000/api/shiduchim/manager/candidates-cards/${candidate._id}`, { headers: { 'x-access-token': currentUser.token } })
-           
+
             if (resp.status === 200) {
-                
+
                 toast(resp.data.message, { duration: 5000 })
 
                 dispatch(removeCandidate(candidate._id)) //מחיקת המועמד ממערך המועמדים
