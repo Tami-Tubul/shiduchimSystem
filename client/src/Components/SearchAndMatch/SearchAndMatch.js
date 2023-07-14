@@ -10,10 +10,11 @@ import Header from "../Header/Header";
 import { memo } from "react";
 
 const SearchAndMatch = () => {
-    console.log('SearchAndMatch rendered');
 
     const [formValues, setFormValues] = useState({});
     const [filteredCands, setFilteredCands] = useState([]);
+    const [flagFilter, setFlagFilter] = useState(false);
+
 
     const currentUser = useSelector((state) => state.user.currentUser);
     const candidates = useSelector((state) => state.user.candidates);
@@ -32,6 +33,8 @@ const SearchAndMatch = () => {
         }).then(resp => {
             if(resp.status === 200){
                 setFilteredCands(resp.data.filteredCandidates)
+                setFlagFilter(true)
+               
             }
 
         }).catch(err => {
@@ -82,7 +85,7 @@ const SearchAndMatch = () => {
                         <Grid item>
                             <TextField
                                 label='מעמד(עובד/לומד)'
-                                name='Status'
+                                name='status'
                                 onChange={handleChange}
                                 variant="outlined"
                                 margin="normal"
@@ -206,7 +209,7 @@ const SearchAndMatch = () => {
                 </form>
             </div>
             <Grid container>
-                {filteredCands.length === 0 ?
+                {!flagFilter ?
                     candidates.map(cand => <SearchedCard candidate={cand} />)
                     :
                     filteredCands.map((person) => <SearchedCard candidate={person} />)

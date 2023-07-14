@@ -8,14 +8,14 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
             sector,
             fromAge,
             mostAge,
-            economicCondition, 
+            status,
             fromHeight,
             mostHeight,
             look,
             colorSkin,
             countryBirth,
-            drishotFavoriteMoza, 
-            drishotNotMoza, 
+            drishotFavoriteMoza,
+            drishotNotMoza,
             city,
             characters,
             headdress,
@@ -25,71 +25,78 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
 
         const query = {}
 
-        if (sector) {
+        if (sector && sector !== "") {
             query.sector = sector
         }
 
-        if (fromAge || mostAge) {
+        if (fromAge && fromAge !== "" || mostAge && mostAge !== "") {
             query.age = {};
 
-            if (fromAge) {
-                query.age.$gte = fromAge;
+            if (fromAge && fromAge !== "") {
+                query.age.$gte = parseInt(fromAge);
             }
 
-            if (mostAge) {
-                query.age.$lte = mostAge;
+            if (mostAge && mostAge !== "") {
+                query.age.$lte = parseInt(mostAge);
             }
         }
 
-        if (economicCondition) {
-            query.economicCondition = economicCondition
+        if (status && status !== "") {
+            query.status = status
         }
 
-        if (fromHeight) {
-            query.height = { $gte: fromHeight }
+        if (fromHeight && fromHeight !== "" && mostHeight && mostHeight !== "") {
+            query.height = { $gte: parseFloat(fromHeight), $lte: parseFloat(mostHeight) };
+        } else {
+            if (fromHeight && fromHeight !== "") {
+                query.height = { $gte: parseFloat(fromHeight) };
+            }
+
+            if (mostHeight && mostHeight !== "") {
+                query.height = { $lte: parseFloat(mostHeight) };
+            }
         }
 
-        if (mostHeight) {
-            query.height = { $lte: mostHeight }
+
+        if (look && look !== "") {
+            const lookArray = look.split(/[ ,]+/).map((word) => new RegExp(word, "i"));
+            query.look = { $all: lookArray };
         }
 
-        if (look) {
-            query.look = look
-        }
-
-        if (colorSkin) {
+        if (colorSkin && colorSkin !== "") {
             query.colorSkin = colorSkin
         }
 
-        if (countryBirth) {
+        if (countryBirth && countryBirth !== "") {
             query.countryBirth = countryBirth
         }
 
-        if (drishotFavoriteMoza) {
+        if (drishotFavoriteMoza && drishotFavoriteMoza !== "") {
             query.origin = drishotFavoriteMoza
         }
 
-        if (drishotNotMoza) {
+        if (drishotNotMoza && drishotNotMoza !== "") {
             query.origin = { $ne: drishotNotMoza }
         }
 
-        if (city) {
+        if (city && city !== "") {
             query.city = city
         }
 
-        if (characters && characters.length > 0) {
-            query.characters = { $all: characters }
+        if (characters && characters !== "") {
+            const charactersArray = characters.split(/[ ,]+/).map((character) => new RegExp(character, "i"));
+            query.characters = { $all: charactersArray };
         }
 
-        if (headdress) {
+        if (headdress && headdress !== "") {
             query.headdress = headdress
         }
 
-        if (healthCondition) {
+        if (healthCondition && healthCondition !== "") {
             query.healthCondition = healthCondition
         }
 
-        if (halachaMethod) {
+        if (halachaMethod && halachaMethod !== "") {
             query.halachaMethod = halachaMethod
         }
 
@@ -97,7 +104,7 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
 
 
         const filteredCandidates = await Candidate.find(query);
-
+        console.log(filteredCandidates);
         return res.status(200).json({ filteredCandidates: filteredCandidates })
 
     }
@@ -122,5 +129,5 @@ const getAllCandidatesCards = async (req, res, next) => {  //הצגת כרטיס
 module.exports = {
     filterCandidatesCards,
     getAllCandidatesCards
-    
+
 }
