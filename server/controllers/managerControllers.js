@@ -89,6 +89,10 @@ const approveCandidate = async (req, res, next) => {   // אישור מועמד
             candidateExist.isApproved = true; //המנהל מעדכן את המועמד למאושר
             await candidateExist.save();
 
+             const mailTo = candidateExist.email;
+             const textMail = `שלום ${candidateExist.firstName}.\n התקבלת למאגר המועמדים שלנו!\n בקרוב תיצור איתך קשר שדכנית מהמאגר שלנו ותתחיל להציע לך שידוכים.\n בברכת הצלחה וסיעתא דשמיא,\n אתר שידוכים`
+             mail.sendMail(mailTo, textMail);
+
             res.status(201).json({ message: "המועמד נוסף בהצלחה למאגר" })
 
             //תזמון שליחת מייל פעם בחודש מתאריך זה --- בוטל ---- הועבר לפונקציה שבלחיצת כפתור שולחת לו מייל
@@ -212,7 +216,7 @@ const sendMailToCandidateCheckIfRelelevant = async (req, res, next) => {  //כש
 
         else {
             const mailTo = candidateExist.email;
-            const textMail = `שלום ${candidateExist.firstName}.  האם אתה עדיין מחפש שידוך? השב בכן או לא כדי שהמערכת תדע האם להסיר אותך מהמאגר. תודה.`;
+            const textMail = `שלום ${candidateExist.firstName}.\n האם את/ה עדיין מחפש/ת שידוך? השב/י בכן או לא כדי שהמערכת תדע האם להסיר אותך מהמאגר. תודה.`;
             mail.sendMail(mailTo, textMail);
 
             res.status(200).json({ message: "המייל נשלח למועמד בהצלחה" });
