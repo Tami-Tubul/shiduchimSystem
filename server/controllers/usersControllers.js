@@ -8,7 +8,7 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
             sector,
             fromAge,
             mostAge,
-            status,
+            doingToday,
             fromHeight,
             mostHeight,
             look,
@@ -41,8 +41,8 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
             }
         }
 
-        if (status && status !== "") {
-            query.status = status
+        if (doingToday && doingToday !== "") {
+            query.doingToday = doingToday
         }
 
         if (fromHeight && fromHeight !== "" && mostHeight && mostHeight !== "") {
@@ -56,7 +56,6 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
                 query.height = { $lte: parseFloat(mostHeight) };
             }
         }
-
 
         if (look && look !== "") {
             const lookArray = look.split(/[ ,]+/).map((word) => new RegExp(word, "i"));
@@ -104,7 +103,6 @@ const filterCandidatesCards = async (req, res, next) => {  //סינון מועמ
 
 
         const filteredCandidates = await Candidate.find(query);
-        console.log(filteredCandidates);
         return res.status(200).json({ filteredCandidates: filteredCandidates })
 
     }

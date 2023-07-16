@@ -85,7 +85,7 @@ const SearchAndMatch = () => {
                         <Grid item>
                             <TextField
                                 label='מעמד(עובד/לומד)'
-                                name='status'
+                                name='doingToday'
                                 onChange={handleChange}
                                 variant="outlined"
                                 margin="normal"
