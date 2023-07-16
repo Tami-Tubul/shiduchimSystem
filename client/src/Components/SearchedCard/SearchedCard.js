@@ -38,17 +38,6 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function SearchedCard(props) {
-    const dispatch = useDispatch();
-
-    const currentUser = useSelector((state) => state.user.currentUser);
-    const candidates = useSelector((state) => state.user.candidates);
-
-    const matchMaker = useSelector((state) => state.matchMaker);
-    const favoritesIDs = matchMaker.faoritedCandidates;
-
-    const faoritedCands = candidates.filter(cand => { //אובייקטים של מועמדים בסל
-        return favoritesIDs && favoritesIDs.includes(cand._id);
-    });
 
     const { candidate } = props;
     const [expanded, setExpanded] = useState(false);
@@ -57,7 +46,23 @@ export default function SearchedCard(props) {
     const [deleteCandidate, setDeleteCandiidate] = useState(false);
     const [sendMail, setSendMail] = useState(false);
 
+    const dispatch = useDispatch();
 
+    const currentUser = useSelector((state) => state.user.currentUser);
+    const candidates = useSelector((state) => state.user.candidates);
+    const filteredCandidates = useSelector((state) => state.user.filteredCandidates);
+
+    const matchMaker = useSelector((state) => state.matchMaker);
+    const favoritesIDs = matchMaker.faoritedCandidates;
+
+    const faoritedCands = filteredCandidates.length !== 0 && filteredCandidates.length < candidates.length ?
+        filteredCandidates.filter(cand => { //אובייקטים של מועמדים בסל
+            return favoritesIDs && favoritesIDs.includes(cand._id);
+        }) : candidates.filter(cand => {
+            return favoritesIDs && favoritesIDs.includes(cand._id);
+        });
+
+        
     useEffect(() => {
         setAddFavorited(faoritedCands.includes(candidate));
     }, [favoritesIDs, faoritedCands])

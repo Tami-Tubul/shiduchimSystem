@@ -248,7 +248,7 @@ export default function FormPropsTextFields() {
                     required
                     label="שם פרטי"
                     name="firstName"
-                    error={formErrors.firstName}
+                    error={Boolean(formErrors.firstName)}
                     helperText={formErrors.firstName}
                     defaultValue={form.firstName}
                     onChange={handleChangeInput}
@@ -259,7 +259,7 @@ export default function FormPropsTextFields() {
                     required
                     label="שם משפחה"
                     name="lastName"
-                    error={formErrors.lastName}
+                    error={Boolean(formErrors.lastName)}
                     helperText={formErrors.lastName}
                     defaultValue={form.lastName}
                     onChange={handleChangeInput}
@@ -273,7 +273,7 @@ export default function FormPropsTextFields() {
                       name='gender'
                       label="מין"
                       onChange={handleChangeInput}
-                      error={formErrors.gender}
+                      error={Boolean(formErrors.gender)}
                       helperText={formErrors.gender}
                       defaultValue={form.gender}
                     >
@@ -289,7 +289,7 @@ export default function FormPropsTextFields() {
                     label="גיל"
                     name="age"
                     type="number"
-                    error={formErrors.age}
+                    error={Boolean(formErrors.age)}
                     helperText={formErrors.age}
                     defaultValue={form.age}
                     onChange={handleChangeInput}
@@ -300,7 +300,7 @@ export default function FormPropsTextFields() {
                     required
                     label="מצב משפחתי"
                     name="familyStatus"
-                    error={formErrors.familyStatus}
+                    error={Boolean(formErrors.familyStatus)}
                     helperText={formErrors.familyStatus}
                     defaultValue={form.familyStatus}
                     onChange={handleChangeInput}
@@ -312,7 +312,7 @@ export default function FormPropsTextFields() {
                     label="תאריך לידה"
                     name="bornDate"
                     type="date"
-                    error={formErrors.bornDate}
+                    error={Boolean(formErrors.bornDate)}
                     helperText={formErrors.bornDate}
                     defaultValue={form.bornDate}
                     onChange={handleChangeInput}
@@ -323,7 +323,7 @@ export default function FormPropsTextFields() {
                     required
                     label="עיר"
                     name="city"
-                    error={formErrors.city}
+                    error={Boolean(formErrors.city)}
                     helperText={formErrors.city}
                     defaultValue={form.city}
                     onChange={handleChangeInput}
@@ -334,7 +334,7 @@ export default function FormPropsTextFields() {
                     required
                     label="ארץ לידה"
                     name="countryBirth"
-                    error={formErrors.countryBirth}
+                    error={Boolean(formErrors.countryBirth)}
                     helperText={formErrors.countryBirth}
                     defaultValue={form.countryBirth}
                     onChange={handleChangeInput}
@@ -346,7 +346,7 @@ export default function FormPropsTextFields() {
                     label="טלפון"
                     name="phone"
                     error={formErrors.phone}
-                    helperText={formErrors.phone}
+                    helperText={Boolean(formErrors.phone)}
                     defaultValue={form.phone}
                     onChange={handleChangeInput}
                   /></Grid>
@@ -355,7 +355,7 @@ export default function FormPropsTextFields() {
                     required
                     label="מייל"
                     name="email"
-                    error={formErrors.email}
+                    error={Boolean(formErrors.email)}
                     helperText={formErrors.email}
                     defaultValue={form.email}
                     onChange={handleChangeInput}
@@ -365,7 +365,7 @@ export default function FormPropsTextFields() {
                     required
                     label="תכונות אופי"
                     name="characters"
-                    error={formErrors.characters}
+                    error={Boolean(formErrors.characters)}
                     helperText={formErrors.characters}
                     defaultValue={form.characters}
                     onChange={handleChangeInput}
@@ -376,7 +376,7 @@ export default function FormPropsTextFields() {
                     required
                     label="גוון עור"
                     name="colorSkin"
-                    error={formErrors.colorSkin}
+                    error={Boolean(formErrors.colorSkin)}
                     helperText={formErrors.colorSkin}
                     defaultValue={form.colorSkin}
                     onChange={handleChangeInput}
@@ -388,7 +388,7 @@ export default function FormPropsTextFields() {
                     label="גובה"
                     name="height"
                     type="number"
-                    error={formErrors.colorSkin}
+                    error={Boolean(formErrors.colorSkin)}
                     helperText={formErrors.colorSkin}
                     defaultValue={form.colorSkin}
                     onChange={handleChangeInput}
@@ -398,7 +398,7 @@ export default function FormPropsTextFields() {
                     required
                     label="מבנה גוף"
                     name="bodyStracture"
-                    error={formErrors.bodyStracture}
+                    error={Boolean(formErrors.bodyStracture)}
                     helperText={formErrors.bodyStracture}
                     defaultValue={form.bodyStracture}
                     onChange={handleChangeInput}
@@ -409,7 +409,7 @@ export default function FormPropsTextFields() {
                     required
                     label="מצב בריאותי"
                     name="healthCondition"
-                    error={formErrors.healthCondition}
+                    error={Boolean(formErrors.healthCondition)}
                     helperText={formErrors.healthCondition}
                     defaultValue={form.healthCondition}
                     onChange={handleChangeInput}
@@ -420,7 +420,7 @@ export default function FormPropsTextFields() {
                     required
                     label="מצב כלכלי"
                     name="economicSituation"
-                    error={formErrors.economicSituation}
+                    error={Boolean(formErrors.economicSituation)}
                     helperText={formErrors.economicSituation}
                     defaultValue={form.economicSituation}
                     onChange={handleChangeInput}
@@ -431,7 +431,7 @@ export default function FormPropsTextFields() {
                     required
                     label="סגנון לבוש"
                     name="clothingStyle"
-                    error={formErrors.clothingStyle}
+                    error={Boolean(formErrors.clothingStyle)}
                     helperText={formErrors.clothingStyle}
                     defaultValue={form.clothingStyle}
                     onChange={handleChangeInput}
@@ -442,7 +442,7 @@ export default function FormPropsTextFields() {
                     required
                     label="מראה כללי"
                     name="look"
-                    error={formErrors.look}
+                    error={Boolean(formErrors.look)}
                     helperText={formErrors.look}
                     defaultValue={form.look}
                     onChange={handleChangeInput}
@@ -453,7 +453,7 @@ export default function FormPropsTextFields() {
                     required
                     label="כיסוי ראש"
                     name="headdress"
-                    error={formErrors.headdress}
+                    error={Boolean(formErrors.headdress)}
                     helperText={formErrors.headdress}
                     defaultValue={form.headdress}
                     onChange={handleChangeInput}
@@ -467,7 +467,7 @@ export default function FormPropsTextFields() {
                       name='sector'
                       label="שיוך מגזרי"
                       onChange={handleChangeInput}
-                      error={formErrors.sector}
+                      error={Boolean(formErrors.sector)}
                       helperText={formErrors.sector}
                       defaultValue={form.sector}
                     >
@@ -485,7 +485,7 @@ export default function FormPropsTextFields() {
                     required
                     label="עדה"
                     name="origin"
-                    error={formErrors.origin}
+                    error={Boolean(formErrors.origin)}
                     helperText={formErrors.origin}
                     defaultValue={form.origin}
                     onChange={handleChangeInput}
@@ -496,7 +496,7 @@ export default function FormPropsTextFields() {
                     label="התחייבות כספית"
                     name="commitMoney"
                     type="number"
-                    error={formErrors.commitMoney}
+                    error={Boolean(formErrors.commitMoney)}
                     helperText={formErrors.commitMoney}
                     defaultValue={form.commitMoney}
                     onChange={handleChangeInput}
@@ -507,7 +507,7 @@ export default function FormPropsTextFields() {
                     label="דרישה כספית"
                     name="requireMoney"
                     type="number"
-                    error={formErrors.requireMoney}
+                    error={Boolean(formErrors.requireMoney)}
                     helperText={formErrors.requireMoney}
                     defaultValue={form.requireMoney}
                     onChange={handleChangeInput}
@@ -518,7 +518,7 @@ export default function FormPropsTextFields() {
                     required
                     label="מקום לימודים/עבודה"
                     name="yeshivaOrSeminar"
-                    error={formErrors.yeshivaOrSeminar}
+                    error={Boolean(formErrors.yeshivaOrSeminar)}
                     helperText={formErrors.yeshivaOrSeminar}
                     defaultValue={form.yeshivaOrSeminar}
                     onChange={handleChangeInput}
@@ -529,7 +529,7 @@ export default function FormPropsTextFields() {
                     required
                     label="עובד/לומד"
                     name="doingToday"
-                    error={formErrors.doingToday}
+                    error={Boolean(formErrors.doingToday)}
                     helperText={formErrors.doingToday}
                     defaultValue={form.doingToday}
                     onChange={handleChangeInput}
@@ -540,7 +540,7 @@ export default function FormPropsTextFields() {
                     required
                     label="שם האב"
                     name="fatherName"
-                    error={formErrors.fatherName}
+                    error={Boolean(formErrors.fatherName)}
                     helperText={formErrors.fatherName}
                     defaultValue={form.fatherName}
                     onChange={handleChangeInput}
@@ -551,7 +551,7 @@ export default function FormPropsTextFields() {
                     required
                     label="עיסוק האב"
                     name="fatherDoing"
-                    error={formErrors.fatherDoing}
+                    error={Boolean(formErrors.fatherDoing)}
                     helperText={formErrors.fatherDoing}
                     defaultValue={form.fatherDoing}
                     onChange={handleChangeInput}
@@ -562,7 +562,7 @@ export default function FormPropsTextFields() {
                     required
                     label="שם האם"
                     name="motherName"
-                    error={formErrors.motherName}
+                    error={Boolean(formErrors.motherName)}
                     helperText={formErrors.motherName}
                     defaultValue={form.motherName}
                     onChange={handleChangeInput}
@@ -573,7 +573,7 @@ export default function FormPropsTextFields() {
                     required
                     label="עיסוק האם"
                     name="motherDoing"
-                    error={formErrors.motherDoing}
+                    error={Boolean(formErrors.motherDoing)}
                     helperText={formErrors.motherDoing}
                     defaultValue={form.motherDoing}
                     onChange={handleChangeInput}
@@ -584,7 +584,7 @@ export default function FormPropsTextFields() {
                     required
                     label="מוצא האב"
                     name="mozaAv"
-                    error={formErrors.mozaAv}
+                    error={Boolean(formErrors.mozaAv)}
                     helperText={formErrors.mozaAv}
                     defaultValue={form.mozaAv}
                     onChange={handleChangeInput}
@@ -595,7 +595,7 @@ export default function FormPropsTextFields() {
                     required
                     label="מוצא האם"
                     name="mozaEm"
-                    error={formErrors.mozaEm}
+                    error={Boolean(formErrors.mozaEm)}
                     helperText={formErrors.mozaEm}
                     defaultValue={form.mozaEm}
                     onChange={handleChangeInput}
@@ -607,7 +607,7 @@ export default function FormPropsTextFields() {
                     label="מס' אחים ואחיות"
                     name="siblings"
                     type="number"
-                    error={formErrors.siblings}
+                    error={Boolean(formErrors.siblings)}
                     helperText={formErrors.siblings}
                     defaultValue={form.siblings}
                     onChange={handleChangeInput}
@@ -618,7 +618,7 @@ export default function FormPropsTextFields() {
                     required
                     label="סטטוס הורים"
                     name="parentStatus"
-                    error={formErrors.parentStatus}
+                    error={Boolean(formErrors.parentStatus)}
                     helperText={formErrors.parentStatus}
                     defaultValue={form.parentStatus}
                     onChange={handleChangeInput}
@@ -629,7 +629,7 @@ export default function FormPropsTextFields() {
                     required
                     label="שיטה הלכתית"
                     name="halachaMethod"
-                    error={formErrors.halachaMethod}
+                    error={Boolean(formErrors.halachaMethod)}
                     helperText={formErrors.halachaMethod}
                     defaultValue={form.halachaMethod}
                     onChange={handleChangeInput}
@@ -644,7 +644,7 @@ export default function FormPropsTextFields() {
                     required
                     label="שיוך מגזרי"
                     name="drishotSector"
-                    error={formErrors.drishotSector}
+                    error={Boolean(formErrors.drishotSector)}
                     helperText={formErrors.drishotSector}
                     defaultValue={form.drishotSector}
                     onChange={handleChangeInput}
@@ -655,7 +655,7 @@ export default function FormPropsTextFields() {
                     required
                     label="מראה כללי"
                     name="drishotLook"
-                    error={formErrors.drishotLook}
+                    error={Boolean(formErrors.drishotLook)}
                     helperText={formErrors.drishotLook}
                     defaultValue={form.drishotLook}
                     onChange={handleChangeInput}
@@ -665,7 +665,7 @@ export default function FormPropsTextFields() {
                   <TextField
                     label="תכונות אופי"
                     name="drishotCharacters"
-                    error={formErrors.drishotCharacters}
+                    error={Boolean(formErrors.drishotCharacters)}
                     helperText={formErrors.drishotCharacters}
                     defaultValue={form.drishotCharacters}
                     onChange={handleChangeInput}
@@ -676,7 +676,7 @@ export default function FormPropsTextFields() {
                     required
                     label="ארץ מוצא מועדף"
                     name="drishotFavoriteMoza"
-                    error={formErrors.drishotFavoriteMoza}
+                    error={Boolean(formErrors.drishotFavoriteMoza)}
                     helperText={formErrors.drishotFavoriteMoza}
                     defaultValue={form.drishotFavoriteMoza}
                     onChange={handleChangeInput}
@@ -686,7 +686,7 @@ export default function FormPropsTextFields() {
                   <TextField
                     label="לא ממוצא"
                     name="drishotNotMoza"
-                    error={formErrors.drishotNotMoza}
+                    error={Boolean(formErrors.drishotNotMoza)}
                     helperText={formErrors.drishotNotMoza}
                     defaultValue={form.drishotNotMoza}
                     onChange={handleChangeInput}
@@ -698,7 +698,7 @@ export default function FormPropsTextFields() {
                     label="מגיל"
                     name="fromAge"
                     type="number"
-                    error={formErrors.fromAge}
+                    error={Boolean(formErrors.fromAge)}
                     helperText={formErrors.fromAge}
                     defaultValue={form.fromAge}
                     onChange={handleChangeInput}
@@ -710,7 +710,7 @@ export default function FormPropsTextFields() {
                     label="עד גיל"
                     name="mostAge"
                     type="number"
-                    error={formErrors.mostAge}
+                    error={Boolean(formErrors.mostAge)}
                     helperText={formErrors.mostAge}
                     defaultValue={form.mostAge}
                     onChange={handleChangeInput}
@@ -722,7 +722,7 @@ export default function FormPropsTextFields() {
                     label="מגובה"
                     name="fromHeight"
                     type="number"
-                    error={formErrors.fromHeight}
+                    error={Boolean(formErrors.fromHeight)}
                     helperText={formErrors.fromHeight}
                     defaultValue={form.fromHeight}
                     onChange={handleChangeInput}
@@ -734,7 +734,7 @@ export default function FormPropsTextFields() {
                     label="עד גובה"
                     name="mostHeight"
                     type="number"
-                    error={formErrors.mostHeight}
+                    error={Boolean(formErrors.mostHeight)}
                     helperText={formErrors.mostHeight}
                     defaultValue={form.mostHeight}
                     onChange={handleChangeInput}
@@ -798,7 +798,7 @@ export default function FormPropsTextFields() {
                     required
                     label="שם"
                     name="recommendName"
-                    error={formErrors.recommendName}
+                    error={Boolean(formErrors.recommendName)}
                     helperText={formErrors.recommendName}
                     //defaultValue={recomendForm.recommendName}
                     onChange={handleChangeInputRecomended}
@@ -809,7 +809,7 @@ export default function FormPropsTextFields() {
                     required
                     label="טלפון"
                     name="recommendPhone"
-                    error={formErrors.recommendPhone}
+                    error={Boolean(formErrors.recommendPhone)}
                     helperText={formErrors.recommendPhone}
                     //defaultValue={recomendForm.recommendName}
                     onChange={handleChangeInputRecomended}
@@ -820,7 +820,7 @@ export default function FormPropsTextFields() {
                     required
                     label="קרבה"
                     name="recommendRelative"
-                    error={formErrors.recommendRelative}
+                    error={Boolean(formErrors.recommendRelative)}
                     helperText={formErrors.recommendRelative}
                     // defaultValue={recomendForm.recommendRelative}
                     onChange={handleChangeInputRecomended}
@@ -877,7 +877,7 @@ export default function FormPropsTextFields() {
                     required
                     label="שם ממלא הטופס"
                     name="fillQuestionarieName"
-                    error={formErrors.fillQuestionarieName}
+                    error={Boolean(formErrors.fillQuestionarieName)}
                     helperText={formErrors.fillQuestionarieName}
                     defaultValue={form.fillQuestionarieName}
                     onChange={handleChangeInput}
@@ -888,7 +888,7 @@ export default function FormPropsTextFields() {
                     required
                     label=" טלפון ממלא הטופס"
                     name="fillQuestionariePhone"
-                    error={formErrors.fillQuestionariePhone}
+                    error={Boolean(formErrors.fillQuestionariePhone)}
                     helperText={formErrors.fillQuestionariePhone}
                     defaultValue={form.fillQuestionariePhone}
                     onChange={handleChangeInput}
@@ -899,7 +899,7 @@ export default function FormPropsTextFields() {
                     required
                     label=" קרבה למועמד"
                     name="fillQuestionarieRelative"
-                    error={formErrors.fillQuestionarieRelative}
+                    error={Boolean(formErrors.fillQuestionarieRelative)}
                     helperText={formErrors.fillQuestionarieRelative}
                     defaultValue={form.fillQuestionarieRelative}
                     onChange={handleChangeInput}

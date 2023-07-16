@@ -128,7 +128,7 @@ const Login = () => {
                   label="שם משתמש"
                   name="userName"
                   onChange={handleChange}
-                  error={formErrors.userName}
+                  error={Boolean(formErrors.userName)}
                   helperText={formErrors.userName}
                   variant="outlined"
                   margin="normal"

@@ -1,6 +1,6 @@
-import { React, useState } from "react"
+import { React, useEffect, useState } from "react"
 import axios from "axios";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import TextField from '@mui/material/TextField';
 import { Button, Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
@@ -8,21 +8,26 @@ import SearchedCard from "../SearchedCard/SearchedCard";
 import './SearchAndMatch.css';
 import Header from "../Header/Header";
 import { memo } from "react";
+import { loadFilteredCandidates } from "../../store/user/userActions";
 
 const SearchAndMatch = () => {
 
-    const [formValues, setFormValues] = useState({});
-    const [filteredCands, setFilteredCands] = useState([]);
-    const [flagFilter, setFlagFilter] = useState(false);
+    const dispatch = useDispatch()
 
+    const [formValues, setFormValues] = useState({});
 
     const currentUser = useSelector((state) => state.user.currentUser);
     const candidates = useSelector((state) => state.user.candidates);
+    const filteredCandidates = useSelector((state) => state.user.filteredCandidates);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormValues({ ...formValues, [name]: value });
     }
+
+    useEffect(() => {
+        dispatch(loadFilteredCandidates([]))
+    },[])
 
     const handleSubmit = () => {
         console.log(formValues);
@@ -31,10 +36,9 @@ const SearchAndMatch = () => {
         axios.post(`http://localhost:5000/api/shiduchim/${currentUser.role}/filter-candidates`, formValues, {
             headers: { 'x-access-token': currentUser.token }
         }).then(resp => {
-            if(resp.status === 200){
-                setFilteredCands(resp.data.filteredCandidates)
-                setFlagFilter(true)
-               
+            if (resp.status === 200) {
+                dispatch(loadFilteredCandidates(resp.data.filteredCandidates))
+
             }
 
         }).catch(err => {
@@ -42,7 +46,7 @@ const SearchAndMatch = () => {
         })
     }
 
-    
+
 
     return (
         <>
@@ -208,14 +212,14 @@ const SearchAndMatch = () => {
                     </Grid>
                 </form>
             </div>
-            <Grid container>
-                {!flagFilter ?
-                    candidates.map(cand => <SearchedCard candidate={cand} />)
-                    :
-                    filteredCands.map((person) => <SearchedCard candidate={person} />)
-                }
+                <Grid container>
+                    {filteredCandidates.length === 0 ?
+                        candidates.map(cand => <SearchedCard key={cand._id} candidate={cand} />)
+                        :
+                        filteredCandidates.map((person) => <SearchedCard key={person._id} candidate={person} />)
+                    }
 
-            </Grid>
+                </Grid>
         </>
     );
 }
