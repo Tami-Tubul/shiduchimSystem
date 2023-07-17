@@ -15,6 +15,7 @@ const SearchAndMatch = () => {
     const dispatch = useDispatch()
 
     const [formValues, setFormValues] = useState({});
+    const [flagFilter, setFlagFilter] = useState(false);
 
     const currentUser = useSelector((state) => state.user.currentUser);
     const candidates = useSelector((state) => state.user.candidates);
@@ -38,6 +39,8 @@ const SearchAndMatch = () => {
         }).then(resp => {
             if (resp.status === 200) {
                 dispatch(loadFilteredCandidates(resp.data.filteredCandidates))
+                setFlagFilter(true)
+
 
             }
 
@@ -213,7 +216,7 @@ const SearchAndMatch = () => {
                 </form>
             </div>
                 <Grid container>
-                    {filteredCandidates.length === 0 ?
+                    {!flagFilter ?
                         candidates.map(cand => <SearchedCard key={cand._id} candidate={cand} />)
                         :
                         filteredCandidates?.map((person) => <SearchedCard key={person._id} candidate={person} />)

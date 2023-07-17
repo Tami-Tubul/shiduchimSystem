@@ -55,7 +55,7 @@ export default function SearchedCard(props) {
     const matchMaker = useSelector((state) => state.matchMaker);
     const favoritesIDs = matchMaker.faoritedCandidates;
 
-    const faoritedCands = filteredCandidates.length !== 0 && filteredCandidates.length < candidates.length ?
+    const faoritedCands = filteredCandidates.length !== 0 ?
         filteredCandidates.filter(cand => { //אובייקטים של מועמדים בסל
             return favoritesIDs && favoritesIDs.includes(cand._id);
         }) : candidates.filter(cand => {
