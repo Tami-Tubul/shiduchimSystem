@@ -216,7 +216,7 @@ const SearchAndMatch = () => {
                     {filteredCandidates.length === 0 ?
                         candidates.map(cand => <SearchedCard key={cand._id} candidate={cand} />)
                         :
-                        filteredCandidates.map((person) => <SearchedCard key={person._id} candidate={person} />)
+                        filteredCandidates?.map((person) => <SearchedCard key={person._id} candidate={person} />)
                     }
 
                 </Grid>
