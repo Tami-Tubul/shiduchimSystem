@@ -11,6 +11,8 @@ import { useState } from 'react';
 
 export default function PersonalArea(props) {
 
+    const dispatch = useDispatch();
+
     const userStore = useSelector((state) => state.user);
     const candidates = userStore.candidates;
     const faoritedCandidatesIDs = useSelector((state) => state.matchMaker.faoritedCandidates);
@@ -19,6 +21,26 @@ export default function PersonalArea(props) {
         return faoritedCandidatesIDs && faoritedCandidatesIDs.includes(cand._id);
     });
 
+
+    useEffect(() => {
+        const getFavoritedCandidatesFromServer = async () => {
+            try {
+                const resp = await axios.get("http://localhost:5000/api/shiduchim/matchmaker/cart", {
+                    headers: { 'x-access-token': userStore.currentUser.token }
+                });
+                if (resp.status === 200) {
+                    const data = resp.data;
+                    const candidatesIDs = data.candidatesOnCart
+                    console.log(candidatesIDs);
+                    dispatch(loadFavoritedCandidates(candidatesIDs));
+                }
+                
+            } catch (error) {
+                console.error('Error retrieving messages:', error);
+            }
+        }
+        getFavoritedCandidatesFromServer();
+    }, [])
 
     return (
         <>

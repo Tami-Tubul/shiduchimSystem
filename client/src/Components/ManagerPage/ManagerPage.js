@@ -15,6 +15,7 @@ import logo from '../../assets/logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
 import toast from 'toast-me';
 import authService from '../../authService';
+import { loadFavoritedCandidates } from '../../store/matchMaker/matchMakerActions';
 
 function ManagerPage() {
   const navigate = useNavigate();
@@ -80,7 +81,8 @@ function ManagerPage() {
       let resp = await axios.post("http://localhost:5000/api/shiduchim/auth/logout");
       if (resp.status === 200) {
             sessionStorage.clear();
-            dispatch(userLogin(authService.getUser()));
+            dispatch(userLogin(authService.getUser())); //איפוס יוזר מחובר
+            dispatch(loadFavoritedCandidates([])); //איפוס אזור אישי של שדכן מחובר
             toast(resp.data.message, { duration: 5000 });
             navigate('/');
         }
