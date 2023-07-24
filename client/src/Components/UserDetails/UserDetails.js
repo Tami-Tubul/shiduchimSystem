@@ -38,8 +38,8 @@ export default function UserDetails(){
 //     drishotHeaddress:null,//דרישות-כיסוי ראש
 //     fromAge:null,//מגיל
 //     mostAge:null,//עד גיל
-//     fromHigh:null,//מגובה
-//     mostHigh:null,//עד גובה
+//     fromHeight:null,//מגובה
+//     mostHeight:null,//עד גובה
 //     casherPhone:null,//טלפון כשר
 //     licence:null,//רישיון
 //     smoking:null//מעשן
@@ -84,8 +84,8 @@ const UserDetails=[
     { label: 'drishotNotMoza', name: 'drNotMoza', type: 'text' },
     { label: 'fromAge', name: 'frAge', type: 'text' },
     { label: 'mostAge', name: 'moAge', type: 'text' },
-    { label: 'fromHigh', name: 'frHigh', type: 'text' },
-    { label: 'mostHigh', name: 'moHigh', type: 'text' },
+    { label: 'fromHeight', name: 'frHigh', type: 'text' },
+    { label: 'mostHeight', name: 'moHigh', type: 'text' },
     { label: 'casherPhone', name: 'cashPhone', type: 'checkbox' },
     { label: 'licence', name: 'rishayon', type: 'checkbox' }
 
