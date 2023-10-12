@@ -1,3 +1,4 @@
+require("dotenv");
 const express = require('express');
 const app = express();
 const apiRoutes = require("./routes/apiRoutes");
@@ -24,7 +25,7 @@ app.use((err, req, res, next) => { //טיפול בשגיאות
 require("./config/database");
 
 async function startServer() {
-    const PORT = 5000
+    const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => { console.log(`Server run in port ${PORT}`) });
 }
 

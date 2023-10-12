@@ -7,7 +7,7 @@ exports.sendMail = (mailTo, textMail) => {
         service: 'gmail',
         auth: {
             user: 'tamihamalka@gmail.com',
-            pass: 'xxxxxxxxxxxxxxxxxxxx' //סיסמת אפליקציה
+            pass: 'xxxxxxxxxxxxxxxxxxxx' //סיסמת אפליקציה //uwiiyrypngtrvyhh
         }
     });
 
