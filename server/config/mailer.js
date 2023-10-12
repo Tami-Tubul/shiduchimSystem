@@ -1,3 +1,4 @@
+require("dotenv")
 const nodemailer = require('nodemailer');
 const cron = require('node-cron');
 
@@ -7,7 +8,7 @@ exports.sendMail = (mailTo, textMail) => {
         service: 'gmail',
         auth: {
             user: 'tamihamalka@gmail.com',
-            pass: 'xxxxxxxxxxxxxxxxxxxx' //סיסמת אפליקציה //uwiiyrypngtrvyhh
+            pass: process.env.APP_PASSWORD_FOR_NODEMAILER //סיסמת אפליקציה 
         }
     });
 
