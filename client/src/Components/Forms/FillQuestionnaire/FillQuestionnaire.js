@@ -118,7 +118,7 @@ export default function FormPropsTextFields() {
         }
       });
     }
-    const isNotValidStep = (errors !== {}) && Object.values(errors).find((error) => {
+    const isNotValidStep = (errors && Object.keys(errors).length > 0) && Object.values(errors).find((error) => {
       return error === "נא למלא שדה חובה"
     }
     );
