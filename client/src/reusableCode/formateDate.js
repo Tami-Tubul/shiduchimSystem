@@ -1,4 +1,4 @@
-const handaleLongDate = (longDate) => { //המרה לתאריך לועזי בפורמט קריא
+export function handaleLongDate(longDate) { //המרה לתאריך לועזי בפורמט קריא
 
     const dateString = longDate;
     const date = new Date(dateString);
@@ -7,7 +7,7 @@ const handaleLongDate = (longDate) => { //המרה לתאריך לועזי בפ�
 
 }
 
-const convertDateToHebrew = (date) => { //המרה לתאריך עברי
+export function convertDateToHebrew(date) { //המרה לתאריך עברי
 
     const dateString = date;
     const newdate = new Date(dateString);
@@ -47,7 +47,7 @@ const convertDateToHebrew = (date) => { //המרה לתאריך עברי
 
     const digits = [...loaziYear.toString()];
     const individualDigits = digits.map(digit => Number(digit));
-   //individualDigits Output: [5, 7, 8, 2]
+    //individualDigits Output: [5, 7, 8, 2]
 
     var thousands = Math.floor(individualDigits[0]); // אלפים
     var hundreds = Math.floor((individualDigits[1] * 100)); // מאות
@@ -64,7 +64,7 @@ const convertDateToHebrew = (date) => { //המרה לתאריך עברי
         hebrewLetters[tens] +
         hebrewLetters[units];
 
-        //hebrewYearString שנה מומרת לעברית
+    //hebrewYearString שנה מומרת לעברית
 
 
     //המרת יום לעברי
@@ -87,5 +87,3 @@ const convertDateToHebrew = (date) => { //המרה לתאריך עברי
 
 }
 
-
-module.exports = { convertDateToHebrew, handaleLongDate };
