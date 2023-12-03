@@ -1,4 +1,4 @@
-require("dotenv");
+require("dotenv").config();
 const express = require('express');
 const app = express();
 const apiRoutes = require("./routes/apiRoutes");
@@ -23,6 +23,8 @@ app.use((err, req, res, next) => { //טיפול בשגיאות
 })
 
 require("./config/database");
+// const connectDB = require("./config/database");
+// connectDB();
 
 async function startServer() {
     const PORT = process.env.PORT || 5000;
