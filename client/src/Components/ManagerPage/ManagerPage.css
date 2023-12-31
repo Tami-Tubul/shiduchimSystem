@@ -6,6 +6,7 @@
     justify-content: space-between;
     text-align: center;
 }
+
 .header {
     height: 100px;
     background-repeat: no-repeat;
@@ -16,12 +17,16 @@
     direction: rtl;
     padding-right: 6%;
 }
+
 .actions {
     z-index: 5;
     margin-top: 40px;
     margin-left: auto;
     margin-right: auto;
-    .css-sghohy-MuiButtonBase-root-MuiButton-root {
-        width: fit-content;
+
+    :global {
+        .css-sghohy-MuiButtonBase-root-MuiButton-root {
+            width: fit-content;
+        }
     }
 }

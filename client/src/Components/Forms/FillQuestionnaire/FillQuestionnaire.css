@@ -6,39 +6,52 @@
     direction: rtl;
     justify-content: space-between;
     text-align: center;
-    .css-1v5z4dq-MuiPaper-root-MuiCard-root {
-        margin: 2% 0 0 0 !important;
-        padding: 5% !important;
+
+    :global {
+        .css-1v5z4dq-MuiPaper-root-MuiCard-root {
+            margin: 2% 0 0 0 !important;
+            padding: 5% !important;
+        }
     }
 }
+
 .css-1v5z4dq-MuiPaper-root-MuiCard-root {
     margin: 2% 0 0 0 !important;
     padding: 5% !important;
 }
+
 .css-480o17-MuiGrid-root {
     padding: 2%;
 }
+
 .addContainer {
     margin-top: 2%;
 }
+
 .css-1e6y48t-MuiButtonBase-root-MuiButton-root {
     color: #cd8e1d !important;
 }
+
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
     color: #cd8e1d !important;
 }
+
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
-    color:#cd8e1d !important;
+    color: #cd8e1d !important;
 }
+
 .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
     color: #cd8e1d !important;
 }
+
 .MuiFormLabel-root .MuiFormLabel-colorPrimary .Mui-focused .css-u4tvz2-MuiFormLabel-root {
     color: #cd8e1d !important;
 }
+
 .css-u4tvz2-MuiFormLabel-root.Mui-focused {
     color: #cd8e1d !important;
 }
+
 .css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
