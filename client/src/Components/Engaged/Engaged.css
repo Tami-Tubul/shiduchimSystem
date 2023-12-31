@@ -8,11 +8,7 @@
     z-index: 6;
     direction: rtl;
     text-align: center;
-    .css-11lq3yg-MuiGrid-root{
-        flex-direction: column !important;
-       }
 } 
-
 
  .bottom-grid{
     flex-direction: column !important;
