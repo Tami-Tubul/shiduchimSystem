@@ -35,7 +35,7 @@ const Engaged = ({ closedRegister }) => {
                                 <p>{closedRegister.bachuraCity}</p>
                             </Grid>
                         </Grid>
-                        <Grid container>
+                        <Grid container className='bottom-grid'>
                             <p style={{ fontSize: "larger", fontWeight: 800, color: "#c87009" }}>מאורסים</p>
                             <p>אור ל{convertDateToHebrew(closedRegister.dateWort)}</p>
                         </Grid>
