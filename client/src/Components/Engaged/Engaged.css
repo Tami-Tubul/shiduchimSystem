@@ -4,15 +4,13 @@
     align-items: center;
     color: #796136;
 }
-
 .Grid {
     z-index: 6;
     direction: rtl;
     text-align: center;
-
-    :global {
-        .css-11lq3yg-MuiGrid-root {
-            flex-direction: column !important;
-        }
-    }
 }
+
+.Grid .css-11lq3yg-MuiGrid-root{
+    flex-direction: column !important;
+   }
+

@@ -5,11 +5,8 @@
     direction: rtl;
     justify-content: space-between;
     text-align: center;
-
-    :global {
-        .css-sghohy-MuiButtonBase-root-MuiButton-root {
-            background-color: #7961369e !important;
-        }
+    .css-sghohy-MuiButtonBase-root-MuiButton-root {
+        background-color: #7961369e !important;
     }
 }
 
@@ -18,10 +15,7 @@
     margin-top: 40px;
     margin-left: auto;
     margin-right: auto;
-
-    :global {
-        .css-sghohy-MuiButtonBase-root-MuiButton-root {
-            width: fit-content;
-        }
+    .css-sghohy-MuiButtonBase-root-MuiButton-root {
+        width: fit-content;
     }
 }
